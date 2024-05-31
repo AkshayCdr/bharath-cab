@@ -49,6 +49,48 @@ Blazing fast ride app. Movement is what we power. So when you think travel, thin
 6. Once the destination is reached, the driver will mark the ride as complete and collect payment.
 7. After the payment is complete, the customer can leave a rating and feedback for the trip if they like.
 
+---
+
+## Api contracts 
+
+### User
+
+#### POST /users
+`createUser` : creates new user 
+- **Path params**
+- **Body params**
+- username
+- name
+- email
+- password
+- **Response**
+- New user created
+- **Response Code**
+- 201:OK created
+
+#### POST /users/login
+`userLogin` : authenticate user
+- **Path params**
+- **Body params**
+- username
+- password
+- **Response**
+- Session cookies
+- **Response Code**
+- 200:OK 
+
+
+### Driver 
+
+
+
+### Rides
+
+
+
+### Location
+
+
 
 
 
