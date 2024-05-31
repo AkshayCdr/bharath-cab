@@ -57,34 +57,179 @@ Blazing fast ride app. Movement is what we power. So when you think travel, thin
 
 #### POST /users
 `createUser` : creates new user 
-- **Path params**
-- **Body params**
-- username
-- name
-- email
-- password
-- **Response**
-- New user created
-- **Response Code**
-- 201:OK created
+ **Path params**
+ **Body params**
+```
+{
+  username: string,
+  password: string,
+  name: string,
+  email: string,
+  phone: number
+}
+```
+ **Response**
+ - New user created
+
+ **Response Code**
+ - 201 OK: created
+
+----
 
 #### POST /users/login
 `userLogin` : authenticate user
-- **Path params**
-- **Body params**
-- username
-- password
-- **Response**
-- Session cookies
-- **Response Code**
-- 200:OK 
+ **Path params**
+ **Body params**
+```
+{
+  username: string,
+  password: string,
+}
+```
+ **Response**
+ - Session cookies
+
+ **Response Code**
+ - 200 OK:
+
+----
+
+
 
 
 ### Driver 
 
 
+#### POST /drivers
+`createDriver` : creates new driver
+ **Path params**
+ **Body params**
+```
+{
+  username: string,
+  password: string,
+  name: string,
+  email: string,
+  phone: number,
+}
+```
+ **Response**
+ - New driver created
+
+ **Response Code**
+ - 201 OK: created
+
+----
+
+
+#### PATCH /drivers/:id/status
+`goOnline` : driver go online
+ **Path params**
+- id :{driverID}
+ **Body params**
+```
+{
+  status:"online",
+  location: location<object>
+}
+```
+ **Response**
+ - Status updated
+
+ **Response Code**
+ - 200 OK: Driver status successfully updated
+
+----
+
+
+
+### Cab
+
+#### POST /cabs/:id
+`createCab` : creates new cab
+ **Path params**
+ - id : {driver id}
+ **Body params**
+```
+{
+  type: string,
+  regNo: number
+}
+```
+ **Response**
+ - New cab added
+
+ **Response Code**
+ - 201 OK: created
+
+----
+
 
 ### Rides
+
+- location object
+```
+{
+  "location": {
+    "latitude": number,
+    "longitude": number
+  },
+}
+```
+
+#### GET /rides/estimates
+`getRideDetails` : get ETA and price details of the ride 
+ **Query params**
+ - pickup_latitude: .
+ - pickup_longitude: .
+ - dropoff_latitude: .
+ - dropoff_longitude: .
+ **Body params**
+ **Response**
+```
+{
+  price:string,
+  ETA:string  
+}
+```
+ **Response Code**
+- 200 OK: ETA and price estimate successfully retrieved.
+
+----
+
+
+#### POST /rides/:id
+`requestRide` : get ETA and price details of the ride 
+ **Path params**
+ - id: {user Id}
+ **Body params**
+```
+{
+  userID: uuid,
+  source: location<object>,
+  destination: location<object>
+}
+```
+ **Response**
+```
+{
+  rideID: uuid,
+  status: string,
+  driver:{
+    name: string,
+    regNo: number,
+    phone: number,
+    location: location<object>
+}
+}
+```
+ **Response Code**
+- 201 Created: Ride request successfully created, and a nearby driver has been notified.
+
+----
+
+
+
 
 
 
