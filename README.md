@@ -293,7 +293,7 @@ Blazing fast ride app. Movement is what we power. So when you think travel, thin
 
 
 #### POST /rides/:id
-`requestRide` : get ETA and price details of the ride 
+`requestRide` : request a new ride
 
  **Path params**
  
