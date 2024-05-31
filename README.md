@@ -57,8 +57,11 @@ Blazing fast ride app. Movement is what we power. So when you think travel, thin
 
 #### POST /users
 `createUser` : creates new user 
+
  **Path params**
+ 
  **Body params**
+ 
 ```
 {
   username: string,
@@ -76,9 +79,36 @@ Blazing fast ride app. Movement is what we power. So when you think travel, thin
 
 ----
 
+#### GET /users/:id
+`getUser` : get a specific user
+
+ **Path params**
+
+ - id: {userID}
+
+ **Body params**
+ 
+ **Response**
+```
+{
+  username: string,
+  email: string,
+  phone: number,
+}
+```
+
+ **Response Code**
+ - 200 OK: 
+
+----
+
+
+
 #### POST /users/login
 `userLogin` : authenticate user
+
  **Path params**
+ 
  **Body params**
 ```
 {
@@ -102,7 +132,9 @@ Blazing fast ride app. Movement is what we power. So when you think travel, thin
 
 #### POST /drivers
 `createDriver` : creates new driver
+
  **Path params**
+ 
  **Body params**
 ```
 {
@@ -122,10 +154,42 @@ Blazing fast ride app. Movement is what we power. So when you think travel, thin
 ----
 
 
+#### GET /drivers/:id
+`getDriver` : get a specific driver
+
+ **Path params**
+
+ - id: {driverID}
+
+ **Body params**
+ 
+ **Response**
+```
+{
+  username: string,
+  email: string,
+  phone: number,
+  cab{
+    type: string,
+    regNo: number,
+  }
+}
+```
+
+ **Response Code**
+ - 200 OK: 
+
+----
+
+
+
 #### PATCH /drivers/:id/status
 `goOnline` : driver go online
+
  **Path params**
+ 
 - id :{driverID}
+
  **Body params**
 ```
 {
@@ -143,12 +207,38 @@ Blazing fast ride app. Movement is what we power. So when you think travel, thin
 
 
 
+#### PATCH /drivers/:id/status
+`goOnline` : driver go offline
+
+ **Path params**
+ 
+- id :{driverID}
+
+ **Body params**
+```
+{
+  status:"offline",
+  location: location<object>
+}
+```
+ **Response**
+ - Status updated
+
+ **Response Code**
+ - 200 OK: Driver status successfully updated
+
+----
+
+
 ### Cab
 
 #### POST /cabs/:id
 `createCab` : creates new cab
+
  **Path params**
+ 
  - id : {driver id}
+
  **Body params**
 ```
 {
@@ -179,12 +269,16 @@ Blazing fast ride app. Movement is what we power. So when you think travel, thin
 
 #### GET /rides/estimates
 `getRideDetails` : get ETA and price details of the ride 
+
  **Query params**
+ 
  - pickup_latitude: .
  - pickup_longitude: .
  - dropoff_latitude: .
  - dropoff_longitude: .
+
  **Body params**
+ 
  **Response**
 ```
 {
@@ -200,9 +294,13 @@ Blazing fast ride app. Movement is what we power. So when you think travel, thin
 
 #### POST /rides/:id
 `requestRide` : get ETA and price details of the ride 
+
  **Path params**
+ 
  - id: {user Id}
+
  **Body params**
+ 
 ```
 {
   userID: uuid,
@@ -217,9 +315,12 @@ Blazing fast ride app. Movement is what we power. So when you think travel, thin
   status: string,
   driver:{
     name: string,
-    regNo: number,
     phone: number,
     location: location<object>
+    cab :{
+      regNo: number,
+      type: string
+   }
 }
 }
 ```
