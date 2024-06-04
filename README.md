@@ -129,6 +129,24 @@ Blazing fast ride app. Movement is what we power. So when you think travel, thin
 ----
 
 
+#### DELETE /session
+`userLogout` : logging out user 
+
+ **Params**
+ - Session cookies
+
+
+ **Response**
+ 
+ - Session cookies removed
+
+
+ **Response Code**
+ - 204 NO CONTENT: session removed 
+
+----
+
+
 
 
 ### Driver 
