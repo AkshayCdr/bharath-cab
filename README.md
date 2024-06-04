@@ -58,7 +58,7 @@ Blazing fast ride app. Movement is what we power. So when you think travel, thin
 
 ### User
 
-#### POST /users
+#### POST /user
 `createUser` : creates new user 
 
  **Path params**
@@ -82,7 +82,7 @@ Blazing fast ride app. Movement is what we power. So when you think travel, thin
 
 ----
 
-#### GET /users/:id
+#### GET /user/:id
 `getUser` : get a specific user
 
  **Path params**
@@ -107,7 +107,7 @@ Blazing fast ride app. Movement is what we power. So when you think travel, thin
 
 
 
-#### POST /users/login
+#### POST /session
 `userLogin` : authenticate user
 
  **Path params**
@@ -133,7 +133,7 @@ Blazing fast ride app. Movement is what we power. So when you think travel, thin
 ### Driver 
 
 
-#### POST /drivers
+#### POST /driver
 `createDriver` : creates new driver
 
  **Path params**
@@ -146,6 +146,8 @@ Blazing fast ride app. Movement is what we power. So when you think travel, thin
   name: string,
   email: string,
   phone: number,
+  cabType: string,
+  cabRegNo: string,
 }
 ```
  **Response**
@@ -157,7 +159,7 @@ Blazing fast ride app. Movement is what we power. So when you think travel, thin
 ----
 
 
-#### GET /drivers/:id
+#### GET /driver/:id
 `getDriver` : get a specific driver
 
  **Path params**
@@ -186,7 +188,7 @@ Blazing fast ride app. Movement is what we power. So when you think travel, thin
 
 
 
-#### PATCH /drivers/:id/status
+#### PATCH /driver/:id
 `goOnline` : driver go online
 
  **Path params**
@@ -210,7 +212,7 @@ Blazing fast ride app. Movement is what we power. So when you think travel, thin
 
 
 
-#### PATCH /drivers/:id/status
+#### PATCH /driver/:id
 `goOnline` : driver go offline
 
  **Path params**
@@ -233,30 +235,6 @@ Blazing fast ride app. Movement is what we power. So when you think travel, thin
 ----
 
 
-### Cab
-
-#### POST /cabs/:id
-`createCab` : creates new cab
-
- **Path params**
- 
- - id : {driver id}
-
- **Body params**
-```
-{
-  type: string,
-  regNo: number
-}
-```
- **Response**
- - New cab added
-
- **Response Code**
- - 201 OK: created
-
-----
-
 
 ### Rides
 
@@ -270,74 +248,48 @@ Blazing fast ride app. Movement is what we power. So when you think travel, thin
 }
 ```
 
-#### GET /rides/estimates
+#### POST /ride
 `getRideDetails` : get ETA and price details of the ride 
 
- **Query params**
- 
- - pickup_latitude: .
- - pickup_longitude: .
- - dropoff_latitude: .
- - dropoff_longitude: .
-
  **Body params**
+ 
+ ```
+  source: location<Object>
+  destination: location<Object>
+ ```
  
  **Response**
 ```
 {
-  price:string,
-  ETA:string  
+  id: uuid,
+  price: string,
+  ETA: string  
 }
 ```
  **Response Code**
+ 
 - 200 OK: ETA and price estimate successfully retrieved.
 
 ----
 
 
-#### POST /rides/:id
+#### POST /ride/:id
 `requestRide` : request a new ride
 
  **Path params**
  
  - id: {user Id}
 
- **Body params**
- 
-```
-{
-  userID: uuid,
-  source: location<object>,
-  destination: location<object>
-}
-```
  **Response**
-```
-{
-  rideID: uuid,
-  status: string,
-  driver:{
-    name: string,
-    phone: number,
-    location: location<object>
-    cab :{
-      regNo: number,
-      type: string
-   }
-}
-}
-```
+
+ - Waiting for driver to connect
+
+
  **Response Code**
-- 201 Created: Ride request successfully created, and a nearby driver has been notified.
+- 200 OK: Searching for nearby driver .
 
 ----
 
-
-
-
-
-
-### Location
 
 
 
