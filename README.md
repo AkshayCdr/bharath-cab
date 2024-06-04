@@ -105,6 +105,7 @@ Blazing fast ride app. Movement is what we power. So when you think travel, thin
 
 ----
 
+### Session
 
 
 #### POST /session
