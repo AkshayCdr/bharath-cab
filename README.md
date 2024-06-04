@@ -15,8 +15,11 @@ Blazing fast ride app. Movement is what we power. So when you think travel, thin
 ## functional requirements
 
 #### customers
+
+- Customer should be able to pick source and destination of the ride 
 - Customers should be able to get ETA and pricing information of ride .
 - Customers should be able to book a cab to a destination.
+- Customer should be able to cancel the ride
 - Customers should be able to see the location of the driver.
 
 #### Drivers
