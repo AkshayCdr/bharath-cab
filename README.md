@@ -37,7 +37,7 @@ Blazing fast ride app. Movement is what we power. So when you think travel, thin
 
 ## Data model
 
-![Bharat-cab-data-model](https://github.com/AkshayCdr/bharat-cab/blob/main/BCMv1.png?raw=true)
+![Bharat-cab-data-model](https://github.com/AkshayCdr/bharat-cab/blob/main/bharatCab_v3.png?raw=true)
 
 
 ---
