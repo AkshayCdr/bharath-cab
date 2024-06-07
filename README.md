@@ -44,13 +44,16 @@ Blazing fast ride app. Movement is what we power. So when you think travel, thin
 
 ## Bharat cab work flow
 
-1. Customer <ins> requests a ride </ins> by specifying the  source, destination  (payment method) etc.
-2. Ride service register’s this request,<ins> finds nearby drivers </ins> , and <ins> calculates the estimated time of arrival (ETA) </ins>.
-3. The request is then broadcast-ed to the nearby drivers for them to accept or deny.
-4. If the driver accepts, the <ins> customer is notified about the live location of the driver</ins>.
-5. The customer is picked up and the driver can start the trip.
-6. Once the destination is reached, the driver will mark the ride as complete and collect payment.
-7. After the payment is complete, the customer can leave a rating and feedback for the trip if they like.
+1. Customer set source and destination and request eta and price ride service register this request and return eta and price
+2. Customer <ins> requests a ride </ins> by specifying the  source, destination  (payment method) etc.
+3. Ride service register’s this request,<ins> finds nearby drivers </ins> ,  </ins>.
+4. The request is then broadcast-ed to the nearby drivers for them to accept or deny.
+5. If the driver accepts, the <ins> customer is notified about the live location of the driver</ins>.
+6. The customer is picked up and the driver can start the trip.
+7. Once the destination is reached, the driver will mark the ride as complete,
+8. ------------------------------------------------------------------------------------------------
+9. (and collect payment.)
+10. (After the payment is complete, the customer can leave a rating and feedback for the trip if they like.)
 
 ---
 
