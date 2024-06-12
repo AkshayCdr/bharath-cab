@@ -1,0 +1,19 @@
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.nav{
+    border: 1px solid black;
+    display: flex;
+}
+
+.nav ul{
+    display: flex;
+}
+
+.nav li{
+    list-style-type: none;
+}
