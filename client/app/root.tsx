@@ -8,7 +8,8 @@ import {
   ScrollRestoration,
 } from "@remix-run/react";
 
-import styles from "./styles/main.css";
+import styles from "./styles/main.css?url";
+import { LinksFunction } from "@remix-run/node";
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -22,7 +23,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <body>
         <nav className="nav">
           <ul>
-            <li>
+            <li className="nav-item">
               <NavLink to={`/login`}>login</NavLink>
             </li>
           </ul>
@@ -35,9 +36,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
   );
 }
 
-export function links() {
-  return [{ rel: "stylesheet", href: styles }];
-}
+export const links: LinksFunction = () => [{ rel: "stylesheet", href: styles }];
 
 export default function App() {
   return <Outlet />;

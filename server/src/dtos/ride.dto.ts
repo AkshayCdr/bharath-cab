@@ -1,0 +1,23 @@
+export interface Ride {
+  readonly id?: string;
+  userId?: string;
+  driverId?: string;
+  status?: RideStatus;
+  source: LocationData;
+  destination: LocationData;
+  price?: number;
+  rating?: number;
+  review?: string;
+}
+
+export type LocationData = {
+  longitude?: number;
+  latitude?: number;
+};
+
+enum RideStatus {
+  Status = "STATUS",
+  Success = "SUCCESS",
+  OnRide = "ON_RIDE",
+  Pending = "PENDING",
+}

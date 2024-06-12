@@ -17,3 +17,9 @@
 .nav li{
     list-style-type: none;
 }
+
+.nav .nav-item a:hover,
+.nav .nav-item a.active{
+    color: blue;
+    background-color: beige;
+}
