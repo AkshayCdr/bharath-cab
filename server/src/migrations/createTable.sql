@@ -3,7 +3,7 @@ CREATE TYPE role AS ENUM ('user','driver');
 
 CREATE TABLE IF NOT EXISTS ACCOUNT(
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    account_type VARCHAR(50) NOT NULL,  
+    account_type role DEFAULT 'user',  
     username varchar(50),
     password varchar(255)
 );
