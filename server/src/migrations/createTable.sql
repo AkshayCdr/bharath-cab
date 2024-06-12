@@ -1,21 +1,35 @@
+BEGIN;
 
-CREATE TYPE role AS ENUM ('user','driver');
+
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'task_status') THEN
+        CREATE TYPE task_status AS ENUM ('todo', 'doing', 'blocked', 'done');
+    END IF;
+END
+$$;
+
+
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'role') THEN
+        CREATE TYPE role AS ENUM ('user', 'driver');
+    END IF;
+END
+$$;
 
 CREATE TABLE IF NOT EXISTS ACCOUNT(
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    account_type role DEFAULT 'user',  
-    username varchar(50),
-    password varchar(255)
+    account_type role DEFAULT 'user',
+    username VARCHAR(50),
+    password VARCHAR(255)
 );
-
-
 
 CREATE TABLE IF NOT EXISTS SESSION(
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     account_id UUID NOT NULL,
     FOREIGN KEY (account_id) REFERENCES ACCOUNT(id)
 );
-
 
 CREATE TABLE IF NOT EXISTS "USER"(
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -24,9 +38,16 @@ CREATE TABLE IF NOT EXISTS "USER"(
     email VARCHAR(50),
     phone VARCHAR(20),
     FOREIGN KEY (account_id) REFERENCES ACCOUNT(id)
-) ;
+);
 
-CREATE TYPE driver_status AS ENUM ('offline', 'online', 'onride');
+
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'driver_status') THEN
+        CREATE TYPE driver_status AS ENUM ('offline', 'online', 'onride');
+    END IF;
+END
+$$;
 
 CREATE TABLE IF NOT EXISTS DRIVER(
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -40,7 +61,14 @@ CREATE TABLE IF NOT EXISTS DRIVER(
     FOREIGN KEY (account_id) REFERENCES ACCOUNT(id)
 );
 
-CREATE TYPE ride_status AS ENUM ('started', 'success', 'onride','pending');
+
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'ride_status') THEN
+        CREATE TYPE ride_status AS ENUM ('started', 'success', 'onride', 'pending');
+    END IF;
+END
+$$;
 
 CREATE TABLE IF NOT EXISTS RIDE(
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -52,7 +80,9 @@ CREATE TABLE IF NOT EXISTS RIDE(
     eta INT CHECK (eta > 0),
     price INT CHECK (price > 0),
     rating SMALLINT CHECK (rating >= 1 AND rating <= 5),
-    review TEXT, 
+    review TEXT,
     FOREIGN KEY (user_id) REFERENCES "USER"(id),
     FOREIGN KEY (driver_id) REFERENCES DRIVER(id)
 );
+
+COMMIT;
