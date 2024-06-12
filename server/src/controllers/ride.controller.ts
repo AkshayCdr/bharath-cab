@@ -14,14 +14,16 @@ export async function insertIntoRide(
     const distance = rideServices.findDistance(source, destination);
     //calculate price
     const price = rideServices.findPrice(distance);
-    //add data in database
-    const id = await rideServices.create({
+
+    const newRide = {
       source,
       destination,
       price,
-    });
+    };
+    //add data in database
+    const id = await rideServices.create(newRide);
 
-    res.status(200).send({ id });
+    res.status(200).send({ ...newRide, id });
     //response will be new ride id
   } catch (error) {
     res.status(500).send({ message: "id not generated" });

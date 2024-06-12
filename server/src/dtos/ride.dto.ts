@@ -16,7 +16,6 @@ export type LocationData = {
 };
 
 enum RideStatus {
-  Status = "STATUS",
   Success = "SUCCESS",
   OnRide = "ON_RIDE",
   Pending = "PENDING",
