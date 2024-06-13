@@ -7,10 +7,10 @@ const client = pool.connect();
 
 export async function insertIntoRideTable(ride: Ride): Promise<string> {
   const query = `INSERT INTO RIDE (source, destination,price) VALUES (
-        POINT($1,$2), 
-        POINT($3, $4),
-        $5) RETURNING id;
-    `;
+          POINT($1,$2), 
+          POINT($3, $4),
+          $5) RETURNING id;
+      `;
   const values = [
     ride.source.longitude,
     ride.source.latitude,

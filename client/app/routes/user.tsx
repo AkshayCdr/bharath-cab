@@ -1,12 +1,11 @@
 import { ActionFunctionArgs, redirect } from "@remix-run/node";
 import LocationInput from "~/component/LocationInput";
+import { ride } from "apis/ride";
 
 export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
-  const locationData = Object.entries(formData);
-  //get source and destination
-  //set source and destination
-  console.log(locationData);
+  const locationData = Object.fromEntries(formData);
+  await ride.setLocation(locationData);
   return redirect("/user");
 }
 

@@ -8,7 +8,10 @@ export async function insertIntoRide(
 ): Promise<void> {
   try {
     //source and destination
+
     const { source, destination } = req.body;
+
+    console.log(source);
 
     //get distance
     const distance = rideServices.findDistance(source, destination);
@@ -26,6 +29,6 @@ export async function insertIntoRide(
     res.status(200).send({ ...newRide, id });
     //response will be new ride id
   } catch (error) {
-    res.status(500).send({ message: "id not generated" });
+    res.status(500).send({ message: "id not generated", error });
   }
 }

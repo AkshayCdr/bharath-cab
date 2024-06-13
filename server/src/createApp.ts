@@ -5,6 +5,7 @@ import rideRouter from "./routes/ride.route";
 export function createApp() {
   const app = express();
 
+  app.use(express.json());
   app.use("/user", UserRouter);
   app.use("/ride", rideRouter);
   return app;
