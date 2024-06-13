@@ -20,6 +20,7 @@ export async function createHash(password: string) {
 export async function verifyPassword(password: string, hash: string) {
   try {
     const match = await argon.verify(hash, password);
+    console.log(match);
     return match;
   } catch (error) {
     console.log(error);
