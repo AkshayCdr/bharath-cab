@@ -28,6 +28,7 @@ async function getRideDetails(rideId) {
   }
   const data = await response.json();
   console.log(data);
+  return data;
 }
 
 export const ride = {
