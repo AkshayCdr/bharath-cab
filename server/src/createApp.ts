@@ -2,6 +2,7 @@ import express from "express";
 import UserRouter from "./routes/user.route";
 import rideRouter from "./routes/ride.route";
 import sessionRoute from "./routes/session.route";
+import driverRoute from "./routes/driver.route";
 
 export function createApp() {
   const app = express();
@@ -10,6 +11,7 @@ export function createApp() {
   app.use("/user", UserRouter);
   app.use("/ride/", rideRouter);
   app.use("/session", sessionRoute);
+  app.use("/driver", driverRoute);
 
   return app;
 }
