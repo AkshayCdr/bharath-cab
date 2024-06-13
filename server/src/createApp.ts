@@ -7,6 +7,6 @@ export function createApp() {
 
   app.use(express.json());
   app.use("/user", UserRouter);
-  app.use("/ride", rideRouter);
+  app.use("/ride/", rideRouter);
   return app;
 }

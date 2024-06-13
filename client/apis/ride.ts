@@ -16,11 +16,19 @@ async function setLocation(locationData) {
     );
     return;
   }
+  const { id } = await response.json();
+  return id;
+}
+
+async function getRideDetails(rideId) {
+  const response = await fetch(`http://localhost:3000/ride/${rideId}`);
+  if (!response.ok) {
+    console.error(response.status, response.statusText);
+    return;
+  }
   const data = await response.json();
   console.log(data);
 }
-
-async function getRideDetails() {}
 
 export const ride = {
   setLocation,

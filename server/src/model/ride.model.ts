@@ -21,3 +21,11 @@ export async function insertIntoRideTable(ride: Ride): Promise<string> {
   const result: QueryResult<Id> = await (await client).query(query, values);
   return result.rows[0].id;
 }
+
+export async function getFromRideTable(id: string): Promise<Ride> {
+  const query = `SELECT source,destination,price FROM RIDE WHERE id = $1`;
+  const values = [id];
+  const result: QueryResult<Ride> = await (await client).query(query, values);
+  console.log(result.rows);
+  return result.rows[0];
+}
