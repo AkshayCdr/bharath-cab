@@ -32,8 +32,7 @@ CREATE TABLE IF NOT EXISTS SESSION(
 );
 
 CREATE TABLE IF NOT EXISTS "USER"(
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    account_id UUID NOT NULL,
+    account_id UUID PRIMARY KEY NOT NULL,
     name VARCHAR(50) NOT NULL,
     email VARCHAR(50),
     phone VARCHAR(20),
@@ -50,8 +49,7 @@ END
 $$;
 
 CREATE TABLE IF NOT EXISTS DRIVER(
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    account_id UUID NOT NULL,
+    account_id UUID PRIMARY KEY NOT NULL,
     name VARCHAR(50) NOT NULL,
     email VARCHAR(50),
     phone VARCHAR(20),
@@ -81,8 +79,8 @@ CREATE TABLE IF NOT EXISTS RIDE(
     price INT CHECK (price > 0),
     rating SMALLINT CHECK (rating >= 1 AND rating <= 5),
     review TEXT,
-    FOREIGN KEY (user_id) REFERENCES "USER"(id),
-    FOREIGN KEY (driver_id) REFERENCES DRIVER(id)
+    FOREIGN KEY (user_id) REFERENCES "USER"(account_id),
+    FOREIGN KEY (driver_id) REFERENCES DRIVER(account_id)
 );
 
 COMMIT;

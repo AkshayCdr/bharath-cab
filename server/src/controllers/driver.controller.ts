@@ -4,6 +4,7 @@ import { Account } from "../dtos/account.dto";
 import { createHash } from "../utils/passwordUtils";
 import { account } from "../services/account.services";
 import { driver } from "../services/driver.services";
+import { Id } from "../types/id";
 
 export async function createDriver(
   req: Request<{}, {}, Driver & Account>,
@@ -45,5 +46,16 @@ export async function createDriver(
     res
       .status(500)
       .send({ message: "server error, driver not created", error });
+  }
+}
+
+export async function getDriver(req: Request<Id>, res: Response) {
+  try {
+    const { id } = req.params;
+
+    const driverData = await driver.get(id);
+    res.status(200).send({ driverData });
+  } catch (error) {
+    res.status(500).send({ message: "server error ,cannot get driver", error });
   }
 }

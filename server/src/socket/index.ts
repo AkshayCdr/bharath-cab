@@ -18,6 +18,7 @@ export function createSocket(
 
   io.on("connect", (socket) => {
     console.log("connected");
+    console.log(socket.id);
 
     socket.on("registerDriver", (driverID: string) => {
       console.log(driverID);

@@ -2,6 +2,7 @@ import { Account } from "../dtos/account.dto";
 import {
   checkAccountExist,
   createAccount,
+  getAccountId,
   getPasswordFromTable,
 } from "../model/account.model";
 
@@ -17,6 +18,10 @@ export async function getPassword(username: string): Promise<string> {
   return getPasswordFromTable(username);
 }
 
+export async function getId(username: string): Promise<string> {
+  return getAccountId(username);
+}
+
 export async function insert(account: Account) {}
 
 export const account = {
@@ -24,4 +29,5 @@ export const account = {
   insert,
   checkUsername,
   getPassword,
+  getId,
 };

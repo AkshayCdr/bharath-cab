@@ -12,8 +12,6 @@ export async function action({ request }: ActionFunctionArgs) {
 
   const userDetails = Object.fromEntries(formData);
 
-  console.log(userDetails);
-
   const driver = formData.get("driver") === "check";
   const user = formData.get("user") === "check";
 
@@ -23,8 +21,8 @@ export async function action({ request }: ActionFunctionArgs) {
   const id = await account.login(userDetails);
   console.log(id);
 
-  if (user) return redirect("/user");
-  if (driver) return redirect("/driver");
+  if (user) return redirect(`/user/${id}`);
+  if (driver) return redirect(`/driver/${id}`);
   return redirect("/");
 }
 

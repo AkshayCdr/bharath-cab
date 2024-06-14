@@ -1,10 +1,9 @@
 import { Router } from "express";
-import { createDriver } from "../controllers/driver.controller";
+import { createDriver, getDriver } from "../controllers/driver.controller";
 
 const route = Router();
 
 route.post("/", createDriver);
-
-route.get("/:id");
+route.get("/:id", getDriver);
 
 export default route;

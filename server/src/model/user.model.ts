@@ -15,7 +15,7 @@ const client = pool.connect();
 
 export async function createUser(user: User): Promise<string> {
   try {
-    const query = `INSERT INTO "USER" (account_id,name,email,phone) VALUES($1,$2,$3,$4) RETURNING id`;
+    const query = `INSERT INTO "USER" (account_id,name,email,phone) VALUES($1,$2,$3,$4) RETURNING account_id AS id`;
     const values = [user.accountId, user.name, user.email, user.phone];
     const result: QueryResult<Id> = await (await client).query(query, values);
     return result.rows[0].id;

@@ -50,3 +50,15 @@ export async function getPasswordFromTable(username: string): Promise<string> {
     throw new Error("fetching password failed");
   }
 }
+
+export async function getAccountId(username: string): Promise<string> {
+  try {
+    const query = `SELECT id FROM ACCOUNT WHERE username = $1;`;
+    const values = [username];
+    const result: QueryResult<Id> = await (await client).query(query, values);
+    return result.rows[0].id;
+  } catch (error) {
+    console.log(error);
+    throw new Error("fetching password failed");
+  }
+}
