@@ -1,3 +1,9 @@
 export default function Driver() {
-  return <div>driver</div>;
+  function goOnline() {}
+
+  return (
+    <div>
+      <button onClick={goOnline}>goOnline</button>
+    </div>
+  );
 }
