@@ -37,7 +37,7 @@ export async function action({ request }: ActionFunctionArgs) {
   };
   // const locationData = Object.fromEntries(formData);
 
-  console.log(locationData);
+  // console.log(locationData);
   const rideId = await ride.setLocation(locationData);
   return redirect(`/ride/${rideId}`);
 }

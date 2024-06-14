@@ -1,4 +1,4 @@
-interface driver {
+export interface Driver {
   cabType: string;
   cabRegNo: string;
   status?: string;

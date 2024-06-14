@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { Session } from "../dtos/session.dto";
-import { user } from "../services/user.services";
 import { verifyPassword } from "../utils/passwordUtils";
+import { account } from "../services/account.services";
 
 export async function insertIntoSession(
   req: Request<{}, {}, Session>,
@@ -10,12 +10,12 @@ export async function insertIntoSession(
   try {
     const { username, password } = req.body;
 
-    const isUserExist = await user.checkUsername(username);
+    const isUserExist = await account.checkUsername(username);
 
     if (!isUserExist)
       return res.status(401).send({ message: "invalid username" });
 
-    const passwordHash = await user.getPassword(username);
+    const passwordHash = await account.getPassword(username);
 
     if (!passwordHash) res.status(500).send({ message: "password not exist" });
 
