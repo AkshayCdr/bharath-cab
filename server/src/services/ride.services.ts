@@ -1,5 +1,10 @@
 import { LocationData, Ride } from "../dtos/ride.dto";
-import { getFromRideTable, insertIntoRideTable } from "../model/ride.model";
+import { User } from "../dtos/user.dto";
+import {
+  getFromRideTable,
+  getRideAndUserFromTable,
+  insertIntoRideTable,
+} from "../model/ride.model";
 
 async function create(ride: any): Promise<string> {
   return insertIntoRideTable(ride);
@@ -8,6 +13,11 @@ async function create(ride: any): Promise<string> {
 async function read(id: string): Promise<Ride> {
   return await getFromRideTable(id);
 }
+
+async function getRideAndUser(id: string): Promise<Ride & User> {
+  return await getRideAndUserFromTable(id);
+}
+
 async function update(): Promise<void> {}
 async function del(): Promise<void> {}
 
@@ -28,4 +38,5 @@ export const rideServices = {
   del,
   findDistance,
   findPrice,
+  getRideAndUser,
 };

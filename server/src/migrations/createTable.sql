@@ -63,7 +63,7 @@ CREATE TABLE IF NOT EXISTS DRIVER(
 DO $$
 BEGIN
     IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'ride_status') THEN
-        CREATE TYPE ride_status AS ENUM ('started', 'success', 'onride', 'pending');
+        CREATE TYPE ride_status AS ENUM ('started', 'success', 'onride', 'pending','requested');
     END IF;
 END
 $$;
