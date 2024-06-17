@@ -9,7 +9,7 @@ export function createApp() {
 
   app.use(express.json());
   app.use("/user", UserRouter);
-  app.use("/ride/", rideRouter);
+  app.use("/ride", rideRouter);
   app.use("/session", sessionRoute);
   app.use("/driver", driverRoute);
 

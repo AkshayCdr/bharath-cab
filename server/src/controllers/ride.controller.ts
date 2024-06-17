@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { Ride } from "../dtos/ride.dto";
 import { rideServices } from "../services/ride.services";
 import { Id } from "../types/id";
+import { user } from "../services/user.services";
 
 export async function insertIntoRide(
   req: Request<{}, {}, Ride>,
@@ -10,11 +11,13 @@ export async function insertIntoRide(
   try {
     //source and destination
 
-    const { source, destination } = req.body;
+    const { userId, source, destination } = req.body;
 
+    console.log(userId);
     console.log(source);
     console.log(destination);
 
+    console.log(typeof userId);
     console.log(typeof source);
     console.log(typeof destination);
 
@@ -24,14 +27,18 @@ export async function insertIntoRide(
     const price = rideServices.findPrice(distance);
 
     const newRide = {
+      userId,
       source,
       destination,
       price,
     };
+    console.log("here");
     //add data in database
-    const id = await rideServices.create(newRide);
+    const rideId = await rideServices.create(newRide);
 
-    res.status(200).send({ id });
+    console.log("here");
+    console.log("id inside controller is ", rideId);
+    res.status(201).send({ rideId });
     //response will be new ride id
   } catch (error) {
     res.status(500).send({ message: "id not generated", error });
@@ -45,5 +52,12 @@ export async function getRide(req: Request<Id>, res: Response) {
     res.status(200).send(JSON.stringify(rideDetails));
   } catch (error) {
     res.status(500).send({ message: "cannot reterive data", error });
+  }
+}
+
+export async function rideDetails(req: Request, res: Response) {
+  try {
+  } catch (error) {
+    res.status(500).send({ message: "Error setting ride " });
   }
 }

@@ -52,7 +52,6 @@ export async function createDriver(
 export async function getDriver(req: Request<Id>, res: Response) {
   try {
     const { id } = req.params;
-
     const driverData = await driver.get(id);
     res.status(200).send({ driverData });
   } catch (error) {

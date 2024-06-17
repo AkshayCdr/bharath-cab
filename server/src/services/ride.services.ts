@@ -1,7 +1,7 @@
 import { LocationData, Ride } from "../dtos/ride.dto";
 import { getFromRideTable, insertIntoRideTable } from "../model/ride.model";
 
-async function create(ride: Ride): Promise<string> {
+async function create(ride: any): Promise<string> {
   return insertIntoRideTable(ride);
 }
 

@@ -24,3 +24,17 @@ export async function createUser(user: User): Promise<string> {
     throw new Error("Error inserting into user");
   }
 }
+
+export async function getUser(id: string): Promise<User> {
+  try {
+    console.log(id);
+    const query = `SELECT * FROM "USER" WHERE account_id = $1`;
+
+    const values = [id];
+    const result: QueryResult<User> = await (await client).query(query, values);
+    return result.rows[0];
+  } catch (error) {
+    console.error(error);
+    throw new Error("Error inserting into user");
+  }
+}

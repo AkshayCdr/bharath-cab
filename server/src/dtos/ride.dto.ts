@@ -1,18 +1,18 @@
 export interface Ride {
   readonly id?: string;
-  userId?: string;
+  userId: string;
   driverId?: string;
   status?: RideStatus;
   source: LocationData;
   destination: LocationData;
-  price?: number;
+  price: number;
   rating?: number;
   review?: string;
 }
 
 export type LocationData = {
-  longitude?: number;
-  latitude?: number;
+  longitude: number;
+  latitude: number;
 };
 
 enum RideStatus {

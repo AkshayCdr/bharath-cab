@@ -4,9 +4,16 @@ import { User } from "../dtos/user.dto";
 import { user } from "../services/user.services";
 import { createHash } from "../utils/passwordUtils";
 import { Account } from "../dtos/account.dto";
+import { Id } from "../types/id";
 
-export async function getUser(req: Request, res: Response) {
-  res.send([]);
+export async function getUser(req: Request<Id>, res: Response) {
+  try {
+    const { id } = req.params;
+    const userDetails = await user.get(id);
+    res.status(200).send(userDetails);
+  } catch (error) {
+    res.status(500).send({ message: "error retriving user", error });
+  }
 }
 
 export async function createUser(
@@ -15,7 +22,7 @@ export async function createUser(
 ) {
   try {
     const { username, password, name, phone } = req.body;
-    console.log(username);
+
     const passwordHash = await createHash(password);
     const accountType = "user";
     //create account
