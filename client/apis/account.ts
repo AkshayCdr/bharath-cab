@@ -10,6 +10,7 @@ async function login(userDetails) {
   if (!response.ok) throw new Error("login error");
 
   const { id } = await response.json();
+  console.log(id);
   return id;
 }
 

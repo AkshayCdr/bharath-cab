@@ -1,8 +1,9 @@
 /* eslint-disable import/no-unresolved */
 import React from "react";
-import { useLoaderData } from "@remix-run/react";
-import { json, LoaderFunctionArgs } from "@remix-run/node";
+import { useActionData, useLoaderData } from "@remix-run/react";
+import { ActionFunctionArgs, json, LoaderFunctionArgs } from "@remix-run/node";
 import { ride } from "apis/ride";
+import RideDetails from "~/component/RideDetails";
 // import invariant from "tiny-invariant";
 
 interface rideDetails {
@@ -17,30 +18,38 @@ type Coordinates = {
   y?: number;
 };
 
+export async function action({ request }: ActionFunctionArgs) {
+  const formData = await request.formData();
+  const rideID = formData.get("rideId");
+  const message = await ride.requestForRide(rideID);
+  console.log(message);
+  return json({ message });
+}
+
 export const loader = async ({ params }: LoaderFunctionArgs) => {
-  // invariant(params.rideId, "Missing rideId param");
-  const rideDetails: rideDetails = await ride.getRideDetails(params.rideId);
-  if (!rideDetails) throw new Response("Not Found", { status: 404 });
+  const { rideId } = params;
+
+  if (!rideId) {
+    throw new Response("Not Found", { status: 404 });
+  }
+
+  const rideDetails: rideDetails = await ride.getRideDetails(rideId);
+
+  if (!rideDetails) {
+    throw new Response("Not Found", { status: 404 });
+  }
+
   return json({ rideDetails });
 };
 
 export default function Ride() {
   const { rideDetails } = useLoaderData<typeof loader>();
+  const message = useActionData<typeof action>();
   console.log(rideDetails);
   return (
     <div>
-      <h1>ride details</h1>
-      <ul key={rideDetails.id}>
-        <li>Source</li>
-        <li>{rideDetails.source.x}</li>
-        <li>{rideDetails.source.y}</li>
-        <li>Destination</li>
-        <li>{rideDetails.destination.x}</li>
-        <li>{rideDetails.source.y}</li>
-        <li>{rideDetails.price}</li>
-      </ul>
-      <button>Accept</button>
-      <button>Cancel</button>
+      {message ? <p>{message.message}</p> : <p>no value</p>}
+      <RideDetails rideDetails={rideDetails} />
     </div>
   );
 }
