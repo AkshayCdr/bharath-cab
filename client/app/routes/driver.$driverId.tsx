@@ -1,5 +1,9 @@
 import { socket } from "~/socket/websocket";
-import { json, type LoaderFunctionArgs } from "@remix-run/node";
+import {
+  ActionFunctionArgs,
+  json,
+  type LoaderFunctionArgs,
+} from "@remix-run/node";
 
 import { useLoaderData } from "@remix-run/react";
 import { driver } from "apis/driver";
@@ -20,26 +24,23 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
   return json(driverData);
 };
 
+// export const action = async ({ request }: ActionFunctionArgs) => {
+//   const formData = await request.formData();
+
+//   console.log(formData);
+
+//   const data = Object.fromEntries(formData);
+//   console.log(data);
+// };
+
 export default function Driver() {
   const { driverData } = useLoaderData<typeof loader>();
-
-  // function goOnline() {
-  //   socket.on("registerDriver", driverData.account_id);
-  // }
-
-  // socket.on("rideRequest", (userDetails) => {
-  //   console.log(userDetails);
-  // });
-
-  // socket.on("connect", () => {
-  //   console.log(socket.id);
-  // });
 
   const [userDetails, setUserDetails] = useState({});
 
   useEffect(() => {
     socket.on("connect", () => {
-      console.log("Socket connected with id:", socket.id);
+      console.log("Socket driver connected with id:", socket.id);
     });
 
     socket.on("rideRequest", (userDetails) => {
@@ -56,6 +57,15 @@ export default function Driver() {
   const goOnline = () => {
     socket.emit("registerDriver", driverData.account_id);
   };
+
+  const handleClick = (e) => {
+    e.preventDefault();
+    console.log("clicked", e);
+    socket.emit("driverAccept", {
+      driverId: driverData.account_id,
+      userId: userDetails.user_id,
+    });
+  };
   return (
     <div>
       <button onClick={goOnline}>goOnline</button>
@@ -63,11 +73,11 @@ export default function Driver() {
         <li>{driverData.name}</li>
       </ul>
       <h1>User Details</h1>
-      {/* <p>{userDetails ? <p>{userDetails.name}</p> : "no user"}</p> */}
-      <ul key={userDetails.id}>
-        <li>{userDetails.name}</li>
-        <li>{userDetails.phone}</li>
-      </ul>
+      <UserDetails
+        userData={userDetails}
+        driverId={driverData.account_id}
+        onClick={handleClick}
+      />
     </div>
   );
 }

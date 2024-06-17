@@ -34,7 +34,6 @@ export async function getDriver(accountId: string): Promise<Driver> {
     const result: QueryResult<Driver> = await (
       await client
     ).query(query, values);
-    console.log(result.rows);
     return result.rows[0];
   } catch (error) {
     console.error(error);

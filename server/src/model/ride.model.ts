@@ -32,7 +32,7 @@ export async function insertIntoRideTable(ride: Ride): Promise<string> {
 
 export async function getFromRideTable(id: string): Promise<Ride> {
   try {
-    const query = `SELECT id,source,destination,price FROM RIDE WHERE id = $1`;
+    const query = `SELECT id,source,destination,price,user_id FROM RIDE WHERE id = $1`;
     const values = [id];
     const result: QueryResult<Ride> = await (await client).query(query, values);
     return result.rows[0];

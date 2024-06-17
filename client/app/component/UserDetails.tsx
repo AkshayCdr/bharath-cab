@@ -1,23 +1,46 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 
+import { Form } from "@remix-run/react";
 import { User } from "~/routes/user.$userId";
 
-// interface UserDetails {
-//   userData: User;
-// }
-
-export default function UserDetails({ userData }) {
+export default function UserDetails({ userData, driverId, onClick }) {
   console.log({ userData });
 
   return (
+    // <Form method="POST">
     <div>
-      <h1>UserData</h1>
-      <h1>{userData.name}</h1>
-      <h2>{userData.phone}</h2>
-      {/* <p>{userData.source.x}</p>
-      <p>{userData.source.y}</p>
-      <p>{userData.destination.x}</p>
-      <p>{userData.destination.y}</p> */}
+      <input type="hidden" name="driverId" defaultValue={driverId} />
+      <input type="hidden" name="userId" defaultValue={userData.id} />
+      <p>
+        <label htmlFor="name">Name:</label>
+        <input
+          type="text"
+          name="name"
+          id=""
+          defaultValue={userData.name}
+          readOnly
+        />
+        <label htmlFor="phone">Phone:</label>
+        <input
+          type="text"
+          name="phone"
+          id=""
+          defaultValue={userData.phone}
+          readOnly
+        />
+        <label htmlFor="price">Price:</label>
+        <input
+          type="text"
+          name="price"
+          id=""
+          defaultValue={userData.price}
+          readOnly
+        />
+      </p>
+      <button type="submit" onClick={onClick}>
+        Accept Ride
+      </button>
     </div>
+    // </Form>
   );
 }

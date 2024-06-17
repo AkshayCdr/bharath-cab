@@ -2,6 +2,7 @@ import { Server } from "socket.io";
 import { driverSocket } from "./driver.socket";
 import { clientSocket } from "./client.socket";
 import HTTPServer from "http";
+import { driver } from "../services/driver.services";
 
 export function createSocket(
   httpServer: HTTPServer.Server<
@@ -21,13 +22,29 @@ export function createSocket(
     console.log(socket.id);
 
     socket.on("registerDriver", (driverID: string) => {
-      console.log(driverID);
+      console.log("driver reg with id:", driverID);
       driverSocket[driverID] = socket;
     });
 
     socket.on("registerClient", (clientID: string) => {
-      console.log(clientID);
+      console.log("client reg with id:", clientID);
       clientSocket[clientID] = socket;
+    });
+
+    socket.on("driverAccept", async (rideData) => {
+      console.log("driver accepted", rideData.userId, rideData.driverId);
+      const { userId, driverId } = rideData;
+      //send to userid
+      //send the driver details to user
+      const driverDetails = await driver.get(driverId);
+      console.log(driverDetails);
+
+      if (clientSocket[userId]) {
+        clientSocket[userId].emit("rideAccepted", driverDetails);
+      }
+
+      //send to other drivers
+      //remove client data from other driver
     });
 
     socket.on("disconnect", () => {
