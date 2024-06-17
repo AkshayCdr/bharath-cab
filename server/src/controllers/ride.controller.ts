@@ -9,21 +9,10 @@ export async function insertIntoRide(
   res: Response
 ): Promise<void> {
   try {
-    //source and destination
-
     const { userId, source, destination } = req.body;
 
-    console.log(userId);
-    console.log(source);
-    console.log(destination);
-
-    console.log(typeof userId);
-    console.log(typeof source);
-    console.log(typeof destination);
-
-    //get distance
     const distance = rideServices.findDistance(source, destination);
-    //calculate price
+
     const price = rideServices.findPrice(distance);
 
     const newRide = {
@@ -32,14 +21,10 @@ export async function insertIntoRide(
       destination,
       price,
     };
-    console.log("here");
-    //add data in database
+
     const rideId = await rideServices.create(newRide);
 
-    console.log("here");
-    console.log("id inside controller is ", rideId);
     res.status(201).send({ rideId });
-    //response will be new ride id
   } catch (error) {
     res.status(500).send({ message: "id not generated", error });
   }
