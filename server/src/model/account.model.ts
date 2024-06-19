@@ -28,7 +28,6 @@ export async function checkAccountExist(username: string): Promise<boolean> {
     const query = `SELECT 1 FROM ACCOUNT WHERE username = $1;`;
     const values = [username];
     const result = await (await client).query(query, values);
-    console.log(result.rows);
     return result.rows.length > 0;
   } catch (error) {
     console.log(error);

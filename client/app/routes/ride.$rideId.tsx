@@ -73,6 +73,7 @@ export default function Ride() {
 
   return (
     <div>
+      <RideDetails rideDetails={rideDetails} />
       {rideStatus ? (
         // <p>driver accepted</p>
         <DriverDetails driverDetails={driverDetails} />
@@ -81,7 +82,6 @@ export default function Ride() {
       ) : (
         <p>Waiting for driver</p>
       )}
-      <RideDetails rideDetails={rideDetails} />
     </div>
   );
 }

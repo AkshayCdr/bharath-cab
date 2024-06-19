@@ -10,6 +10,7 @@ import RideDetails from "../component/RideDetails";
 import { json, useLoaderData } from "@remix-run/react";
 import { user } from "apis/user";
 import UserDetails from "~/component/UserDetails";
+import UserProfile from "~/component/UserProfile";
 
 export interface User {
   account_id: string;
@@ -82,7 +83,8 @@ export default function User() {
   const { userData } = useLoaderData<typeof loader>();
   return (
     <div>
-      <UserDetails userData={userData} />
+      <UserProfile userData={userData}/>
+      {/* <UserDetails userData={userData} /> */}
       <LocationInput userId={userData.account_id} />
     </div>
   );

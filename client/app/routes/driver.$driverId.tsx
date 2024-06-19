@@ -9,15 +9,20 @@ import { useLoaderData } from "@remix-run/react";
 import { driver } from "apis/driver";
 import { useEffect, useState } from "react";
 import UserDetails from "~/component/UserDetails";
+import DriverProfile from "~/component/DriverProfile";
 
 export const loader = async ({ params }: LoaderFunctionArgs) => {
   const { driverId } = params;
 
+  console.log(driverId)
   if (!driverId) {
     throw new Response("Not Found", { status: 404 });
   }
 
   const driverData = await driver.get(driverId);
+
+  console.log(driverData)
+
   if (!driverData)
     throw json({ message: "Could not find driver details of id " });
 
@@ -69,9 +74,8 @@ export default function Driver() {
   return (
     <div>
       <button onClick={goOnline}>goOnline</button>
-      <ul key={driverData.account_id}>
-        <li>{driverData.name}</li>
-      </ul>
+      
+      <DriverProfile driverData={driverData}/>
       <h1>User Details</h1>
       <UserDetails
         userData={userDetails}
