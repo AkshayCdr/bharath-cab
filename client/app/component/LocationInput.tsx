@@ -11,10 +11,10 @@ const cities = [
 export default function LocationInput({ userId }) {
   return (
     <Form method="POST" id="location-form">
-      <p>
+      <p className="input-form">
         <input type="hidden" name="userId" value={userId} />
         <label htmlFor="source">Source:</label>
-        <select name="source" id="source">
+        <select name="source" id="source" className="input-source">
           {cities.map((city) => (
             <option
               key={city.name}
@@ -26,7 +26,11 @@ export default function LocationInput({ userId }) {
         </select>
 
         <label htmlFor="destination">Destination:</label>
-        <select name="destination" id="destination">
+        <select
+          name="destination"
+          id="destination"
+          className="input-destination"
+        >
           {cities.map((city) => (
             <option
               key={city.name}

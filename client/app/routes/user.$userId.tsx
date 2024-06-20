@@ -1,6 +1,7 @@
 /* eslint-disable import/no-unresolved */
 import {
   ActionFunctionArgs,
+  LinksFunction,
   LoaderFunctionArgs,
   redirect,
 } from "@remix-run/node";
@@ -11,6 +12,8 @@ import { json, useLoaderData } from "@remix-run/react";
 import { user } from "apis/user";
 import UserDetails from "~/component/UserDetails";
 import UserProfile from "~/component/UserProfile";
+
+import styles from "../styles/user.css?url";
 
 export interface User {
   account_id: string;
@@ -82,10 +85,11 @@ export async function action({ request }: ActionFunctionArgs) {
 export default function User() {
   const { userData } = useLoaderData<typeof loader>();
   return (
-    <div>
-      <UserProfile userData={userData} />
-      {/* <UserDetails userData={userData} /> */}
+    <div className="user-page">
+      <UserProfile styles={styles} userData={userData} />
       <LocationInput userId={userData.account_id} />
     </div>
   );
 }
+
+export const links: LinksFunction = () => [{ rel: "stylesheet", href: styles }];

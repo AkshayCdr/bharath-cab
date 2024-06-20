@@ -50,7 +50,6 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
 export default function Ride() {
   const { rideDetails } = useLoaderData<typeof loader>();
   const message = useActionData<typeof action>();
-  // console.log("This is ride details", rideDetails);
 
   const [rideStatus, setRideStatus] = useState(false);
   const [driverDetails, setDriverDetails] = useState({});
@@ -79,12 +78,9 @@ export default function Ride() {
     <div>
       <RideDetails rideDetails={rideDetails} />
       {rideStatus ? (
-        // <p>driver accepted</p>
         <DriverDetails driverDetails={driverDetails} />
-      ) : message ? (
-        <p>{message.message}</p>
       ) : (
-        <p>Waiting for driver</p>
+        message && <p className="ride-message">{message.message}</p>
       )}
     </div>
   );

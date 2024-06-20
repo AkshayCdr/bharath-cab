@@ -1,0 +1,18 @@
+.user-page{
+    background-color: aqua;
+}
+
+#location-form{
+    height: 400px;
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    justify-content: center;
+    align-items: center;
+}
+
+.input-form{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}

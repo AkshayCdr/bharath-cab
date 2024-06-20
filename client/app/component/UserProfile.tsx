@@ -1,6 +1,4 @@
-
-
-export default function UserProfile({userData}) {
+export default function UserProfile({ userData, styles }) {
   return (
     <div>
       <ul>
@@ -8,5 +6,5 @@ export default function UserProfile({userData}) {
         <li>Phone: {userData.phone}</li>
       </ul>
     </div>
-  )
+  );
 }
