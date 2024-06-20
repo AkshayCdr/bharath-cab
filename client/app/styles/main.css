@@ -6,8 +6,9 @@
 }
 
 .nav{
-    border: 1px solid black;
+    /* border: 1px solid black; */
     display: flex;
+    background-color: black;
 }
 
 .nav ul{
@@ -18,8 +19,14 @@
     list-style-type: none;
 }
 
+.nav .nav-item a{ 
+    color: white;
+    text-decoration: none;
+}
+
 .nav .nav-item a:hover,
 .nav .nav-item a.active{
-    color: blue;
-    background-color: beige;
+    color: grey;
+
+    
 }

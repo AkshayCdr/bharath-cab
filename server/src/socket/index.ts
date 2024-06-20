@@ -1,8 +1,9 @@
 import { Server } from "socket.io";
-import { driverSocket } from "./driver.socket";
-import { clientSocket } from "./client.socket";
+import { driverSock, driverSocket } from "./driver.socket";
+import { clientSock, clientSocket } from "./client.socket";
 import HTTPServer from "http";
 import { driver } from "../services/driver.services";
+import { Ride } from "../dtos/ride.dto";
 
 export function createSocket(
   httpServer: HTTPServer.Server<
@@ -21,21 +22,16 @@ export function createSocket(
     console.log("connected");
     console.log(socket.id);
 
-    socket.on("registerDriver", (driverID: string) => {
-      console.log("driver reg with id:", driverID);
-      driverSocket[driverID] = socket;
-    });
+    driverSock.registerDriverSocket(socket);
 
-    socket.on("registerClient", (clientID: string) => {
-      console.log("client reg with id:", clientID);
-      clientSocket[clientID] = socket;
-    });
+    clientSock.registerClientSocket(socket);
 
     socket.on("driverAccept", async (rideData) => {
       console.log("driver accepted", rideData.userId, rideData.driverId);
-      const { userId, driverId } = rideData;
+      const { userId, driverId }: Ride = rideData;
       //send to userid
       //send the driver details to user
+      //set driver to ride
       const driverDetails = await driver.get(driverId);
       console.log(driverDetails);
 
@@ -44,7 +40,18 @@ export function createSocket(
       }
 
       //send to other drivers
+      for (let socket in driverSocket) {
+        driverSocket[socket].emit("lockRide", driverId);
+      }
       //remove client data from other driver
+    });
+
+    // get ride details and send just use ride details for this
+    socket.on("updateLocation", (data) => {
+      const { driverData, latitude, longitude } = data;
+      for (let client in clientSocket) {
+        clientSocket[client].emit("updateLocation", [latitude, longitude]);
+      }
     });
 
     socket.on("disconnect", () => {

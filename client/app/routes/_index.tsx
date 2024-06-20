@@ -1,5 +1,7 @@
-import type { MetaFunction } from "@remix-run/node";
+import type { LinksFunction, MetaFunction } from "@remix-run/node";
 import { Link } from "@remix-run/react";
+
+import styles from "../styles/index.css?url";
 
 export const meta: MetaFunction = () => {
   return [
@@ -11,8 +13,11 @@ export const meta: MetaFunction = () => {
 export default function Index() {
   return (
     <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}>
-      <h1>Hello world</h1>
-      <Link to={`/login`}>login</Link>
+      <main className="main-page">
+        <h1 className="main-heading">Bharat Cab</h1>
+      </main>
     </div>
   );
 }
+
+export const links: LinksFunction = () => [{ rel: "stylesheet", href: styles }];

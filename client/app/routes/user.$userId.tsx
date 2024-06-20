@@ -83,7 +83,7 @@ export default function User() {
   const { userData } = useLoaderData<typeof loader>();
   return (
     <div>
-      <UserProfile userData={userData}/>
+      <UserProfile userData={userData} />
       {/* <UserDetails userData={userData} /> */}
       <LocationInput userId={userData.account_id} />
     </div>

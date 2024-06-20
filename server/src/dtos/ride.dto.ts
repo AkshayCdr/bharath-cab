@@ -1,7 +1,7 @@
 export interface Ride {
   readonly id?: string;
   userId: string;
-  driverId?: string;
+  driverId: string;
   status?: RideStatus;
   source: LocationData;
   destination: LocationData;

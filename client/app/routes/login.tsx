@@ -1,11 +1,7 @@
-import { ActionFunctionArgs } from "@remix-run/node";
-import { Link, redirect, useActionData } from "@remix-run/react";
+import { ActionFunctionArgs, LinksFunction } from "@remix-run/node";
+import { redirect, useActionData } from "@remix-run/react";
 import { account } from "apis/account";
 import LoginInput from "../component/LoginInput";
-// interface userDetails{
-//   username:string,
-//   password:string
-// }
 
 export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
@@ -19,20 +15,17 @@ export async function action({ request }: ActionFunctionArgs) {
     return { message: "invalid username or password" };
 
   const id = await account.login(userDetails);
-  console.log(id);
 
   if (user) return redirect(`/user/${id}`);
   if (driver) return redirect(`/driver/${id}`);
-  return redirect("/");
+  return { message: "select user/driver" };
 }
 
 export default function Login() {
   const data = useActionData();
   return (
     <div>
-      {data?.message && <p>{data.message}</p>}
-      <Link to={`/user`}>user</Link>
-      <Link to={`/driver`}>driver</Link>
+      {data?.message && <p className="login-alert">{data.message}</p>}
       <LoginInput />
     </div>
   );

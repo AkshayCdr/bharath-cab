@@ -63,6 +63,10 @@ export default function Ride() {
       setDriverDetails(driverDetails);
       console.log(driverDetails);
     });
+    socket.on("updateLocation", (locationData) => {
+      const [latitude, longitude] = locationData;
+      console.log(latitude, longitude);
+    });
 
     return () => {
       socket.off("connect");

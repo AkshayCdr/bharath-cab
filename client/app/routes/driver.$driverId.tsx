@@ -14,14 +14,14 @@ import DriverProfile from "~/component/DriverProfile";
 export const loader = async ({ params }: LoaderFunctionArgs) => {
   const { driverId } = params;
 
-  console.log(driverId)
+  console.log(driverId);
   if (!driverId) {
     throw new Response("Not Found", { status: 404 });
   }
 
   const driverData = await driver.get(driverId);
 
-  console.log(driverData)
+  console.log(driverData);
 
   if (!driverData)
     throw json({ message: "Could not find driver details of id " });
@@ -43,6 +43,8 @@ export default function Driver() {
 
   const [userDetails, setUserDetails] = useState({});
 
+  // navigator.geolocation.watchPosition(success,error,option);
+
   useEffect(() => {
     socket.on("connect", () => {
       console.log("Socket driver connected with id:", socket.id);
@@ -53,11 +55,38 @@ export default function Driver() {
       setUserDetails(userDetails);
     });
 
+    socket.on("lockRide", (driverId) => {
+      if (driverId !== driverData.account_id) {
+        setUserDetails({});
+        console.log("ride taken");
+      } else {
+        console.log("ride confirmed ");
+        setLocationTracking();
+      }
+    });
+
     return () => {
       socket.off("connect");
       socket.off("rideRequest");
     };
   }, []);
+
+  const setLocationTracking = () => {
+    navigator.geolocation.watchPosition(
+      (pos) => {
+        const { latitude, longitude } = pos.coords;
+        socket.emit("updateLocation", { driverData, latitude, longitude });
+      },
+      (error) => {
+        console.log("eroor getting location", error);
+      },
+      {
+        enableHighAccuracy: true,
+        maximumAge: 0,
+        timeout: 50000,
+      }
+    );
+  };
 
   const goOnline = () => {
     socket.emit("registerDriver", driverData.account_id);
@@ -74,8 +103,8 @@ export default function Driver() {
   return (
     <div>
       <button onClick={goOnline}>goOnline</button>
-      
-      <DriverProfile driverData={driverData}/>
+
+      <DriverProfile driverData={driverData} />
       <h1>User Details</h1>
       <UserDetails
         userData={userDetails}
