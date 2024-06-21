@@ -4,14 +4,14 @@ import { Form } from "@remix-run/react";
 import { User } from "~/routes/user.$userId";
 
 export default function UserDetails({ userData, driverId, onClick }) {
-  console.log({ userData });
+  console.log(userData);
 
   return (
     // <Form method="POST">
-    <div>
+    <div className="ride-details">
       <input type="hidden" name="driverId" defaultValue={driverId} />
       <input type="hidden" name="userId" defaultValue={userData.id} />
-      <p>
+      <p className="ride-details-input">
         <label htmlFor="name">Name:</label>
         <input
           type="text"

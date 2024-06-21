@@ -7,10 +7,10 @@ import {
 } from "@remix-run/node";
 import LocationInput from "~/component/LocationInput";
 import { ride } from "apis/ride";
-import RideDetails from "../component/RideDetails";
+
 import { json, useLoaderData } from "@remix-run/react";
 import { user } from "apis/user";
-import UserDetails from "~/component/UserDetails";
+
 import UserProfile from "~/component/UserProfile";
 
 import styles from "../styles/user.css?url";

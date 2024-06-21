@@ -1,12 +1,18 @@
 /* eslint-disable import/no-unresolved */
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useActionData, useLoaderData } from "@remix-run/react";
-import { ActionFunctionArgs, json, LoaderFunctionArgs } from "@remix-run/node";
+import {
+  ActionFunctionArgs,
+  json,
+  LinksFunction,
+  LoaderFunctionArgs,
+} from "@remix-run/node";
 import { ride } from "apis/ride";
 import RideDetails from "~/component/RideDetails";
 import { socket } from "~/socket/websocket";
 import DriverDetails from "~/component/DriverDetails";
 // import invariant from "tiny-invariant";
+import styles from "../styles/ride.css?url";
 
 interface rideDetails {
   id: string;
@@ -42,7 +48,6 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
   if (!rideDetails) {
     throw new Response("Not Found", { status: 404 });
   }
-  // console.log(rideDetails);
 
   return json({ rideDetails });
 };
@@ -71,11 +76,12 @@ export default function Ride() {
       socket.off("connect");
       socket.off("registerClient");
       socket.off("rideAccepted");
+      socket.off("updateLocation");
     };
   }, []);
 
   return (
-    <div>
+    <div className="ride-details">
       <RideDetails rideDetails={rideDetails} />
       {rideStatus ? (
         <DriverDetails driverDetails={driverDetails} />
@@ -85,3 +91,5 @@ export default function Ride() {
     </div>
   );
 }
+
+export const links: LinksFunction = () => [{ rel: "stylesheet", href: styles }];

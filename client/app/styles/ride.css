@@ -1,0 +1,23 @@
+#ride-request-form{
+    width: fit-content;
+}
+
+.ride-details{
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}
+
+.ride-details-input{
+    display: flex;
+    flex-direction: column;
+
+}
+
+.driver-details{
+
+}
+
+.driver-details ul {
+    list-style: none;
+}

@@ -1,6 +1,7 @@
 import { socket } from "~/socket/websocket";
 import {
   ActionFunctionArgs,
+  LinksFunction,
   json,
   type LoaderFunctionArgs,
 } from "@remix-run/node";
@@ -10,6 +11,8 @@ import { driver } from "apis/driver";
 import { useEffect, useState } from "react";
 import UserDetails from "~/component/UserDetails";
 import DriverProfile from "~/component/DriverProfile";
+
+import styles from "../styles/driver.css?url";
 
 export const loader = async ({ params }: LoaderFunctionArgs) => {
   const { driverId } = params;
@@ -42,8 +45,10 @@ export default function Driver() {
   const { driverData } = useLoaderData<typeof loader>();
 
   const [userDetails, setUserDetails] = useState({});
+  const [online, setOnline] = useState(false);
+  const [isRideAccepted, setRideAccepted] = useState(false);
 
-  // navigator.geolocation.watchPosition(success,error,option);
+  console.log(userDetails);
 
   useEffect(() => {
     socket.on("connect", () => {
@@ -89,28 +94,42 @@ export default function Driver() {
   };
 
   const goOnline = () => {
-    socket.emit("registerDriver", driverData.account_id);
+    setOnline(!online);
+    if (online) {
+      socket.emit("setOffline", driverData.account_id);
+    } else {
+      socket.emit("registerDriver", driverData.account_id);
+    }
   };
 
   const handleClick = (e) => {
     e.preventDefault();
-    console.log("clicked", e);
     socket.emit("driverAccept", {
       driverId: driverData.account_id,
       userId: userDetails.user_id,
     });
+    setRideAccepted(true);
   };
   return (
-    <div>
-      <button onClick={goOnline}>goOnline</button>
-
+    <div className="driver-page">
       <DriverProfile driverData={driverData} />
-      <h1>User Details</h1>
-      <UserDetails
-        userData={userDetails}
-        driverId={driverData.account_id}
-        onClick={handleClick}
-      />
+      {Object.keys(userDetails).length > 0 && !isRideAccepted && (
+        <UserDetails
+          userData={userDetails}
+          driverId={driverData.account_id}
+          onClick={handleClick}
+        />
+      )}
+      {!isRideAccepted && (
+        <button
+          onClick={goOnline}
+          className={online ? "btn-gooffline" : "btn-goonline"}
+        >
+          {online ? "go-offline" : "go-online"}
+        </button>
+      )}
     </div>
   );
 }
+
+export const links: LinksFunction = () => [{ rel: "stylesheet", href: styles }];

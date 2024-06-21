@@ -23,6 +23,7 @@ export function createSocket(
     console.log(socket.id);
 
     driverSock.registerDriverSocket(socket);
+    driverSock.setOffline(socket);
 
     clientSock.registerClientSocket(socket);
 
@@ -49,6 +50,8 @@ export function createSocket(
     // get ride details and send just use ride details for this
     socket.on("updateLocation", (data) => {
       const { driverData, latitude, longitude } = data;
+      console.log(latitude);
+      console.log(longitude);
       for (let client in clientSocket) {
         clientSocket[client].emit("updateLocation", [latitude, longitude]);
       }

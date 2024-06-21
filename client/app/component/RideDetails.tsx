@@ -22,7 +22,7 @@ export default function RideDetails({ rideDetails }) {
     <div>
       <Form method="POST" id="ride-request-form">
         <input type="hidden" name="rideId" defaultValue={rideDetails.id} />
-        <p>
+        <p className="ride-details-input">
           <label htmlFor="source">Source:</label>
           <input
             type="text"
@@ -34,7 +34,6 @@ export default function RideDetails({ rideDetails }) {
               rideDetails.source.x
             )}
           />
-
           <label htmlFor="destination">Destination:</label>
           <input
             type="text"
@@ -45,6 +44,14 @@ export default function RideDetails({ rideDetails }) {
               rideDetails.destination.y,
               rideDetails.destination.x
             )}
+          />
+          <label htmlFor="price">Price:</label>
+          <input
+            type="text"
+            name="price"
+            id=""
+            defaultValue={rideDetails.price}
+            readOnly
           />
         </p>
         <p>

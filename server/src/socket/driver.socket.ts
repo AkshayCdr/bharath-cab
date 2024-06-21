@@ -11,6 +11,16 @@ async function registerDriverSocket(socket: {
   });
 }
 
+async function setOffline(socket: {
+  on: (arg0: string, arg1: (driverID: string) => void) => void;
+}) {
+  socket.on("setOffline", (driverID: string) => {
+    console.log(`driver id ${driverID} went offline`);
+    delete driverSocket[driverID];
+  });
+}
+
 export const driverSock = {
   registerDriverSocket,
+  setOffline,
 };
