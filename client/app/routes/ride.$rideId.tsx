@@ -11,9 +11,9 @@ import { ride } from "apis/ride";
 import RideDetails from "~/component/RideDetails";
 import { socket } from "~/socket/websocket";
 import DriverDetails from "~/component/DriverDetails";
-// import invariant from "tiny-invariant";
-import styles from "../styles/ride.css?url";
 
+import styles from "../styles/ride.css?url";
+// import "leaflet/dist/leaflet.css";
 interface rideDetails {
   id: string;
   source: Coordinates;
@@ -53,11 +53,31 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
 };
 
 export default function Ride() {
+  const [MapComponent, setMapComponent] = useState(null);
+  const [source, setSource] = useState(null);
+  const [destination, setDestination] = useState(null);
+
   const { rideDetails } = useLoaderData<typeof loader>();
+
   const message = useActionData<typeof action>();
 
   const [isRideAccepted, setRideStatus] = useState(false);
   const [driverDetails, setDriverDetails] = useState({});
+
+  const [rideLocation, setRideLocation] = useState(null);
+
+  useEffect(() => {
+    import("../component/Map").then((module) =>
+      setMapComponent(() => module.default)
+    );
+  }, []);
+
+  useEffect(() => {
+    if (rideDetails) {
+      setSource([rideDetails.destination.y, rideDetails.destination.x]);
+      setDestination([rideDetails.source.y, rideDetails.source.x]);
+    }
+  }, [rideDetails]);
 
   useEffect(() => {
     socket.emit("registerClient", rideDetails.user_id);
@@ -69,7 +89,9 @@ export default function Ride() {
     });
     socket.on("updateLocation", (locationData) => {
       const [latitude, longitude] = locationData;
+      console.log(locationData);
       console.log(latitude, longitude);
+      setRideLocation([latitude, longitude]);
     });
 
     return () => {
@@ -82,6 +104,15 @@ export default function Ride() {
 
   return (
     <div className="ride-details">
+      {MapComponent && (
+        <MapComponent
+          source={source}
+          destination={destination}
+          setSource={setSource}
+          setDestination={setDestination}
+          rideLocation={rideLocation}
+        />
+      )}
       <RideDetails rideDetails={rideDetails} />
       {isRideAccepted ? (
         <DriverDetails driverDetails={driverDetails} />

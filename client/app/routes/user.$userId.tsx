@@ -14,7 +14,7 @@ import { user } from "apis/user";
 import UserProfile from "~/component/UserProfile";
 
 import styles from "../styles/user.css?url";
-// import Map from "~/component/Map";
+
 import { useEffect, useState } from "react";
 
 export interface User {

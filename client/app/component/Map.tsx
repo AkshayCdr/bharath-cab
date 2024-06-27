@@ -15,9 +15,12 @@ export default function Map({
   destination,
   setSource,
   setDestination,
+  rideLocation,
 }) {
   const [isSourceSet, setIsSourceSet] = useState(false);
   const [route, setRoute] = useState([]);
+  const [distance, setDistance] = useState(null);
+  const [midpoint, setMidpoint] = useState(null);
 
   useEffect(() => {
     if (source && destination) {
@@ -32,6 +35,8 @@ export default function Map({
             coord[0],
           ]);
           setRoute(coords);
+          setDistance(data.routes[0].distance / 1000);
+          setMidpoint(getRouteMidpoint(coords));
         }
       })();
     }
@@ -53,8 +58,13 @@ export default function Map({
     return null;
   }
 
+  function getRouteMidpoint(route) {
+    const midpointIndex = Math.floor(route.length / 2);
+    return route[midpointIndex];
+  }
+
   return (
-    <MapContainer center={[51.505, -0.09]} zoom={13} scrollWheelZoom={false}>
+    <MapContainer center={[12.971, 77.594]} zoom={13} scrollWheelZoom={false}>
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -70,7 +80,21 @@ export default function Map({
           <Popup>destination</Popup>
         </Marker>
       )}
-      {route.length > 0 && <Polyline positions={route} color="blue" />}
+      {rideLocation && (
+        <Marker position={rideLocation}>
+          <Popup>Driver Location</Popup>
+        </Marker>
+      )}
+      {route.length > 0 && (
+        <>
+          <Polyline positions={route} color="blue" />
+          {midpoint && (
+            <Marker position={midpoint}>
+              <Popup>Distance: {distance.toFixed(2)} km</Popup>
+            </Marker>
+          )}
+        </>
+      )}
     </MapContainer>
   );
 }
