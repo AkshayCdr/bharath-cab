@@ -86,6 +86,8 @@ export async function action({ request }: ActionFunctionArgs) {
 
 export default function User() {
   const [MapComponent, setMapComponent] = useState(null);
+  const [source, setSource] = useState(null);
+  const [destination, setDestination] = useState(null);
   const { userData } = useLoaderData<typeof loader>();
 
   useEffect(() => {
@@ -96,7 +98,14 @@ export default function User() {
 
   return (
     <div className="user-page">
-      {MapComponent && <MapComponent />}
+      {MapComponent && (
+        <MapComponent
+          source={source}
+          destination={destination}
+          setSource={setSource}
+          setDestination={setDestination}
+        />
+      )}
       <UserProfile styles={styles} userData={userData} />
       <LocationInput userId={userData.account_id} />
     </div>
