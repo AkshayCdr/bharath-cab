@@ -1,15 +1,27 @@
 .user-page{
     background-color: aqua;
+    height: 100vh;
 }
 
-#location-form{
+/* #location-form{
     height: 400px;
     display: flex;
     flex-direction: column;
     width: 50%;
     justify-content: center;
     align-items: center;
+} */
+
+.leaflet-container{
+    /* width: 500px; */
+    height:100vh ;
+    /* height: 80%; */
+    padding: 10px;
+    margin: 5px;
+    border: 2px solid black;
+    border-radius: 10px;
 }
+
 
 .input-form{
     display: flex;

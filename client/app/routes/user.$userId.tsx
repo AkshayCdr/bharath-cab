@@ -14,7 +14,8 @@ import { user } from "apis/user";
 import UserProfile from "~/component/UserProfile";
 
 import styles from "../styles/user.css?url";
-import Map from "~/component/Map";
+// import Map from "~/component/Map";
+import { useEffect, useState } from "react";
 
 export interface User {
   account_id: string;
@@ -84,12 +85,20 @@ export async function action({ request }: ActionFunctionArgs) {
 }
 
 export default function User() {
+  const [MapComponent, setMapComponent] = useState(null);
   const { userData } = useLoaderData<typeof loader>();
+
+  useEffect(() => {
+    import("../component/Map").then((module) =>
+      setMapComponent(() => module.default)
+    );
+  });
+
   return (
     <div className="user-page">
+      {MapComponent && <MapComponent />}
       <UserProfile styles={styles} userData={userData} />
       <LocationInput userId={userData.account_id} />
-      <Map />
     </div>
   );
 }
