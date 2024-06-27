@@ -107,7 +107,11 @@ export default function User() {
         />
       )}
       <UserProfile styles={styles} userData={userData} />
-      <LocationInput userId={userData.account_id} />
+      <LocationInput
+        userId={userData.account_id}
+        source={source}
+        destination={destination}
+      />
     </div>
   );
 }

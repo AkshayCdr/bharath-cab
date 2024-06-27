@@ -8,38 +8,22 @@ const cities = [
   { name: "Chennai", latitude: 13.0827, longitude: 80.2707 },
 ];
 
-export default function LocationInput({ userId }) {
+export default function LocationInput({ userId, source, destination }) {
   return (
     <Form method="POST" id="location-form">
       <p className="input-form">
         <input type="hidden" name="userId" value={userId} />
         <label htmlFor="source">Source:</label>
-        <select name="source" id="source" className="input-source">
-          {cities.map((city) => (
-            <option
-              key={city.name}
-              value={`${city.latitude},${city.longitude}`}
-            >
-              {city.name}
-            </option>
-          ))}
-        </select>
+        <input type="text" name="source" id="" value={source} readOnly />
 
         <label htmlFor="destination">Destination:</label>
-        <select
+        <input
+          type="text"
           name="destination"
-          id="destination"
-          className="input-destination"
-        >
-          {cities.map((city) => (
-            <option
-              key={city.name}
-              value={`${city.latitude},${city.longitude}`}
-            >
-              {city.name}
-            </option>
-          ))}
-        </select>
+          id=""
+          value={destination}
+          readOnly
+        />
       </p>
       <p>
         <button type="submit">submit</button>

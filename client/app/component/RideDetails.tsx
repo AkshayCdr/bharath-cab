@@ -1,22 +1,9 @@
 import { Form } from "@remix-run/react";
+import { ride } from "apis/ride";
 import React from "react";
-
-const cities = [
-  { name: "Delhi", latitude: 28.6139, longitude: 77.209 },
-  { name: "Mumbai", latitude: 19.076, longitude: 72.8777 },
-  { name: "Bangalore", latitude: 12.9716, longitude: 77.5946 },
-  { name: "Kolkata", latitude: 22.5726, longitude: 88.3639 },
-  { name: "Chennai", latitude: 13.0827, longitude: 80.2707 },
-];
 
 export default function RideDetails({ rideDetails }) {
   console.log(rideDetails);
-  const getCityNameByCoordinates = (x: number, y: number) => {
-    const city = cities.find(
-      (city) => city.latitude === x && city.longitude === y
-    );
-    return city ? city.name : "no citie";
-  };
 
   return (
     <div>
@@ -28,11 +15,8 @@ export default function RideDetails({ rideDetails }) {
             type="text"
             readOnly
             name="source"
+            defaultValue={(rideDetails.source.x, rideDetails.source.y)}
             id=""
-            defaultValue={getCityNameByCoordinates(
-              rideDetails.source.y,
-              rideDetails.source.x
-            )}
           />
           <label htmlFor="destination">Destination:</label>
           <input
@@ -40,17 +24,16 @@ export default function RideDetails({ rideDetails }) {
             name="destination"
             id=""
             readOnly
-            defaultValue={getCityNameByCoordinates(
-              rideDetails.destination.y,
-              rideDetails.destination.x
-            )}
+            defaultValue={
+              (rideDetails.destination.x, rideDetails.destination.y)
+            }
           />
           <label htmlFor="price">Price:</label>
           <input
             type="text"
             name="price"
             id=""
-            defaultValue={rideDetails.price}
+            value={rideDetails.price}
             readOnly
           />
         </p>

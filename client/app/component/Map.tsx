@@ -1,13 +1,14 @@
 import {
   MapContainer,
   Marker,
+  Polyline,
   Popup,
   TileLayer,
   useMap,
   useMapEvents,
 } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function Map({
   source,
@@ -16,6 +17,25 @@ export default function Map({
   setDestination,
 }) {
   const [isSourceSet, setIsSourceSet] = useState(false);
+  const [route, setRoute] = useState([]);
+
+  useEffect(() => {
+    if (source && destination) {
+      (async () => {
+        const response = await fetch(
+          `http://router.project-osrm.org/route/v1/driving/${source[1]},${source[0]};${destination[1]},${destination[0]}?overview=full&geometries=geojson`
+        );
+        const data = await response.json();
+        if (data.routes.length > 0) {
+          const coords = data.routes[0].geometry.coordinates.map((coord) => [
+            coord[1],
+            coord[0],
+          ]);
+          setRoute(coords);
+        }
+      })();
+    }
+  }, [source, destination]);
 
   function ClickHandler() {
     useMapEvents({
@@ -50,6 +70,7 @@ export default function Map({
           <Popup>destination</Popup>
         </Marker>
       )}
+      {route.length > 0 && <Polyline positions={route} color="blue" />}
     </MapContainer>
   );
 }
