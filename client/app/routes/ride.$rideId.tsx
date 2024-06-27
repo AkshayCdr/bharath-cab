@@ -56,7 +56,7 @@ export default function Ride() {
   const { rideDetails } = useLoaderData<typeof loader>();
   const message = useActionData<typeof action>();
 
-  const [rideStatus, setRideStatus] = useState(false);
+  const [isRideAccepted, setRideStatus] = useState(false);
   const [driverDetails, setDriverDetails] = useState({});
 
   useEffect(() => {
@@ -83,7 +83,7 @@ export default function Ride() {
   return (
     <div className="ride-details">
       <RideDetails rideDetails={rideDetails} />
-      {rideStatus ? (
+      {isRideAccepted ? (
         <DriverDetails driverDetails={driverDetails} />
       ) : (
         message && <p className="ride-message">{message.message}</p>

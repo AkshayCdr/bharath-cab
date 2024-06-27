@@ -14,6 +14,7 @@ import { user } from "apis/user";
 import UserProfile from "~/component/UserProfile";
 
 import styles from "../styles/user.css?url";
+import Map from "~/component/Map";
 
 export interface User {
   account_id: string;
@@ -88,6 +89,7 @@ export default function User() {
     <div className="user-page">
       <UserProfile styles={styles} userData={userData} />
       <LocationInput userId={userData.account_id} />
+      <Map />
     </div>
   );
 }
