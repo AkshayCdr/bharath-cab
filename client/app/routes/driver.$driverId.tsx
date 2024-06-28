@@ -6,7 +6,7 @@ import {
   type LoaderFunctionArgs,
 } from "@remix-run/node";
 
-import { useLoaderData } from "@remix-run/react";
+import { useLoaderData, useNavigate } from "@remix-run/react";
 import { driver } from "apis/driver";
 import { useEffect, useState } from "react";
 import UserDetails from "~/component/UserDetails";
@@ -32,15 +32,6 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
   return json(driverData);
 };
 
-// export const action = async ({ request }: ActionFunctionArgs) => {
-//   const formData = await request.formData();
-
-//   console.log(formData);
-
-//   const data = Object.fromEntries(formData);
-//   console.log(data);
-// };
-
 export default function Driver() {
   const { driverData } = useLoaderData<typeof loader>();
 
@@ -48,6 +39,7 @@ export default function Driver() {
   const [online, setOnline] = useState(false);
   const [isRideAccepted, setRideAccepted] = useState(false);
 
+  const navigate = useNavigate();
   console.log(userDetails);
 
   useEffect(() => {
@@ -67,6 +59,7 @@ export default function Driver() {
       } else {
         console.log("ride confirmed ");
         setLocationTracking();
+        navigate("/finalPageDriver");
       }
     });
 

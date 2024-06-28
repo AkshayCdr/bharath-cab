@@ -58,7 +58,7 @@ export async function action({ request }: ActionFunctionArgs) {
   const source = formData.get("source");
   const destination = formData.get("destination");
 
-  if (!source || !destination) return redirect("/user");
+  if (!source || !destination) return { message: "select source/destination" };
 
   const [sourceLatitude, sourceLongitude] = source.split(",");
   const [destinationLatitude, destinationLongitude] = destination.split(",");
@@ -86,15 +86,15 @@ export async function action({ request }: ActionFunctionArgs) {
 
 export default function User() {
   const [MapComponent, setMapComponent] = useState(null);
-  const [source, setSource] = useState(null);
-  const [destination, setDestination] = useState(null);
+  const [source, setSource] = useState("");
+  const [destination, setDestination] = useState("");
   const [isEditable, setIsEditable] = useState(true);
 
   const [sourceName, setSourceName] = useState("");
   const [destinationName, setDestinationName] = useState("");
 
   const { userData } = useLoaderData<typeof loader>();
-
+  const data = useLoaderData();
   useEffect(() => {
     import("../component/Map").then((module) =>
       setMapComponent(() => module.default)
@@ -119,7 +119,10 @@ export default function User() {
         userId={userData.account_id}
         sourceName={sourceName}
         destinationName={destinationName}
+        source={source}
+        destination={destination}
       />
+      {data?.message && <p>{data.message}</p>}
     </div>
   );
 }

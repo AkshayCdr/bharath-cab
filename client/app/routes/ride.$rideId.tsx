@@ -92,7 +92,7 @@ export default function Ride() {
       setRideStatus(true);
       setDriverDetails(driverDetails);
       console.log(driverDetails);
-      navigate("/finalPageUser");
+      navigate(`/finalPageUser/${rideDetails.id}`);
     });
     socket.on("updateLocation", (locationData) => {
       const [latitude, longitude] = locationData;
@@ -123,7 +123,11 @@ export default function Ride() {
           isEditable={isEditable}
         />
       )}
-      <RideDetails rideDetails={rideDetails} />
+      <RideDetails
+        rideDetails={rideDetails}
+        sourceName={sourceName}
+        destinationName={destinationName}
+      />
       {isRideAccepted ? (
         <DriverDetails driverDetails={driverDetails} />
       ) : (

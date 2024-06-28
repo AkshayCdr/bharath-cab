@@ -37,6 +37,13 @@ export default function Map({
             coord[1],
             coord[0],
           ]);
+          const sourceName = await getLocationName(source[0], source[1]);
+          const destinationName = await getLocationName(
+            destination[0],
+            destination[1]
+          );
+          setSourceName(sourceName);
+          setDestinationName(destinationName);
           setRoute(coords);
           setDistance(data.routes[0].distance / 1000);
           setMidpoint(getRouteMidpoint(coords));
@@ -53,13 +60,11 @@ export default function Map({
         if (!isSourceSet) {
           setSource([lat, lng]);
           const name = await getLocationName(lat, lng);
-          console.log("this is name" + name);
           setSourceName(name);
           setIsSourceSet(true);
         } else {
           setDestination([lat, lng]);
           const name = await getLocationName(lat, lng);
-          console.log("this is des name" + name);
           setDestinationName(name);
           setIsSourceSet(false);
         }
