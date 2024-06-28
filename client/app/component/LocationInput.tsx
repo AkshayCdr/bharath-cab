@@ -1,4 +1,5 @@
 import { Form } from "@remix-run/react";
+import { useEffect } from "react";
 
 const cities = [
   { name: "Delhi", latitude: 28.6139, longitude: 77.209 },
@@ -8,20 +9,20 @@ const cities = [
   { name: "Chennai", latitude: 13.0827, longitude: 80.2707 },
 ];
 
-export default function LocationInput({ userId, source, destination }) {
+export default function LocationInput({ userId, sourceName, destinationName }) {
   return (
     <Form method="POST" id="location-form">
       <p className="input-form">
         <input type="hidden" name="userId" value={userId} />
         <label htmlFor="source">Source:</label>
-        <input type="text" name="source" id="" value={source} readOnly />
+        <input type="text" name="source" id="" value={sourceName} readOnly />
 
         <label htmlFor="destination">Destination:</label>
         <input
           type="text"
           name="destination"
           id=""
-          value={destination}
+          value={destinationName}
           readOnly
         />
       </p>

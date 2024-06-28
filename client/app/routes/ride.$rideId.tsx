@@ -1,6 +1,6 @@
 /* eslint-disable import/no-unresolved */
 import { useEffect, useState } from "react";
-import { useActionData, useLoaderData } from "@remix-run/react";
+import { useActionData, useLoaderData, useNavigate } from "@remix-run/react";
 import {
   ActionFunctionArgs,
   json,
@@ -56,6 +56,12 @@ export default function Ride() {
   const [MapComponent, setMapComponent] = useState(null);
   const [source, setSource] = useState(null);
   const [destination, setDestination] = useState(null);
+  const [isEditable, setIsEditable] = useState(false);
+
+  const [sourceName, setSourceName] = useState(null);
+  const [destinationName, setDestinationName] = useState(null);
+
+  const navigate = useNavigate();
 
   const { rideDetails } = useLoaderData<typeof loader>();
 
@@ -86,6 +92,7 @@ export default function Ride() {
       setRideStatus(true);
       setDriverDetails(driverDetails);
       console.log(driverDetails);
+      navigate("/finalPageUser");
     });
     socket.on("updateLocation", (locationData) => {
       const [latitude, longitude] = locationData;
@@ -110,7 +117,10 @@ export default function Ride() {
           destination={destination}
           setSource={setSource}
           setDestination={setDestination}
+          setSourceName={setSourceName}
+          setDestinationName={setDestinationName}
           rideLocation={rideLocation}
+          isEditable={isEditable}
         />
       )}
       <RideDetails rideDetails={rideDetails} />

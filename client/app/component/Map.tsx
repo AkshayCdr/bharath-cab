@@ -15,7 +15,10 @@ export default function Map({
   destination,
   setSource,
   setDestination,
+  setSourceName,
+  setDestinationName,
   rideLocation,
+  isEditable,
 }) {
   const [isSourceSet, setIsSourceSet] = useState(false);
   const [route, setRoute] = useState([]);
@@ -44,13 +47,20 @@ export default function Map({
 
   function ClickHandler() {
     useMapEvents({
-      click(e) {
+      async click(e) {
         const { lat, lng } = e.latlng;
+        if (!isEditable) return;
         if (!isSourceSet) {
           setSource([lat, lng]);
+          const name = await getLocationName(lat, lng);
+          console.log("this is name" + name);
+          setSourceName(name);
           setIsSourceSet(true);
         } else {
           setDestination([lat, lng]);
+          const name = await getLocationName(lat, lng);
+          console.log("this is des name" + name);
+          setDestinationName(name);
           setIsSourceSet(false);
         }
       },
@@ -97,4 +107,12 @@ export default function Map({
       )}
     </MapContainer>
   );
+}
+
+async function getLocationName(lat, lon) {
+  const response = await fetch(
+    `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`
+  );
+  const data = await response.json();
+  return data.display_name;
 }

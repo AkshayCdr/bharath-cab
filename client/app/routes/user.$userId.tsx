@@ -88,6 +88,11 @@ export default function User() {
   const [MapComponent, setMapComponent] = useState(null);
   const [source, setSource] = useState(null);
   const [destination, setDestination] = useState(null);
+  const [isEditable, setIsEditable] = useState(true);
+
+  const [sourceName, setSourceName] = useState("");
+  const [destinationName, setDestinationName] = useState("");
+
   const { userData } = useLoaderData<typeof loader>();
 
   useEffect(() => {
@@ -104,13 +109,16 @@ export default function User() {
           destination={destination}
           setSource={setSource}
           setDestination={setDestination}
+          setSourceName={setSourceName}
+          setDestinationName={setDestinationName}
+          isEditable={isEditable}
         />
       )}
       <UserProfile styles={styles} userData={userData} />
       <LocationInput
         userId={userData.account_id}
-        source={source}
-        destination={destination}
+        sourceName={sourceName}
+        destinationName={destinationName}
       />
     </div>
   );
