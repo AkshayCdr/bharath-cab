@@ -1,6 +1,6 @@
 /* eslint-disable import/no-unresolved */
 import { useEffect, useState } from "react";
-import { useActionData, useLoaderData, useNavigate } from "@remix-run/react";
+import { useActionData, useNavigate } from "@remix-run/react";
 import {
   ActionFunctionArgs,
   json,
@@ -9,10 +9,12 @@ import {
 } from "@remix-run/node";
 import { ride } from "apis/ride";
 import RideDetails from "~/component/RideDetails";
-import { socket } from "~/socket/websocket";
+
 import DriverDetails from "~/component/DriverDetails";
 
 import styles from "../styles/ride.css?url";
+import useRideDetails from "~/hooks/useRideDetails";
+import useRideSocket from "~/hooks/useRideSocket";
 // import "leaflet/dist/leaflet.css";
 export interface rideDetails {
   id: string;
@@ -53,52 +55,21 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
 };
 
 export default function Ride() {
-  const [MapComponent, setMapComponent] = useState(null);
-  const [source, setSource] = useState(null);
-  const [destination, setDestination] = useState(null);
   const [isEditable, setIsEditable] = useState(false);
-
   const [sourceName, setSourceName] = useState(null);
   const [destinationName, setDestinationName] = useState(null);
 
-  const navigate = useNavigate();
-
-  const { rideDetails } = useLoaderData<typeof loader>();
-
   const message = useActionData<typeof action>();
 
-  const [isRideAccepted, setRideStatus] = useState(false);
-  const [driverDetails, setDriverDetails] = useState({});
-
-  useEffect(() => {
-    import("../component/Map").then((module) =>
-      setMapComponent(() => module.default)
-    );
-  }, []);
-
-  useEffect(() => {
-    if (rideDetails) {
-      setSource([rideDetails.destination.y, rideDetails.destination.x]);
-      setDestination([rideDetails.source.y, rideDetails.source.x]);
-    }
-  }, [rideDetails]);
-
-  useEffect(() => {
-    socket.emit("registerClient", rideDetails.user_id);
-    socket.on("rideAccepted", (driverDetails) => {
-      console.log("ride accepted by driver ", driverDetails);
-      setRideStatus(true);
-      setDriverDetails(driverDetails);
-      console.log(driverDetails);
-      navigate(`/finalPageUser/${rideDetails.id}`);
-    });
-
-    return () => {
-      socket.off("connect");
-      socket.off("registerClient");
-      socket.off("rideAccepted");
-    };
-  }, []);
+  const {
+    rideDetails,
+    source,
+    destination,
+    setSource,
+    setDestination,
+    MapComponent,
+  } = useRideDetails();
+  const { isRideAccepted, driverDetails } = useRideSocket(rideDetails);
 
   return (
     <div className="ride-details">

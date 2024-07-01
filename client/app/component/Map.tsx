@@ -25,6 +25,8 @@ export default function Map({
   const [distance, setDistance] = useState(null);
   const [midpoint, setMidpoint] = useState(null);
 
+  console.log(rideLocation);
+
   useEffect(() => {
     if (source && destination) {
       (async () => {
@@ -78,8 +80,14 @@ export default function Map({
     return route[midpointIndex];
   }
 
+  const getCenter = () => {
+    if (rideLocation) return rideLocation;
+    if (midpoint) return midpoint;
+    return [12.971, 77.594];
+  };
+
   return (
-    <MapContainer center={[12.971, 77.594]} zoom={13} scrollWheelZoom={false}>
+    <MapContainer center={getCenter()} zoom={13} scrollWheelZoom={false}>
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

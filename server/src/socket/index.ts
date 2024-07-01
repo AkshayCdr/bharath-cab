@@ -50,8 +50,8 @@ export function createSocket(
     // get ride details and send just use ride details for this
     socket.on("updateLocation", (data) => {
       const { driverData, latitude, longitude } = data;
-      console.log(latitude);
-      console.log(longitude);
+      console.log("inside server" + latitude);
+      console.log("inside server" + longitude);
       for (let client in clientSocket) {
         clientSocket[client].emit("updateLocation", [latitude, longitude]);
       }
