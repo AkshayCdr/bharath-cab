@@ -58,8 +58,7 @@ export default function Driver() {
         console.log("ride taken");
       } else {
         console.log("ride confirmed ");
-        setLocationTracking();
-        navigate("/finalPageDriver");
+        navigate(`/finalPageDriver/${driverData.account_id}`);
       }
     });
 
@@ -68,23 +67,6 @@ export default function Driver() {
       socket.off("rideRequest");
     };
   }, []);
-
-  const setLocationTracking = () => {
-    navigator.geolocation.watchPosition(
-      (pos) => {
-        const { latitude, longitude } = pos.coords;
-        socket.emit("updateLocation", { driverData, latitude, longitude });
-      },
-      (error) => {
-        console.log("eroor getting location", error);
-      },
-      {
-        enableHighAccuracy: true,
-        maximumAge: 0,
-        timeout: 50000,
-      }
-    );
-  };
 
   const goOnline = () => {
     setOnline(!online);

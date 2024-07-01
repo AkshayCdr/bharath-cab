@@ -14,7 +14,7 @@ import DriverDetails from "~/component/DriverDetails";
 
 import styles from "../styles/ride.css?url";
 // import "leaflet/dist/leaflet.css";
-interface rideDetails {
+export interface rideDetails {
   id: string;
   source: Coordinates;
   destination: Coordinates;
@@ -70,8 +70,6 @@ export default function Ride() {
   const [isRideAccepted, setRideStatus] = useState(false);
   const [driverDetails, setDriverDetails] = useState({});
 
-  const [rideLocation, setRideLocation] = useState(null);
-
   useEffect(() => {
     import("../component/Map").then((module) =>
       setMapComponent(() => module.default)
@@ -94,18 +92,11 @@ export default function Ride() {
       console.log(driverDetails);
       navigate(`/finalPageUser/${rideDetails.id}`);
     });
-    socket.on("updateLocation", (locationData) => {
-      const [latitude, longitude] = locationData;
-      console.log(locationData);
-      console.log(latitude, longitude);
-      setRideLocation([latitude, longitude]);
-    });
 
     return () => {
       socket.off("connect");
       socket.off("registerClient");
       socket.off("rideAccepted");
-      socket.off("updateLocation");
     };
   }, []);
 
@@ -119,7 +110,6 @@ export default function Ride() {
           setDestination={setDestination}
           setSourceName={setSourceName}
           setDestinationName={setDestinationName}
-          rideLocation={rideLocation}
           isEditable={isEditable}
         />
       )}

@@ -17,8 +17,8 @@ export default function Map({
   setDestination,
   setSourceName,
   setDestinationName,
-  rideLocation,
   isEditable,
+  rideLocation,
 }) {
   const [isSourceSet, setIsSourceSet] = useState(false);
   const [route, setRoute] = useState([]);
