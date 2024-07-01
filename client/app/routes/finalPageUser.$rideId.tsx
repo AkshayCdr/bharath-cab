@@ -7,7 +7,7 @@ import useRideLocation from "~/hooks/useRideLocation";
 
 export const loader = async ({ params }: LoaderFunctionArgs) => {
   const { rideId } = params;
-  console.log(rideId);
+
   if (!rideId) {
     throw new Response("Not Found", { status: 404 });
   }
