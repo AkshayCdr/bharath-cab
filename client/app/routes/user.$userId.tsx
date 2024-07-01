@@ -8,7 +8,7 @@ import {
 import LocationInput from "~/component/LocationInput";
 import { ride } from "apis/ride";
 
-import { json, useLoaderData } from "@remix-run/react";
+import { json, useActionData, useLoaderData } from "@remix-run/react";
 import { user } from "apis/user";
 
 import UserProfile from "~/component/UserProfile";
@@ -16,6 +16,7 @@ import UserProfile from "~/component/UserProfile";
 import styles from "../styles/user.css?url";
 
 import { useEffect, useState } from "react";
+import useUserDetails from "~/hooks/useUserDetails";
 
 export interface User {
   account_id: string;
@@ -85,21 +86,20 @@ export async function action({ request }: ActionFunctionArgs) {
 }
 
 export default function User() {
-  const [MapComponent, setMapComponent] = useState(null);
-  const [source, setSource] = useState("");
-  const [destination, setDestination] = useState("");
-  const [isEditable, setIsEditable] = useState(true);
-
-  const [sourceName, setSourceName] = useState("");
-  const [destinationName, setDestinationName] = useState("");
-
-  const { userData } = useLoaderData<typeof loader>();
-  const data = useLoaderData();
-  useEffect(() => {
-    import("../component/Map").then((module) =>
-      setMapComponent(() => module.default)
-    );
-  });
+  const {
+    userData,
+    source,
+    destination,
+    setSource,
+    setDestination,
+    sourceName,
+    setSourceName,
+    destinationName,
+    setDestinationName,
+    isEditable,
+    MapComponent,
+    data,
+  } = useUserDetails();
 
   return (
     <div className="user-page">

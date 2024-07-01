@@ -1,10 +1,9 @@
 import { LoaderFunctionArgs, json } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
 import { ride } from "apis/ride";
-import { useEffect, useState } from "react";
-import { socket } from "~/socket/websocket";
+import { useState } from "react";
 import Ride from "~/component/Ride";
-import useRideDetails from "~/hooks/useRideDetails";
+import useRideDetails, { RideDetails } from "~/hooks/useRideDetails";
+import useRideLocation from "~/hooks/useRideLocation";
 
 export const loader = async ({ params }: LoaderFunctionArgs) => {
   const { rideId } = params;
@@ -12,7 +11,7 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
   if (!rideId) {
     throw new Response("Not Found", { status: 404 });
   }
-  const rideDetails: rideDetails = await ride.getRideDetails(rideId);
+  const rideDetails: RideDetails = await ride.getRideDetails(rideId);
 
   if (!rideDetails) {
     throw new Response("Not Found", { status: 404 });
@@ -22,7 +21,6 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
 };
 
 export default function FinalPageUser() {
-  const [rideLocation, setRideLocation] = useState(null);
   const [isEditable, setIsEditable] = useState(false);
   const [sourceName, setSourceName] = useState(null);
   const [destinationName, setDestinationName] = useState(null);
@@ -36,18 +34,7 @@ export default function FinalPageUser() {
     MapComponent,
   } = useRideDetails();
 
-  useEffect(() => {
-    const handleUpdateLocation = (locationData) => {
-      const [latitude, longitude] = locationData;
-      setRideLocation([latitude, longitude]);
-    };
-
-    socket.on("updateLocation", handleUpdateLocation);
-
-    return () => {
-      socket.off("updateLocation", handleUpdateLocation);
-    };
-  }, []);
+  const { rideLocation } = useRideLocation();
 
   return (
     <div>

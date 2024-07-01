@@ -25,8 +25,6 @@ export default function Map({
   const [distance, setDistance] = useState(null);
   const [midpoint, setMidpoint] = useState(null);
 
-  console.log(rideLocation);
-
   useEffect(() => {
     if (source && destination) {
       (async () => {

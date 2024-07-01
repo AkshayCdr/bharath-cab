@@ -40,19 +40,18 @@ export default function Driver() {
   const [isRideAccepted, setRideAccepted] = useState(false);
 
   const navigate = useNavigate();
-  console.log(userDetails);
 
   useEffect(() => {
-    socket.on("connect", () => {
+    const handleConnect = () => {
       console.log("Socket driver connected with id:", socket.id);
-    });
+    };
 
-    socket.on("rideRequest", (userDetails) => {
+    const handleRideRequest = (userDetails) => {
       console.log("Received ride request:", userDetails);
       setUserDetails(userDetails);
-    });
+    };
 
-    socket.on("lockRide", (driverId) => {
+    const handleLockRide = (driverId) => {
       if (driverId !== driverData.account_id) {
         setUserDetails({});
         console.log("ride taken");
@@ -60,11 +59,15 @@ export default function Driver() {
         console.log("ride confirmed ");
         navigate(`/finalPageDriver/${driverData.account_id}`);
       }
-    });
+    };
+    socket.on("connect", handleConnect);
+    socket.on("rideRequest", handleRideRequest);
+    socket.on("lockRide", handleLockRide);
 
     return () => {
       socket.off("connect");
-      socket.off("rideRequest");
+      socket.off("rideRequest", handleRideRequest);
+      socket.off("lockRide", handleLockRide);
     };
   }, []);
 
