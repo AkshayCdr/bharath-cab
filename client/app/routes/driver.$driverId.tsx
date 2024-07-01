@@ -1,18 +1,13 @@
-import { socket } from "~/socket/websocket";
-import {
-  ActionFunctionArgs,
-  LinksFunction,
-  json,
-  type LoaderFunctionArgs,
-} from "@remix-run/node";
+import { LinksFunction, json, type LoaderFunctionArgs } from "@remix-run/node";
 
-import { useLoaderData, useNavigate } from "@remix-run/react";
 import { driver } from "apis/driver";
-import { useEffect, useState } from "react";
+
 import UserDetails from "~/component/UserDetails";
 import DriverProfile from "~/component/DriverProfile";
 
 import styles from "../styles/driver.css?url";
+import useDriver from "~/hooks/useDriver";
+import useDriverSocket from "~/hooks/useDriverSocket";
 
 export const loader = async ({ params }: LoaderFunctionArgs) => {
   const { driverId } = params;
@@ -33,59 +28,33 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
 };
 
 export default function Driver() {
-  const { driverData } = useLoaderData<typeof loader>();
+  const {
+    driverData,
+    userDetails,
+    setUserDetails,
+    online,
+    toggleOnline,
+    isRideAccepted,
+    setRideAccepted,
+  } = useDriver();
 
-  const [userDetails, setUserDetails] = useState({});
-  const [online, setOnline] = useState(false);
-  const [isRideAccepted, setRideAccepted] = useState(false);
-
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const handleConnect = () => {
-      console.log("Socket driver connected with id:", socket.id);
-    };
-
-    const handleRideRequest = (userDetails) => {
-      console.log("Received ride request:", userDetails);
-      setUserDetails(userDetails);
-    };
-
-    const handleLockRide = (driverId) => {
-      if (driverId !== driverData.account_id) {
-        setUserDetails({});
-        console.log("ride taken");
-      } else {
-        console.log("ride confirmed ");
-        navigate(`/finalPageDriver/${driverData.account_id}`);
-      }
-    };
-    socket.on("connect", handleConnect);
-    socket.on("rideRequest", handleRideRequest);
-    socket.on("lockRide", handleLockRide);
-
-    return () => {
-      socket.off("connect");
-      socket.off("rideRequest", handleRideRequest);
-      socket.off("lockRide", handleLockRide);
-    };
-  }, []);
+  const { registerDriver, setOffline, driverAccept } = useDriverSocket(
+    driverData.account_id,
+    setUserDetails
+  );
 
   const goOnline = () => {
-    setOnline(!online);
+    toggleOnline();
     if (online) {
-      socket.emit("setOffline", driverData.account_id);
+      setOffline();
     } else {
-      socket.emit("registerDriver", driverData.account_id);
+      registerDriver();
     }
   };
 
-  const handleClick = (e) => {
+  const acceptRide = (e) => {
     e.preventDefault();
-    socket.emit("driverAccept", {
-      driverId: driverData.account_id,
-      userId: userDetails.user_id,
-    });
+    driverAccept(userDetails.user_id);
     setRideAccepted(true);
   };
   return (
@@ -95,7 +64,7 @@ export default function Driver() {
         <UserDetails
           userData={userDetails}
           driverId={driverData.account_id}
-          onClick={handleClick}
+          onClick={acceptRide}
         />
       )}
       {!isRideAccepted && (
