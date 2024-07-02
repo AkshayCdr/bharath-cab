@@ -2,7 +2,7 @@ import { Ride } from "../dtos/ride.dto";
 import { driver } from "../services/driver.services";
 import { rideServices } from "../services/ride.services";
 import { DriverSocket } from "../types/driverSocket";
-import { clientSock, clientSocket } from "./client.socket";
+import { clientSock } from "./client.socket";
 
 export const driverSocket: DriverSocket = {};
 

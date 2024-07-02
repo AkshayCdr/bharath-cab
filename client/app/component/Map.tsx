@@ -4,11 +4,11 @@ import {
   Polyline,
   Popup,
   TileLayer,
-  useMap,
-  useMapEvents,
 } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import useRoute from "~/hooks/useRoute";
+import useMapClickHandler from "~/hooks/useMapClickHandler";
 
 export default function Map({
   source,
@@ -21,61 +21,20 @@ export default function Map({
   rideLocation,
 }) {
   const [isSourceSet, setIsSourceSet] = useState(false);
-  const [route, setRoute] = useState([]);
-  const [distance, setDistance] = useState(null);
-  const [midpoint, setMidpoint] = useState(null);
 
-  useEffect(() => {
-    if (source && destination) {
-      (async () => {
-        const response = await fetch(
-          `http://router.project-osrm.org/route/v1/driving/${source[1]},${source[0]};${destination[1]},${destination[0]}?overview=full&geometries=geojson`
-        );
-        const data = await response.json();
-        if (data.routes.length > 0) {
-          const coords = data.routes[0].geometry.coordinates.map((coord) => [
-            coord[1],
-            coord[0],
-          ]);
-          const sourceName = await getLocationName(source[0], source[1]);
-          const destinationName = await getLocationName(
-            destination[0],
-            destination[1]
-          );
-          setSourceName(sourceName);
-          setDestinationName(destinationName);
-          setRoute(coords);
-          setDistance(data.routes[0].distance / 1000);
-          setMidpoint(getRouteMidpoint(coords));
-        }
-      })();
-    }
-  }, [source, destination]);
+  const { route, distance, midpoint } = useRoute(source, destination);
 
   function ClickHandler() {
-    useMapEvents({
-      async click(e) {
-        const { lat, lng } = e.latlng;
-        if (!isEditable) return;
-        if (!isSourceSet) {
-          setSource([lat, lng]);
-          const name = await getLocationName(lat, lng);
-          setSourceName(name);
-          setIsSourceSet(true);
-        } else {
-          setDestination([lat, lng]);
-          const name = await getLocationName(lat, lng);
-          setDestinationName(name);
-          setIsSourceSet(false);
-        }
-      },
+    useMapClickHandler({
+      isEditable,
+      isSourceSet,
+      setSource,
+      setSourceName,
+      setDestination,
+      setDestinationName,
+      setIsSourceSet,
     });
     return null;
-  }
-
-  function getRouteMidpoint(route) {
-    const midpointIndex = Math.floor(route.length / 2);
-    return route[midpointIndex];
   }
 
   const getCenter = () => {
@@ -118,12 +77,4 @@ export default function Map({
       )}
     </MapContainer>
   );
-}
-
-async function getLocationName(lat, lon) {
-  const response = await fetch(
-    `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`
-  );
-  const data = await response.json();
-  return data.display_name;
 }

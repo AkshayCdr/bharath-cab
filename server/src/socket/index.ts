@@ -2,8 +2,6 @@ import { Server, Socket } from "socket.io";
 import { driverSock, driverSocket as sockets } from "./driver.socket";
 import { clientSock, clientSocket } from "./client.socket";
 import HTTPServer from "http";
-import { driver } from "../services/driver.services";
-import { Ride } from "../dtos/ride.dto";
 import { DefaultEventsMap } from "socket.io/dist/typed-events";
 
 export function createSocket(
