@@ -1,7 +1,8 @@
 import { Ride } from "../dtos/ride.dto";
 import { driver } from "../services/driver.services";
+import { rideServices } from "../services/ride.services";
 import { DriverSocket } from "../types/driverSocket";
-import { clientSock } from "./client.socket";
+import { clientSock, clientSocket } from "./client.socket";
 
 export const driverSocket: DriverSocket = {};
 
@@ -29,15 +30,8 @@ async function rideAccepted(socket: {
   socket.on("driverAccept", async (rideData) => {
     console.log("driver accepted", rideData.userId, rideData.driverId);
     const { userId, driverId }: Ride = rideData;
-    //send to userid
-    //send the driver details to user
-    //set driver to ride
     const driverDetails = await driver.get(driverId);
-    console.log(driverDetails);
-
     clientSock.rideAccepted(userId, driverDetails);
-
-    //send to other drivers
     lockRide(socket, driverId);
   });
 }
@@ -53,8 +47,25 @@ async function lockRide(
   }
 }
 
+async function updateLocation(socket: {
+  on: (
+    arg0: string,
+    arg1: (data: { rideId: any; latitude: any; longitude: any }) => void
+  ) => void;
+}) {
+  socket.on(
+    "updateLocation",
+    async (data: { rideId: string; latitude: number; longitude: number }) => {
+      const { rideId, latitude, longitude } = data;
+      const { user_id } = await rideServices.read(rideId);
+      clientSock.sendLocation(user_id, latitude, longitude);
+    }
+  );
+}
+
 export const driverSock = {
   registerDriverSocket,
   setOffline,
   rideAccepted,
+  updateLocation,
 };

@@ -1,9 +1,10 @@
-import { Server } from "socket.io";
-import { driverSock, driverSocket } from "./driver.socket";
+import { Server, Socket } from "socket.io";
+import { driverSock, driverSocket as sockets } from "./driver.socket";
 import { clientSock, clientSocket } from "./client.socket";
 import HTTPServer from "http";
 import { driver } from "../services/driver.services";
 import { Ride } from "../dtos/ride.dto";
+import { DefaultEventsMap } from "socket.io/dist/typed-events";
 
 export function createSocket(
   httpServer: HTTPServer.Server<
@@ -29,47 +30,57 @@ export function createSocket(
 
     driverSock.rideAccepted(socket);
 
-    // get ride details and send just use ride details for this
-    socket.on("updateLocation", (data) => {
-      const { rideId, latitude, longitude } = data;
-      console.log("inside server" + latitude);
-      console.log("inside server" + longitude);
-      for (let client in clientSocket) {
-        clientSocket[client].emit("updateLocation", [latitude, longitude]);
-      }
-    });
+    driverSock.updateLocation(socket);
 
-    socket.on("disconnect", () => {
-      console.log("disconnected");
-      if (
-        !(
-          Object.values(driverSocket).includes(socket) ||
-          Object.values(clientSocket).includes(socket)
-        )
-      ) {
-        return;
-      }
-      if (Object.values(clientSocket).includes(socket)) {
-        for (let clientId in clientSocket) {
-          if (clientSocket[clientId] === socket) {
-            console.log(`client with ${clientId} disconnected`);
-            delete clientSocket[clientId];
-            break;
-          }
-        }
-      }
-
-      if (Object.values(driverSocket).includes(socket)) {
-        for (let driverId in driverSocket) {
-          if (clientSocket[driverId] === socket) {
-            console.log(`driver with ${driverId} disconnected`);
-            delete clientSocket[driverId];
-            break;
-          }
-        }
-      }
-    });
+    handleDisconnection(socket);
   });
 
   return io;
 }
+
+function handleDisconnection(
+  socket: Socket<DefaultEventsMap, DefaultEventsMap, DefaultEventsMap, any>
+) {
+  socket.on("disconnect", () => {
+    console.log("disconnected");
+    if (
+      !(
+        Object.values(sockets).includes(socket) ||
+        Object.values(clientSocket).includes(socket)
+      )
+    ) {
+      return;
+    }
+    if (Object.values(clientSocket).includes(socket)) {
+      for (let clientId in clientSocket) {
+        if (clientSocket[clientId] === socket) {
+          console.log(`client with ${clientId} disconnected`);
+          delete clientSocket[clientId];
+          break;
+        }
+      }
+    }
+
+    if (Object.values(sockets).includes(socket)) {
+      for (let driverId in sockets) {
+        if (sockets[driverId] === socket) {
+          console.log(`driver with ${driverId} disconnected`);
+          delete sockets[driverId];
+          break;
+        }
+      }
+    }
+  });
+}
+
+// function removeSocket(sockets, socket, role) {
+//   if (Object.values(sockets).includes(socket)) {
+//     for (let id in sockets) {
+//       if (sockets[id] === socket) {
+//         console.log(`${role} with ${id} disconnected`);
+//         delete sockets[id];
+//         break;
+//       }
+//     }
+//   }
+// }

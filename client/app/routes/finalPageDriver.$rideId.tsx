@@ -2,8 +2,10 @@ import { LoaderFunctionArgs, json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { driver } from "apis/driver";
 import { ride } from "apis/ride";
+import { useState } from "react";
 import useLocation from "~/hooks/useLocation";
-import { RideDetails } from "~/hooks/useRideDetails";
+import useRideDetails, { RideDetails } from "~/hooks/useRideDetails";
+import Ride from "~/component/Ride";
 
 export const loader = async ({ params }: LoaderFunctionArgs) => {
   const { rideId } = params;
@@ -21,9 +23,39 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
 };
 
 export default function FinalPageDriver() {
-  const { rideDetails } = useLoaderData<typeof loader>();
+  const [isEditable, setIsEditable] = useState(false);
+  const [sourceName, setSourceName] = useState(null);
+  const [destinationName, setDestinationName] = useState(null);
+  const {
+    rideDetails,
+    source,
+    destination,
+    setSource,
+    setDestination,
+    MapComponent,
+  } = useRideDetails();
 
   const { currentLocation } = useLocation(rideDetails.id);
 
-  return <div>finalPageDriver</div>;
+  return (
+    <div>
+      {MapComponent && (
+        <MapComponent
+          source={source}
+          destination={destination}
+          setSource={setSource}
+          setDestination={setDestination}
+          setSourceName={setSourceName}
+          setDestinationName={setDestinationName}
+          isEditable={isEditable}
+          rideLocation={currentLocation}
+        />
+      )}
+      <Ride
+        rideDetails={rideDetails}
+        sourceName={sourceName}
+        destinationName={destinationName}
+      />
+    </div>
+  );
 }

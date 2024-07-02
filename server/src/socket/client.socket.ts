@@ -17,7 +17,18 @@ async function rideAccepted(userId: string, driverDetails: any) {
   }
 }
 
+async function sendLocation(
+  userId: string,
+  latitude: number,
+  longitude: number
+) {
+  if (clientSocket[userId]) {
+    clientSocket[userId].emit("updateLocation", [latitude, longitude]);
+  }
+}
+
 export const clientSock = {
   registerClientSocket,
   rideAccepted,
+  sendLocation,
 };
