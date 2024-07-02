@@ -11,6 +11,13 @@ async function registerClientSocket(socket: {
   });
 }
 
+async function rideAccepted(userId: string, driverDetails: any) {
+  if (clientSocket[userId]) {
+    clientSocket[userId].emit("rideAccepted", driverDetails);
+  }
+}
+
 export const clientSock = {
   registerClientSocket,
+  rideAccepted,
 };

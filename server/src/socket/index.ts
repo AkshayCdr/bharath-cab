@@ -27,29 +27,11 @@ export function createSocket(
 
     clientSock.registerClientSocket(socket);
 
-    socket.on("driverAccept", async (rideData) => {
-      console.log("driver accepted", rideData.userId, rideData.driverId);
-      const { userId, driverId }: Ride = rideData;
-      //send to userid
-      //send the driver details to user
-      //set driver to ride
-      const driverDetails = await driver.get(driverId);
-      console.log(driverDetails);
-
-      if (clientSocket[userId]) {
-        clientSocket[userId].emit("rideAccepted", driverDetails);
-      }
-
-      //send to other drivers
-      for (let socket in driverSocket) {
-        driverSocket[socket].emit("lockRide", driverId);
-      }
-      //remove client data from other driver
-    });
+    driverSock.rideAccepted(socket);
 
     // get ride details and send just use ride details for this
     socket.on("updateLocation", (data) => {
-      const { driverData, latitude, longitude } = data;
+      const { rideId, latitude, longitude } = data;
       console.log("inside server" + latitude);
       console.log("inside server" + longitude);
       for (let client in clientSocket) {

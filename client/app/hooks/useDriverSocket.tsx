@@ -1,9 +1,15 @@
 import { useNavigate } from "@remix-run/react";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { socket } from "~/socket/websocket";
 
-export default function useDriverSocket(driverId, setUserDetails) {
+export default function useDriverSocket(driverId, setUserDetails, userDetails) {
   const navigate = useNavigate();
+  const userDetailsRef = useRef(userDetails);
+
+  useEffect(() => {
+    userDetailsRef.current = userDetails;
+  }, [userDetails]);
+
   useEffect(() => {
     const handleConnect = () => {
       console.log("Socket driver connected with id:", socket.id);
@@ -20,7 +26,9 @@ export default function useDriverSocket(driverId, setUserDetails) {
         console.log("ride taken");
       } else {
         console.log("ride confirmed ");
-        navigate(`/finalPageDriver/${driverId}`);
+        console.log("ride confiremmed and userDeails");
+        console.log(userDetails);
+        navigate(`/finalPageDriver/${userDetailsRef.current.id}`);
       }
     };
     socket.on("connect", handleConnect);

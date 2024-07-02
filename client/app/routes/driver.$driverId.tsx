@@ -40,7 +40,8 @@ export default function Driver() {
 
   const { registerDriver, setOffline, driverAccept } = useDriverSocket(
     driverData.account_id,
-    setUserDetails
+    setUserDetails,
+    userDetails
   );
 
   const goOnline = () => {
