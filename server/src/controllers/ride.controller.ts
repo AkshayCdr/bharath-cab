@@ -3,7 +3,7 @@ import { Ride } from "../dtos/ride.dto";
 import { rideServices } from "../services/ride.services";
 import { Id } from "../types/id";
 import { user } from "../services/user.services";
-import { driverSocket } from "../socket/driver.socket";
+import { driverSock, driverSocket } from "../socket/driver.socket";
 
 export async function insertIntoRide(
   req: Request<{}, {}, Ride>,
@@ -60,10 +60,7 @@ export async function requestForRide(
     const rideDetails = await rideServices.getRideAndUser(id);
     console.log("ride Details user ride", rideDetails);
 
-    console.log(Object.keys(driverSocket));
-    for (let driverId in driverSocket) {
-      driverSocket[driverId].emit("rideRequest", rideDetails);
-    }
+    driverSock.requestForRide(rideDetails);
 
     res.status(200).send({ message: "waiting for the driver" });
   } catch (error) {

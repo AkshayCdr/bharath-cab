@@ -4,6 +4,7 @@ import {
   getFromRideTable,
   getRideAndUserFromTable,
   insertIntoRideTable,
+  updateRideTable,
 } from "../model/ride.model";
 
 async function create(ride: any): Promise<string> {
@@ -18,7 +19,10 @@ async function getRideAndUser(id: string): Promise<Ride & User> {
   return await getRideAndUserFromTable(id);
 }
 
-async function update(): Promise<void> {}
+async function update(rideId: string, driverId: string): Promise<void> {
+  return await updateRideTable(rideId, driverId);
+}
+
 async function del(): Promise<void> {}
 
 function findDistance(souce: LocationData, destination: LocationData): number {

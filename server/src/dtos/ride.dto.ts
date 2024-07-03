@@ -1,5 +1,5 @@
 export interface Ride {
-  readonly id?: string;
+  readonly id: string;
   userId: string;
   driverId: string;
   user_id: string;

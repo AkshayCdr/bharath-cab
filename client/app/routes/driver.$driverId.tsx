@@ -55,7 +55,7 @@ export default function Driver() {
 
   const acceptRide = (e) => {
     e.preventDefault();
-    driverAccept(userDetails.user_id);
+    driverAccept(userDetails.user_id, userDetails.id);
     setRideAccepted(true);
   };
   return (

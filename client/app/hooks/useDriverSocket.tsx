@@ -25,7 +25,6 @@ export default function useDriverSocket(driverId, setUserDetails, userDetails) {
         setUserDetails({});
         console.log("ride taken");
       } else {
-        console.log("ride confirmed ");
         console.log("ride confiremmed and userDeails");
         console.log(userDetails);
         navigate(`/finalPageDriver/${userDetailsRef.current.id}`);
@@ -50,8 +49,8 @@ export default function useDriverSocket(driverId, setUserDetails, userDetails) {
     socket.emit("setOffline", driverId);
   };
 
-  const driverAccept = (userId) => {
-    socket.emit("driverAccept", { driverId, userId });
+  const driverAccept = (userId, rideId) => {
+    socket.emit("driverAccept", { driverId, rideId, userId });
   };
 
   return { registerDriver, setOffline, driverAccept };

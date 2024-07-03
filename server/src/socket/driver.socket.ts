@@ -1,4 +1,5 @@
 import { Ride } from "../dtos/ride.dto";
+import { User } from "../dtos/user.dto";
 import { driver } from "../services/driver.services";
 import { rideServices } from "../services/ride.services";
 import { DriverSocket } from "../types/driverSocket";
@@ -28,8 +29,10 @@ async function rideAccepted(socket: {
   on: (arg0: string, arg1: (rideData: any) => Promise<void>) => void;
 }) {
   socket.on("driverAccept", async (rideData) => {
-    console.log("driver accepted", rideData.userId, rideData.driverId);
-    const { userId, driverId }: Ride = rideData;
+    console.log("driver accepted");
+    console.log(rideData);
+    const { driverId, id: rideId, userId }: Ride = rideData;
+    await rideServices.update(rideId, driverId);
     const driverDetails = await driver.get(driverId);
     clientSock.rideAccepted(userId, driverDetails);
     lockRide(socket, driverId);
@@ -83,11 +86,20 @@ async function rideNearby(socket: {
   });
 }
 
+async function requestForRide(rideDetails: Ride & User) {
+  if (Object.keys(driverSocket).length > 0) {
+    for (let driverId in driverSocket) {
+      driverSocket[driverId].emit("rideRequest", rideDetails);
+    }
+  }
+}
+
 export const driverSock = {
   registerDriverSocket,
   setOffline,
   rideAccepted,
   updateLocation,
   rideNearby,
+  requestForRide,
   // endRide
 };
