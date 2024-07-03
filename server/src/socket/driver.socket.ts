@@ -77,7 +77,9 @@ async function rideNearby(socket: {
   on: (arg0: string, arg1: (rideDetails: any) => void) => void;
 }) {
   socket.on("rideNearby", (rideDetails) => {
-    console.log(rideDetails);
+    const { user_id, id } = rideDetails;
+    console.log("user id inside server", user_id);
+    clientSock.rideNearby(user_id, id);
   });
 }
 

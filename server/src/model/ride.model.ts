@@ -61,3 +61,17 @@ export async function getRideAndUserFromTable(
     throw new Error("Error fetching data from ride and user");
   }
 }
+
+export async function updateRideTable(
+  id: string,
+  driverId: string
+): Promise<void> {
+  try {
+    const query = `UPDATE ride SET driver_id = $1 WHERE id = $2`;
+    const values = [driverId, id];
+    await (await client).query(query, values);
+  } catch (error) {
+    console.error(error);
+    throw new Error("Error getting data from ride");
+  }
+}

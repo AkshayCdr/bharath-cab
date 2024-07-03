@@ -33,9 +33,16 @@ async function sendLocation(
 //   }
 // }
 
+async function rideNearby(userId: string, rideId: string) {
+  if (clientSocket[userId]) {
+    clientSocket[userId].emit("rideNearby", rideId);
+  }
+}
+
 export const clientSock = {
   registerClientSocket,
   rideAccepted,
   sendLocation,
   // endRide
+  rideNearby,
 };
