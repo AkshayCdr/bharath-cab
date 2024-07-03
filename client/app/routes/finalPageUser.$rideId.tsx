@@ -22,16 +22,14 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
 
 export default function FinalPageUser() {
   const [isEditable, setIsEditable] = useState(false);
-  const [sourceName, setSourceName] = useState(null);
-  const [destinationName, setDestinationName] = useState(null);
 
   const {
     rideDetails,
     source,
     destination,
-    setSource,
-    setDestination,
     MapComponent,
+    sourceName,
+    destinationName,
   } = useRideDetails();
 
   const { rideLocation } = useRideLocation();
@@ -42,10 +40,6 @@ export default function FinalPageUser() {
         <MapComponent
           source={source}
           destination={destination}
-          setSource={setSource}
-          setDestination={setDestination}
-          setSourceName={setSourceName}
-          setDestinationName={setDestinationName}
           isEditable={isEditable}
           rideLocation={rideLocation}
         />

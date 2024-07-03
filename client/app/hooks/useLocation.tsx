@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { socket } from "~/socket/websocket";
 
 export default function useLocation(rideId) {
-  const [currentLocation, setCurrentLocation] = useState([]);
+  const [currentLocation, setCurrentLocation] = useState(null);
   useEffect(() => {
     const watchId = navigator.geolocation.watchPosition(
       (pos) => {
@@ -23,7 +23,7 @@ export default function useLocation(rideId) {
     return () => {
       navigator.geolocation.clearWatch(watchId);
     };
-  }, []);
+  }, [rideId]);
 
   return { currentLocation };
 }

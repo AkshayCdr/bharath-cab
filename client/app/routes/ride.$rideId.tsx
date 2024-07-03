@@ -56,8 +56,6 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
 
 export default function Ride() {
   const [isEditable, setIsEditable] = useState(false);
-  const [sourceName, setSourceName] = useState(null);
-  const [destinationName, setDestinationName] = useState(null);
 
   const message = useActionData<typeof action>();
 
@@ -68,6 +66,10 @@ export default function Ride() {
     setSource,
     setDestination,
     MapComponent,
+    sourceName,
+    destinationName,
+    setSourceName,
+    setDestinationName,
   } = useRideDetails();
   const { isRideAccepted, driverDetails } = useRideSocket(rideDetails);
 

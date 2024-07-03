@@ -27,8 +27,15 @@ async function sendLocation(
   }
 }
 
+// async function endRide(userId,rideId){
+//   if (clientSocket[userId]) {
+//     clientSocket[userId].emit("endRide", rideId);
+//   }
+// }
+
 export const clientSock = {
   registerClientSocket,
   rideAccepted,
   sendLocation,
+  // endRide
 };

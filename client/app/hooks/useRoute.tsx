@@ -12,6 +12,7 @@ export default function useRoute(source, destination) {
   const [midpoint, setMidpoint] = useState(null);
 
   useEffect(() => {
+    if (!source || !destination) return;
     if (source && destination) {
       (async () => {
         const routeData = await fetchRoutes(source, destination);

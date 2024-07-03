@@ -1,6 +1,7 @@
 import { useLoaderData } from "@remix-run/react";
 import { useEffect, useState } from "react";
 import { loader } from "~/routes/ride.$rideId";
+import { getLocationName } from "~/utils/getLocationName";
 
 export interface RideDetails {
   id: string;
@@ -19,12 +20,26 @@ export default function useRideDetails() {
   const [source, setSource] = useState(null);
   const [destination, setDestination] = useState(null);
   const [MapComponent, setMapComponent] = useState(null);
+  const [sourceName, setSourceName] = useState(null);
+  const [destinationName, setDestinationName] = useState(null);
   const { rideDetails } = useLoaderData<typeof loader>();
   useEffect(() => {
-    if (rideDetails) {
-      setSource([rideDetails.destination.y, rideDetails.destination.x]);
-      setDestination([rideDetails.source.y, rideDetails.source.x]);
-    }
+    (async () => {
+      if (rideDetails) {
+        setSource([rideDetails.destination.y, rideDetails.destination.x]);
+        setDestination([rideDetails.source.y, rideDetails.source.x]);
+        const source = await getLocationName(
+          rideDetails.source.y,
+          rideDetails.source.x
+        );
+        const destination = await getLocationName(
+          rideDetails.destination.y,
+          rideDetails.destination.x
+        );
+        setSourceName(source);
+        setDestinationName(destination);
+      }
+    })();
   }, [rideDetails]);
 
   useEffect(() => {
@@ -40,5 +55,9 @@ export default function useRideDetails() {
     setSource,
     setDestination,
     MapComponent,
+    sourceName,
+    destinationName,
+    setSourceName,
+    setDestinationName,
   };
 }

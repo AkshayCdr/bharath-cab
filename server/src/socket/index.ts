@@ -1,5 +1,9 @@
 import { Server, Socket } from "socket.io";
-import { driverSock, driverSocket as sockets } from "./driver.socket";
+import {
+  driverSock,
+  driverSocket,
+  driverSocket as sockets,
+} from "./driver.socket";
 import { clientSock, clientSocket } from "./client.socket";
 import HTTPServer from "http";
 import { DefaultEventsMap } from "socket.io/dist/typed-events";
@@ -30,6 +34,8 @@ export function createSocket(
 
     driverSock.updateLocation(socket);
 
+    driverSock.rideNearby(socket);
+
     handleDisconnection(socket);
   });
 
@@ -59,11 +65,11 @@ function handleDisconnection(
       }
     }
 
-    if (Object.values(sockets).includes(socket)) {
-      for (let driverId in sockets) {
-        if (sockets[driverId] === socket) {
+    if (Object.values(driverSocket).includes(socket)) {
+      for (let driverId in driverSocket) {
+        if (driverSocket[driverId] === socket) {
           console.log(`driver with ${driverId} disconnected`);
-          delete sockets[driverId];
+          delete driverSocket[driverId];
           break;
         }
       }

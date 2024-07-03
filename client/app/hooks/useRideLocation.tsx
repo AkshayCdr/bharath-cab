@@ -9,10 +9,22 @@ export default function useRideLocation() {
       setRideLocation([latitude, longitude]);
     };
 
+    const handleRideNearby = () => {};
+
+    const handleEndRide = () => {};
+
+    const handleStartRide = () => {};
+
     socket.on("updateLocation", handleUpdateLocation);
+    socket.on("rideNearby", handleRideNearby);
+    socket.on("endRide", handleEndRide);
+    socket.on("startRide", handleStartRide);
 
     return () => {
       socket.off("updateLocation", handleUpdateLocation);
+      socket.off("driverNearby", handleRideNearby);
+      socket.off("endRide", handleEndRide);
+      socket.off("startRide", handleStartRide);
     };
   }, []);
   return { rideLocation };

@@ -63,9 +63,29 @@ async function updateLocation(socket: {
   );
 }
 
+// async function endRide(socket){
+//   socket.on('endRide',async(rideDetails) =>{
+//     console.log(rideDetails)
+//     //get userid and send to client
+//     // const { user_id } = await rideServices.read(rideId);
+//     // clientSock.endRide(user_id,rideId)
+
+//   })
+// }
+
+async function rideNearby(socket: {
+  on: (arg0: string, arg1: (rideDetails: any) => void) => void;
+}) {
+  socket.on("rideNearby", (rideDetails) => {
+    console.log(rideDetails);
+  });
+}
+
 export const driverSock = {
   registerDriverSocket,
   setOffline,
   rideAccepted,
   updateLocation,
+  rideNearby,
+  // endRide
 };
