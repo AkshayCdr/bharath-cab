@@ -10,10 +10,10 @@ export default function RideDetails({
   console.log(rideDetails);
 
   return (
-    <div className="flex flex-row">
+    <div className="flex flex-col">
       <Form method="POST" id="ride-request-form">
         <input type="hidden" name="rideId" defaultValue={rideDetails.id} />
-        <p className="ride-details-input">
+        <p className="ride-details-input flex flex-col">
           <input
             type="text"
             readOnly

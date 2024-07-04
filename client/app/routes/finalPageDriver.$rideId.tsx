@@ -42,7 +42,7 @@ export default function FinalPageDriver() {
 
   useEffect(() => {
     //if distance <1 -> emit driver nearby
-    if (distance > 0.1 && distance < 3) {
+    if (distance > 1 && distance < 3) {
       console.log("ride nearby inside driver page", distance);
       socket.emit("rideNearby", rideDetails);
     }
@@ -60,6 +60,11 @@ export default function FinalPageDriver() {
 
   return (
     <div>
+      <Ride
+        rideDetails={rideDetails}
+        sourceName={sourceName}
+        destinationName={destinationName}
+      />
       {MapComponent && (
         <MapComponent
           source={source}
@@ -68,11 +73,6 @@ export default function FinalPageDriver() {
           rideLocation={currentLocation}
         />
       )}
-      <Ride
-        rideDetails={rideDetails}
-        sourceName={sourceName}
-        destinationName={destinationName}
-      />
       {startRide && <p>ride started</p>}
     </div>
   );

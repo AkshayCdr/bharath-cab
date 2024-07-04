@@ -1,9 +1,10 @@
 import { LoaderFunctionArgs, json } from "@remix-run/node";
 import { ride } from "apis/ride";
-import { useState } from "react";
-import Ride from "~/component/Ride";
+import { useEffect, useState } from "react";
+
 import useRideDetails, { RideDetails } from "~/hooks/useRideDetails";
 import useRideLocation from "~/hooks/useRideLocation";
+import Details from "../component/Details";
 
 export const loader = async ({ params }: LoaderFunctionArgs) => {
   const { rideId } = params;
@@ -32,10 +33,30 @@ export default function FinalPageUser() {
     destinationName,
   } = useRideDetails();
 
-  const { rideLocation } = useRideLocation();
+  const { rideLocation, rideNearby, rideStatus } = useRideLocation();
+
+  useEffect(() => {
+    if (rideNearby) {
+      alert("ride Nearby");
+    }
+  }, [rideNearby]);
+
+  useEffect(() => {
+    if (rideStatus === "start") {
+      alert("ride started");
+    }
+    if (rideStatus === "end") {
+      alert("ride ended");
+    }
+  }, [rideStatus]);
 
   return (
-    <div>
+    <div className="flex flex-row m-5 p-3">
+      <Details
+        rideDetails={rideDetails}
+        sourceName={sourceName}
+        destinationName={destinationName}
+      />
       {MapComponent && (
         <MapComponent
           source={source}
@@ -44,11 +65,6 @@ export default function FinalPageUser() {
           rideLocation={rideLocation}
         />
       )}
-      <Ride
-        rideDetails={rideDetails}
-        sourceName={sourceName}
-        destinationName={destinationName}
-      />
     </div>
   );
 }
