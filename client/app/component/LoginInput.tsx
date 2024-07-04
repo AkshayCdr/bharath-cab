@@ -5,8 +5,22 @@ export default function LoginInput() {
   return (
     <Form method="POST" id="login-form">
       <p className="login-details">
-        <input type="text" name="username" placeholder="username" />
-        <input type="password" name="password" placeholder="password" />
+        <input
+          type="text"
+          name="username"
+          placeholder="username"
+          required
+          minLength={2}
+          maxLength={30}
+        />
+        <input
+          type="password"
+          name="password"
+          placeholder="password"
+          required
+          minLength={2}
+          maxLength={30}
+        />
         <span className="user-driver">
           <span>user</span>
           <input type="checkbox" name="user" value="check" />
