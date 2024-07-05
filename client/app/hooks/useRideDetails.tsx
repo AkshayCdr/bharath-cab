@@ -26,8 +26,8 @@ export default function useRideDetails() {
   useEffect(() => {
     (async () => {
       if (rideDetails) {
-        setSource([rideDetails.destination.y, rideDetails.destination.x]);
-        setDestination([rideDetails.source.y, rideDetails.source.x]);
+        setSource([rideDetails.source.y, rideDetails.source.x]);
+        setDestination([rideDetails.destination.y, rideDetails.destination.x]);
         const source = await getLocationName(
           rideDetails.source.y,
           rideDetails.source.x
