@@ -11,9 +11,9 @@ export default function RideDetails({
 
   return (
     <div>
-      <Form method="POST" id="ride-request-form">
+      <Form method="POST" id="ride-request-form" className="flex flex-col">
         <input type="hidden" name="rideId" defaultValue={rideDetails.id} />
-        <p className="ride-details-input">
+        <p className="flex flex-col gap-6">
           <input
             type="text"
             readOnly
@@ -33,24 +33,36 @@ export default function RideDetails({
               (rideDetails.destination.x, rideDetails.destination.y)
             }
           />
-          <label htmlFor="source">Source:</label>
-          <input type="text" name="sourceName" value={sourceName} readOnly />
-          <label htmlFor="destination">Destination:</label>
-          <input
-            type="text"
-            name="destinationName"
-            id=""
-            value={destinationName}
-            readOnly
-          />
-          <label htmlFor="price">Price:</label>
-          <input
-            type="text"
-            name="price"
-            id=""
-            value={rideDetails.price}
-            readOnly
-          />
+
+          <div className="flex flex-col">
+            <label htmlFor="source" className="text-2xl">
+              Source:
+            </label>
+            <input type="text" name="sourceName" value={sourceName} readOnly />
+          </div>
+          <div className="flex flex-col">
+            <label htmlFor="destination" className="text-2xl">
+              Destination:
+            </label>
+            <input
+              type="text"
+              name="destinationName"
+              id=""
+              value={destinationName}
+              readOnly
+            />
+          </div>
+
+          <div className="flex flex-col">
+            <label htmlFor="price">Price:</label>
+            <input
+              type="text"
+              name="price"
+              id=""
+              value={rideDetails.price}
+              readOnly
+            />
+          </div>
         </p>
         <p>
           <button type="submit">Request for ride</button>

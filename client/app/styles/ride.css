@@ -1,37 +1,8 @@
-#ride-request-form{
-    width: fit-content;
-}
-
-.ride-details{
-
-    height: 100vh;
-   
-}
-
-.leaflet-container{
-
-    height:100vh ;
-
-    padding: 10px;
-    margin: 5px;
-    border: 2px solid black;
-    border-radius: 10px;
-}
-
-.ride-details-input{
-    display: flex;
-    flex-direction: column;
-
-}
-
-.driver-details{
-
-
-    
-}
 
 
 
-.driver-details ul {
-    list-style: none;
-}
+
+
+
+
+

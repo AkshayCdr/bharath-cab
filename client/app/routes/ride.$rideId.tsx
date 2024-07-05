@@ -74,7 +74,19 @@ export default function Ride() {
   const { isRideAccepted, driverDetails } = useRideSocket(rideDetails);
 
   return (
-    <div className="ride-details">
+    <div className="flex flex-row">
+      <p className="flex flex-col">
+        <RideDetails
+          rideDetails={rideDetails}
+          sourceName={sourceName}
+          destinationName={destinationName}
+        />
+        {isRideAccepted ? (
+          <DriverDetails driverDetails={driverDetails} />
+        ) : (
+          message && <p className="ride-message">{message.message}</p>
+        )}
+      </p>
       {MapComponent && (
         <MapComponent
           source={source}
@@ -85,16 +97,6 @@ export default function Ride() {
           setDestinationName={setDestinationName}
           isEditable={isEditable}
         />
-      )}
-      <RideDetails
-        rideDetails={rideDetails}
-        sourceName={sourceName}
-        destinationName={destinationName}
-      />
-      {isRideAccepted ? (
-        <DriverDetails driverDetails={driverDetails} />
-      ) : (
-        message && <p className="ride-message">{message.message}</p>
       )}
     </div>
   );

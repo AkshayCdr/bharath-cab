@@ -5,7 +5,7 @@ import { ride } from "apis/ride";
 import { useEffect, useState } from "react";
 import useLocation from "~/hooks/useLocation";
 import useRideDetails, { RideDetails } from "~/hooks/useRideDetails";
-import Ride from "~/component/Ride";
+import Details from "../component/Details";
 import { socket } from "~/socket/websocket";
 import useRoute from "~/hooks/useRoute";
 
@@ -64,8 +64,8 @@ export default function FinalPageDriver() {
   }, [distanceFromSource, distanceFromDestination, rideDetails]);
 
   return (
-    <div>
-      <Ride
+    <div className="flex flex-row m-5 p-3">
+      <Details
         rideDetails={rideDetails}
         sourceName={sourceName}
         destinationName={destinationName}

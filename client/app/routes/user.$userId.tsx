@@ -101,7 +101,15 @@ export default function User() {
   } = useUserDetails();
 
   return (
-    <div className="user-page">
+    <div className="user-page flex flex-row">
+      <UserProfile styles={styles} userData={userData} />
+      <LocationInput
+        userId={userData.account_id}
+        sourceName={sourceName}
+        destinationName={destinationName}
+        source={source}
+        destination={destination}
+      />
       {MapComponent && (
         <MapComponent
           source={source}
@@ -113,14 +121,6 @@ export default function User() {
           isEditable={isEditable}
         />
       )}
-      <UserProfile styles={styles} userData={userData} />
-      <LocationInput
-        userId={userData.account_id}
-        sourceName={sourceName}
-        destinationName={destinationName}
-        source={source}
-        destination={destination}
-      />
     </div>
   );
 }
