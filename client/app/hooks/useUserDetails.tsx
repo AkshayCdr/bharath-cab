@@ -4,7 +4,7 @@ import { loader } from "~/routes/user.$userId";
 
 export default function useUserDetails() {
   const { userData } = useLoaderData<typeof loader>();
-  const data = useActionData();
+
   const [MapComponent, setMapComponent] = useState(null);
   const [source, setSource] = useState("");
   const [destination, setDestination] = useState("");
@@ -29,6 +29,5 @@ export default function useUserDetails() {
     setDestinationName,
     isEditable,
     MapComponent,
-    data,
   };
 }

@@ -38,25 +38,30 @@ export default function FinalPageDriver() {
   } = useRideDetails();
 
   const { currentLocation } = useLocation(rideDetails.id);
-  const { distance } = useRoute(source, destination);
+  const { distance: distanceFromSource } = useRoute(currentLocation, source);
+  const { distance: distanceFromDestination } = useRoute(
+    currentLocation,
+    destination
+  );
+  console.log(distanceFromSource);
 
   useEffect(() => {
     //if distance <1 -> emit driver nearby
-    if (distance > 1 && distance < 3) {
-      console.log("ride nearby inside driver page", distance);
+    if (distanceFromSource > 1 && distanceFromSource < 3) {
+      console.log("ride nearby inside driver page", distanceFromSource);
       socket.emit("rideNearby", rideDetails);
     }
-    if (distance > 0.1 && distance < 1) {
+    if (distanceFromSource === 0) {
       setStartRide(true);
       socket.emit("startRide", rideDetails);
     }
-    if (currentLocation === destination) {
+    if (distanceFromDestination === 0) {
       socket.emit("endRide", rideDetails);
     }
     //if distance <100m. ask start ride -> driver and user
 
     return () => {};
-  }, [distance, rideDetails, currentLocation, destination]);
+  }, [distanceFromSource, distanceFromDestination, rideDetails]);
 
   return (
     <div>

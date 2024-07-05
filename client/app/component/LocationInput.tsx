@@ -1,13 +1,4 @@
-import { Form } from "@remix-run/react";
-import { useEffect } from "react";
-
-const cities = [
-  { name: "Delhi", latitude: 28.6139, longitude: 77.209 },
-  { name: "Mumbai", latitude: 19.076, longitude: 72.8777 },
-  { name: "Bangalore", latitude: 12.9716, longitude: 77.5946 },
-  { name: "Kolkata", latitude: 22.5726, longitude: 88.3639 },
-  { name: "Chennai", latitude: 13.0827, longitude: 80.2707 },
-];
+import { Form, useActionData } from "@remix-run/react";
 
 export default function LocationInput({
   userId,
@@ -16,6 +7,7 @@ export default function LocationInput({
   source,
   destination,
 }) {
+  const data = useActionData();
   return (
     <Form method="POST" id="location-form">
       <p className="input-form">
@@ -26,10 +18,16 @@ export default function LocationInput({
           name="destination"
           id=""
           value={destination}
-          readOnly
+          hidden
         />
         <label htmlFor="source">Source:</label>
-        <input type="text" name="sourceName" value={sourceName} readOnly />
+        <input
+          type="text"
+          name="sourceName"
+          value={sourceName}
+          readOnly
+          required
+        />
 
         <label htmlFor="destination">Destination:</label>
         <input
@@ -38,11 +36,13 @@ export default function LocationInput({
           id=""
           value={destinationName}
           readOnly
+          required
         />
       </p>
       <p>
         <button type="submit">submit</button>
       </p>
+      {data && <span className="text-red-600"> {data.message}</span>}
     </Form>
   );
 }

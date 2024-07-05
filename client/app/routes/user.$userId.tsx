@@ -98,7 +98,6 @@ export default function User() {
     setDestinationName,
     isEditable,
     MapComponent,
-    data,
   } = useUserDetails();
 
   return (
@@ -122,7 +121,6 @@ export default function User() {
         source={source}
         destination={destination}
       />
-      {data?.message && <p>{data.message}</p>}
     </div>
   );
 }
