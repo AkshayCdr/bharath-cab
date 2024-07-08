@@ -3,6 +3,7 @@ import { FaStar } from "react-icons/fa";
 
 export default function Rating() {
   const [rating, setRating] = useState(null);
+  const [hover, setHover] = useState(null);
   return (
     <div className="flex flex-row">
       {[...Array(5)].map((star, index) => {
@@ -12,7 +13,9 @@ export default function Rating() {
           <label htmlFor={`star-${ratingValue}`} key={index}>
             <FaStar
               size={40}
-              color={ratingValue <= rating ? "black" : "white"}
+              color={ratingValue <= (hover || rating) ? "black" : "grey"}
+              onMouseEnter={() => setHover(ratingValue)}
+              onMouseLeave={() => setHover(null)}
             />
             <input
               type="radio"
@@ -20,6 +23,7 @@ export default function Rating() {
               name="rating"
               value={ratingValue}
               onClick={() => setRating(ratingValue)}
+              hidden
             />
           </label>
         );
