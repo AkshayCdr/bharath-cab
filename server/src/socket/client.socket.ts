@@ -11,31 +11,37 @@ async function registerClientSocket(socket: {
   });
 }
 
-async function rideAccepted(userId: string, driverDetails: any) {
-  if (clientSocket[userId]) {
-    clientSocket[userId].emit("rideAccepted", driverDetails);
-  }
+async function rideAccepted(clientId: string, driverDetails: any) {
+  emitEventToClient("rideAccepted", clientId, driverDetails);
 }
 
 async function sendLocation(
-  userId: string,
+  clientId: string,
   latitude: number,
   longitude: number
 ) {
-  if (clientSocket[userId]) {
-    clientSocket[userId].emit("updateLocation", [latitude, longitude]);
-  }
+  emitEventToClient("updateLocation", clientId, [latitude, longitude]);
 }
 
-// async function endRide(userId,rideId){
-//   if (clientSocket[userId]) {
-//     clientSocket[userId].emit("endRide", rideId);
-//   }
-// }
+async function endRide(clientId: string, rideId: string) {
+  emitEventToClient("endRide", clientId, rideId);
+}
 
-async function rideNearby(userId: string, rideId: string) {
-  if (clientSocket[userId]) {
-    clientSocket[userId].emit("rideNearby", rideId);
+async function startRide(clientId: string, rideId: string) {
+  emitEventToClient("startRide", clientId, rideId);
+}
+
+async function rideNearby(clientId: string, rideId: string) {
+  emitEventToClient("rideNearby", clientId, rideId);
+}
+
+async function emitEventToClient(
+  eventName: string,
+  clientId: string,
+  data: any
+) {
+  if (clientSocket[clientId]) {
+    clientSocket[clientId].emit(eventName, data);
   }
 }
 
@@ -43,6 +49,7 @@ export const clientSock = {
   registerClientSocket,
   rideAccepted,
   sendLocation,
-  // endRide
   rideNearby,
+  endRide,
+  startRide,
 };

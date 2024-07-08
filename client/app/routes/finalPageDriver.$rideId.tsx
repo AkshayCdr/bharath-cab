@@ -25,7 +25,8 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
 };
 
 export default function FinalPageDriver() {
-  const [startRide, setStartRide] = useState(false);
+  const [isRideStarted, setStartRide] = useState(false);
+  const [isRideEnded, setEndRide] = useState(false);
   const [isEditable, setIsEditable] = useState(false);
 
   const {
@@ -44,6 +45,7 @@ export default function FinalPageDriver() {
     destination
   );
   console.log(distanceFromSource);
+  console.log(distanceFromDestination);
 
   useEffect(() => {
     //if distance <1 -> emit driver nearby
@@ -56,12 +58,15 @@ export default function FinalPageDriver() {
       socket.emit("startRide", rideDetails);
     }
     if (distanceFromDestination === 0) {
+      if (!isRideStarted) return;
+      console.log("ride ended ");
+      setEndRide(true);
       socket.emit("endRide", rideDetails);
     }
     //if distance <100m. ask start ride -> driver and user
 
     return () => {};
-  }, [distanceFromSource, distanceFromDestination, rideDetails]);
+  }, [distanceFromSource, distanceFromDestination, rideDetails, isRideStarted]);
 
   return (
     <div className="flex flex-row m-5 p-3">
@@ -78,7 +83,8 @@ export default function FinalPageDriver() {
           rideLocation={currentLocation}
         />
       )}
-      {startRide && <p>ride started</p>}
+      {isRideStarted && <p>ride started</p>}
+      {isRideEnded && <p>ride ended</p>}
     </div>
   );
 }

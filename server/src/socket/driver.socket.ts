@@ -10,7 +10,7 @@ export const driverSocket: DriverSocket = {};
 async function registerDriverSocket(socket: {
   on: (arg0: string, arg1: (driverID: string) => void) => void;
 }) {
-  socket.on("registerDriver", (driverID: string) => {
+  socket.on("registerDriver", (driverID) => {
     console.log("driver reg with id:", driverID);
     driverSocket[driverID] = socket;
   });
@@ -19,7 +19,7 @@ async function registerDriverSocket(socket: {
 async function setOffline(socket: {
   on: (arg0: string, arg1: (driverID: string) => void) => void;
 }) {
-  socket.on("setOffline", (driverID: string) => {
+  socket.on("setOffline", (driverID) => {
     console.log(`driver id ${driverID} went offline`);
     delete driverSocket[driverID];
   });
@@ -45,52 +45,72 @@ async function lockRide(
   },
   driverId: string
 ) {
-  for (let socket in driverSocket) {
-    driverSocket[socket].emit("lockRide", driverId);
-  }
+  emitEventToAllDriver("lockRide", driverId);
 }
 
 async function updateLocation(socket: {
   on: (
     arg0: string,
-    arg1: (data: { rideId: any; latitude: any; longitude: any }) => void
+    arg1: (data: {
+      rideId: string;
+      latitude: number;
+      longitude: number;
+    }) => void
   ) => void;
 }) {
-  socket.on(
-    "updateLocation",
-    async (data: { rideId: string; latitude: number; longitude: number }) => {
-      const { rideId, latitude, longitude } = data;
-      const { user_id } = await rideServices.read(rideId);
-      clientSock.sendLocation(user_id, latitude, longitude);
-    }
-  );
+  socket.on("updateLocation", async (data) => {
+    const { rideId, latitude, longitude } = data;
+    const { user_id } = await rideServices.read(rideId);
+    clientSock.sendLocation(user_id, latitude, longitude);
+  });
 }
-
-// async function endRide(socket){
-//   socket.on('endRide',async(rideDetails) =>{
-//     console.log(rideDetails)
-//     //get userid and send to client
-//     // const { user_id } = await rideServices.read(rideId);
-//     // clientSock.endRide(user_id,rideId)
-
-//   })
-// }
 
 async function rideNearby(socket: {
   on: (arg0: string, arg1: (rideDetails: any) => void) => void;
 }) {
   socket.on("rideNearby", (rideDetails) => {
     const { user_id, id } = rideDetails;
-    console.log("user id inside server", user_id);
     clientSock.rideNearby(user_id, id);
   });
 }
 
+async function startRide(socket: {
+  on: (arg0: string, arg1: (rideDetails: any) => void) => void;
+}) {
+  socket.on("startRide", (rideDetails) => {
+    const { user_id, id } = rideDetails;
+    clientSock.startRide(user_id, id);
+  });
+}
+
+async function endRide(socket: {
+  on: (arg0: string, arg1: (rideDetails: any) => void) => void;
+}) {
+  socket.on("endRide", (rideDetails) => {
+    const { user_id, id } = rideDetails;
+    clientSock.endRide(user_id, id);
+  });
+}
+
 async function requestForRide(rideDetails: Ride & User) {
+  emitEventToAllDriver("rideRequest", rideDetails);
+}
+
+async function emitEventToAllDriver(eventName: string, data: any) {
   if (Object.keys(driverSocket).length > 0) {
     for (let driverId in driverSocket) {
-      driverSocket[driverId].emit("rideRequest", rideDetails);
+      emitEventToDriver(eventName, driverId, data);
     }
+  }
+}
+
+async function emitEventToDriver(
+  eventName: string,
+  driverId: string,
+  data: any
+) {
+  if (driverSocket[driverId]) {
+    driverSocket[driverId].emit(eventName, data);
   }
 }
 
@@ -101,5 +121,6 @@ export const driverSock = {
   updateLocation,
   rideNearby,
   requestForRide,
-  // endRide
+  startRide,
+  endRide,
 };

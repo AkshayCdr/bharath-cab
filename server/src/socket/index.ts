@@ -1,9 +1,5 @@
 import { Server, Socket } from "socket.io";
-import {
-  driverSock,
-  driverSocket,
-  driverSocket as sockets,
-} from "./driver.socket";
+import { driverSock, driverSocket } from "./driver.socket";
 import { clientSock, clientSocket } from "./client.socket";
 import HTTPServer from "http";
 import { DefaultEventsMap } from "socket.io/dist/typed-events";
@@ -35,6 +31,8 @@ export function createSocket(
     driverSock.updateLocation(socket);
 
     driverSock.rideNearby(socket);
+    driverSock.startRide(socket);
+    driverSock.endRide(socket);
 
     handleDisconnection(socket);
   });
@@ -46,13 +44,13 @@ function handleDisconnection(
   socket: Socket<DefaultEventsMap, DefaultEventsMap, DefaultEventsMap, any>
 ) {
   socket.on("disconnect", () => {
-    console.log("disconnected");
     if (
       !(
-        Object.values(sockets).includes(socket) ||
+        Object.values(driverSocket).includes(socket) ||
         Object.values(clientSocket).includes(socket)
       )
     ) {
+      console.log("disconnected");
       return;
     }
     if (Object.values(clientSocket).includes(socket)) {

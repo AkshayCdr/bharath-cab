@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import useRideDetails, { RideDetails } from "~/hooks/useRideDetails";
 import useRideLocation from "~/hooks/useRideLocation";
 import Details from "../component/Details";
+import { useAsyncError } from "@remix-run/react";
 
 export const loader = async ({ params }: LoaderFunctionArgs) => {
   const { rideId } = params;
@@ -23,7 +24,8 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
 
 export default function FinalPageUser() {
   const [isEditable, setIsEditable] = useState(false);
-
+  const [isRideStarted, setRideStated] = useState(false);
+  const [isRideEnded, setRideEnded] = useState(false);
   const {
     rideDetails,
     source,
@@ -31,6 +33,7 @@ export default function FinalPageUser() {
     MapComponent,
     sourceName,
     destinationName,
+    setSource,
   } = useRideDetails();
 
   const { rideLocation, rideNearby, rideStatus } = useRideLocation();
@@ -42,13 +45,18 @@ export default function FinalPageUser() {
   }, [rideNearby]);
 
   useEffect(() => {
-    if (rideStatus === "start") {
+    if (rideStatus === "started") {
       alert("ride started");
+      setSource(rideLocation);
+      setRideStated(true);
     }
-    if (rideStatus === "end") {
+    if (rideStatus === "ended") {
+      setRideStated(false);
       alert("ride ended");
+      setRideEnded(true);
+      //go to rating page
     }
-  }, [rideStatus]);
+  }, [rideLocation, rideStatus, setSource]);
 
   return (
     <div className="flex flex-row m-5 p-3">
@@ -65,6 +73,8 @@ export default function FinalPageUser() {
           rideLocation={rideLocation}
         />
       )}
+      {isRideStarted && <p>Ride is started change the location</p>}
+      {isRideEnded && <p>Ride is ended give rating</p>}
     </div>
   );
 }
