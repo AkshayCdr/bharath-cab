@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import useRideDetails, { RideDetails } from "~/hooks/useRideDetails";
 import useRideLocation from "~/hooks/useRideLocation";
 import Details from "../component/Details";
-import { useAsyncError } from "@remix-run/react";
+import Review from "../component/Review";
 
 export const loader = async ({ params }: LoaderFunctionArgs) => {
   const { rideId } = params;
@@ -74,7 +74,7 @@ export default function FinalPageUser() {
         />
       )}
       {isRideStarted && <p>Ride is started change the location</p>}
-      {isRideEnded && <p>Ride is ended give rating</p>}
+      {isRideEnded && <Review />}
     </div>
   );
 }

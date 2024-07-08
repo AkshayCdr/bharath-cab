@@ -48,24 +48,40 @@ export default function FinalPageDriver() {
   console.log(distanceFromDestination);
 
   useEffect(() => {
-    //if distance <1 -> emit driver nearby
-    if (distanceFromSource > 1 && distanceFromSource < 3) {
+    function handleRideNearby() {
       console.log("ride nearby inside driver page", distanceFromSource);
       socket.emit("rideNearby", rideDetails);
     }
-    if (distanceFromSource === 0) {
+
+    function handleRideStart() {
       setStartRide(true);
       socket.emit("startRide", rideDetails);
     }
-    if (distanceFromDestination === 0) {
-      if (!isRideStarted) return;
+    function handleRideEnd() {
       console.log("ride ended ");
       setEndRide(true);
       socket.emit("endRide", rideDetails);
+      socket.disconnect();
+    }
+    //if distance <1 -> emit driver nearby
+    if (distanceFromSource > 1 && distanceFromSource < 3) {
+      handleRideNearby();
+    }
+    if (distanceFromSource === 0) {
+      handleRideStart();
+    }
+    if (distanceFromDestination === 0) {
+      // if (!isRideStarted) return;
+      handleRideEnd();
+      //go to payment page
     }
     //if distance <100m. ask start ride -> driver and user
 
-    return () => {};
+    return () => {
+      socket.off("rideNearby", handleRideNearby);
+      socket.off("startRide", handleRideStart);
+      socket.off("endRide", handleRideEnd);
+    };
   }, [distanceFromSource, distanceFromDestination, rideDetails, isRideStarted]);
 
   return (
