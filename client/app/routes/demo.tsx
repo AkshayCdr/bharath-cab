@@ -7,6 +7,13 @@ export async function action({ request }: ActionFunctionArgs) {
 
   const userDetails = Object.fromEntries(formData);
   console.log(userDetails);
+  if (!userDetails.review && !userDetails.rating) {
+    //send to data to rating
+    console.log("inside the no review or either rating");
+    return;
+  }
+  //send data to backend
+  //thats it
 }
 
 export default function demo() {

@@ -1,4 +1,4 @@
-import { LoaderFunctionArgs, json } from "@remix-run/node";
+import { ActionFunctionArgs, LoaderFunctionArgs, json } from "@remix-run/node";
 import { ride } from "apis/ride";
 import { useEffect, useState } from "react";
 
@@ -21,6 +21,23 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
 
   return json({ rideDetails });
 };
+
+export async function action({ request }: ActionFunctionArgs) {
+  const formData = await request.formData();
+
+  const rideDetails = Object.fromEntries(formData);
+  if (!rideDetails.review && !rideDetails.rating) {
+    //send to data to rating
+    console.log("inside the no review or either rating");
+    return;
+  }
+  //send data to backend
+  console.log(rideDetails);
+  const message = await ride.setReview(rideDetails);
+  console.log(message);
+  return message;
+  //thats it
+}
 
 export default function FinalPageUser() {
   const [isEditable, setIsEditable] = useState(false);
@@ -74,7 +91,7 @@ export default function FinalPageUser() {
         />
       )}
       {isRideStarted && <p>Ride is started change the location</p>}
-      {isRideEnded && <Review />}
+      {isRideEnded && <Review rideId={rideDetails.id} />}
     </div>
   );
 }

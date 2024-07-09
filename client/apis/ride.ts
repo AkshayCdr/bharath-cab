@@ -47,7 +47,23 @@ async function requestForRide(Id) {
     return;
   }
   const { message } = await response.json();
-  console.log("message inside api", message);
+  return message;
+}
+
+async function setReview(rideDetails) {
+  const response = await fetch(
+    `http://localhost:3000/ride/${rideDetails.Id}/review`,
+    {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(rideDetails),
+    }
+  );
+  if (!response.ok) {
+    console.error("failed to review", response.status, response.statusText);
+    return;
+  }
+  const { message } = await response.json();
   return message;
 }
 
@@ -55,4 +71,5 @@ export const ride = {
   setLocation,
   getRideDetails,
   requestForRide,
+  setReview,
 };

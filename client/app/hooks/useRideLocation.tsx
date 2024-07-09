@@ -65,6 +65,7 @@ export default function useRideLocation() {
     const handleEndRide = (rideId) => {
       console.log("ride end triggered", rideId);
       dispatch({ type: actionTypes.END_RIDE, payload: rideId });
+      socket.disconnect();
     };
 
     const handleStartRide = (rideId) => {

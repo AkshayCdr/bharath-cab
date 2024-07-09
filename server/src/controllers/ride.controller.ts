@@ -67,3 +67,19 @@ export async function requestForRide(
     res.status(500).send({ message: "error requesting ride", error });
   }
 }
+
+export async function addReview(req: Request<Id, {}, Ride>, res: Response) {
+  if (req.body.rating) {
+    const { id } = req.params;
+    console.log(`id is ${id}`);
+    const { review, rating } = req.body;
+    console.log("review and ratiing");
+    console.log(review);
+    console.log(rating);
+    return res.status(201).send({ message: "review and ratinf added" });
+  }
+  const { review } = req.body;
+  console.log("review");
+  console.log(review);
+  return res.status(201).send({ message: "rating added" });
+}
