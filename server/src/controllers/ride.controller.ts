@@ -12,7 +12,7 @@ export async function insertIntoRide(
   try {
     const { userId, source, destination } = req.body;
 
-    const distance = rideServices.findDistance(source, destination);
+    const distance = 10;
 
     const price = rideServices.findPrice(distance);
 
@@ -69,17 +69,13 @@ export async function requestForRide(
 }
 
 export async function addReview(req: Request<Id, {}, Ride>, res: Response) {
-  if (req.body.rating) {
+  try {
     const { id } = req.params;
-    console.log(`id is ${id}`);
     const { review, rating } = req.body;
-    console.log("review and ratiing");
-    console.log(review);
-    console.log(rating);
-    return res.status(201).send({ message: "review and ratinf added" });
+    console.log(`review : ${review} rating: ${rating}`);
+    await rideServices.addReview({ id, review, rating });
+    return res.status(201).send({ message: "set review" });
+  } catch (error) {
+    res.status(500).send({ message: "could not able to set review", error });
   }
-  const { review } = req.body;
-  console.log("review");
-  console.log(review);
-  return res.status(201).send({ message: "rating added" });
 }

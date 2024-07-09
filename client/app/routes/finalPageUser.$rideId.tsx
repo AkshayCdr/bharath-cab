@@ -27,11 +27,18 @@ export async function action({ request }: ActionFunctionArgs) {
 
   const rideDetails = Object.fromEntries(formData);
   if (!rideDetails.review && !rideDetails.rating) {
-    //send to data to rating
     console.log("inside the no review or either rating");
-    return;
+    return { message: "add review/rating" };
   }
-  //send data to backend
+  if (!rideDetails.rating) {
+    const updatedRideDetails = { ...rideDetails, rating: 0 };
+    console.log("if there is no rating");
+    console.log(updatedRideDetails);
+    const message = await ride.setReview(updatedRideDetails);
+    return message;
+  }
+
+  console.log("if there is rating");
   console.log(rideDetails);
   const message = await ride.setReview(rideDetails);
   console.log(message);
@@ -91,7 +98,8 @@ export default function FinalPageUser() {
         />
       )}
       {isRideStarted && <p>Ride is started change the location</p>}
-      {isRideEnded && <Review rideId={rideDetails.id} />}
+      {/* {isRideEnded && <Review rideId={rideDetails.id} />} */}
+      <Review rideId={rideDetails.id} />
     </div>
   );
 }

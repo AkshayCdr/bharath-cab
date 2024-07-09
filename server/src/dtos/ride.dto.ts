@@ -7,8 +7,8 @@ export interface Ride {
   source: LocationData;
   destination: LocationData;
   price: number;
-  rating?: number;
-  review?: string;
+  rating: number;
+  review: string;
 }
 
 export type LocationData = {

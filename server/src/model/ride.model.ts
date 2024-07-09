@@ -3,6 +3,7 @@ import { pool } from "../config/db";
 import { QueryResult } from "pg";
 import { Id } from "../types/id";
 import { User } from "../dtos/user.dto";
+import { Review } from "../dtos/rating.dtos";
 
 const client = pool.connect();
 
@@ -69,6 +70,17 @@ export async function updateRideTable(
   try {
     const query = `UPDATE ride SET driver_id = $1 WHERE id = $2`;
     const values = [driverId, id];
+    await (await client).query(query, values);
+  } catch (error) {
+    console.error(error);
+    throw new Error("Error getting data from ride");
+  }
+}
+
+export async function updateReview(rideDetails: Review): Promise<void> {
+  try {
+    const query = `UPDATE ride SET rating = $2,review = $3 WHERE id = $1`;
+    const values = [rideDetails.id, rideDetails.rating, rideDetails.review];
     await (await client).query(query, values);
   } catch (error) {
     console.error(error);

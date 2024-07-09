@@ -77,7 +77,7 @@ CREATE TABLE IF NOT EXISTS RIDE(
     destination POINT,
     eta INT CHECK (eta > 0),
     price INT CHECK (price > 0),
-    rating SMALLINT CHECK (rating >= 1 AND rating <= 5),
+    rating SMALLINT CHECK (rating >= 0 AND rating <= 5),
     review TEXT,
     FOREIGN KEY (user_id) REFERENCES "USER"(account_id),
     FOREIGN KEY (driver_id) REFERENCES DRIVER(account_id)
