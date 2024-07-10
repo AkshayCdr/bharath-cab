@@ -1,4 +1,5 @@
 import { Ride } from "../dtos/ride.dto";
+import { rideServices } from "../services/ride.services";
 import { ClientSocket } from "../types/clientSocket";
 import { driverSock } from "./driver.socket";
 
@@ -50,11 +51,8 @@ async function emitEventToClient(
 async function cancelRide(socket: {
   on: (arg0: string, arg1: (rideId: string) => void) => void;
 }) {
-  //send ride cancel to driver
-  //set ride to cancelled in database
-  //set
   socket.on("cancelRide", (rideId: string) => {
-    // const {driverId} =
+    rideServices.updateStatus(rideId, "cancelled");
     driverSock.cancelRide("cancelRide", rideId);
   });
 }

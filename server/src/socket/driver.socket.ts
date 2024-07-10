@@ -29,10 +29,15 @@ async function rideAccepted(socket: {
   on: (arg0: string, arg1: (rideData: any) => Promise<void>) => void;
 }) {
   socket.on("driverAccept", async (rideData) => {
-    console.log("driver accepted");
-    console.log(rideData);
     const { driverId, id: rideId, userId }: Ride = rideData;
+    const { status } = await rideServices.getStatus(rideId);
+
+    const isCancelled = status === "cancelled";
+    if (isCancelled) return;
+
     await rideServices.update(rideId, driverId);
+    await rideServices.updateStatus(rideId, "driver_accepted");
+
     const driverDetails = await driver.get(driverId);
     clientSock.rideAccepted(userId, driverDetails);
     lockRide(socket, driverId);
