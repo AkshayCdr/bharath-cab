@@ -60,7 +60,7 @@ export async function requestForRide(
     const rideDetails = await rideServices.getRideAndUser(id);
     console.log("ride Details user ride", rideDetails);
 
-    driverSock.requestForRide(rideDetails);
+    await driverSock.requestForRide(rideDetails);
 
     res.status(200).send({ message: "waiting for the driver" });
   } catch (error) {

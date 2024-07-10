@@ -92,7 +92,10 @@ function endRide(socket: {
   });
 }
 
-function requestForRide(rideDetails: Ride & User) {
+async function requestForRide(rideDetails: Ride & User) {
+  //send status to request for ride
+  console.log("chaning status with id ", rideDetails.id);
+  rideServices.updateStatus(rideDetails.id, "requested");
   emitEventToAllDriver("rideRequest", rideDetails);
 }
 

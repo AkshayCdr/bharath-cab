@@ -6,6 +6,7 @@ import {
   getRideAndUserFromTable,
   insertIntoRideTable,
   updateReview,
+  updateRideStatus,
   updateRideTable,
 } from "../model/ride.model";
 
@@ -29,6 +30,10 @@ async function addReview(rideDetails: Review): Promise<void> {
   return updateReview(rideDetails);
 }
 
+async function updateStatus(id: string, status: string): Promise<void> {
+  return updateRideStatus(id, status);
+}
+
 async function del(): Promise<void> {}
 
 function findPrice(distance: number): number {
@@ -45,4 +50,5 @@ export const rideServices = {
   findPrice,
   getRideAndUser,
   addReview,
+  updateStatus,
 };

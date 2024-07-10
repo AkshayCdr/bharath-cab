@@ -87,3 +87,18 @@ export async function updateReview(rideDetails: Review): Promise<void> {
     throw new Error("Error getting data from ride");
   }
 }
+
+export async function updateRideStatus(
+  id: string,
+  status: string
+): Promise<void> {
+  try {
+    const query = `UPDATE ride SET status = $2  WHERE id = $1`;
+    const values = [id, status];
+    const data = await (await client).query(query, values);
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+    throw new Error("Error getting data from ride");
+  }
+}

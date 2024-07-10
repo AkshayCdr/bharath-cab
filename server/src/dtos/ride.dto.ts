@@ -17,7 +17,10 @@ export type LocationData = {
 };
 
 enum RideStatus {
-  Success = "SUCCESS",
-  OnRide = "ON_RIDE",
-  Pending = "PENDING",
+  Success = "success",
+  OnRide = "onride",
+  Pending = "pending",
+  Requested = "requested",
+  Accepted = "driver_accepted",
+  Cancelled = "cancelled",
 }
