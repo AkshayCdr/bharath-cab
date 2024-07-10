@@ -7,7 +7,7 @@ import { clientSock } from "./client.socket";
 
 export const driverSocket: DriverSocket = {};
 
-async function registerDriverSocket(socket: {
+function registerDriverSocket(socket: {
   on: (arg0: string, arg1: (driverID: string) => void) => void;
 }) {
   socket.on("registerDriver", (driverID) => {
@@ -16,7 +16,7 @@ async function registerDriverSocket(socket: {
   });
 }
 
-async function setOffline(socket: {
+function setOffline(socket: {
   on: (arg0: string, arg1: (driverID: string) => void) => void;
 }) {
   socket.on("setOffline", (driverID) => {
@@ -39,7 +39,7 @@ async function rideAccepted(socket: {
   });
 }
 
-async function lockRide(
+function lockRide(
   socket: {
     on: (arg0: string, arg1: (rideData: any) => Promise<void>) => void;
   },
@@ -65,7 +65,7 @@ async function updateLocation(socket: {
   });
 }
 
-async function rideNearby(socket: {
+function rideNearby(socket: {
   on: (arg0: string, arg1: (rideDetails: any) => void) => void;
 }) {
   socket.on("rideNearby", (rideDetails) => {
@@ -74,7 +74,7 @@ async function rideNearby(socket: {
   });
 }
 
-async function startRide(socket: {
+function startRide(socket: {
   on: (arg0: string, arg1: (rideDetails: any) => void) => void;
 }) {
   socket.on("startRide", (rideDetails) => {
@@ -83,7 +83,7 @@ async function startRide(socket: {
   });
 }
 
-async function endRide(socket: {
+function endRide(socket: {
   on: (arg0: string, arg1: (rideDetails: any) => void) => void;
 }) {
   socket.on("endRide", (rideDetails) => {
@@ -92,11 +92,15 @@ async function endRide(socket: {
   });
 }
 
-async function requestForRide(rideDetails: Ride & User) {
+function requestForRide(rideDetails: Ride & User) {
   emitEventToAllDriver("rideRequest", rideDetails);
 }
 
-async function emitEventToAllDriver(eventName: string, data: any) {
+function cancelRide(eventName: string, rideId: string) {
+  emitEventToAllDriver(eventName, rideId);
+}
+
+function emitEventToAllDriver(eventName: string, data: any) {
   if (Object.keys(driverSocket).length > 0) {
     for (let driverId in driverSocket) {
       emitEventToDriver(eventName, driverId, data);
@@ -104,11 +108,7 @@ async function emitEventToAllDriver(eventName: string, data: any) {
   }
 }
 
-async function emitEventToDriver(
-  eventName: string,
-  driverId: string,
-  data: any
-) {
+function emitEventToDriver(eventName: string, driverId: string, data: any) {
   if (driverSocket[driverId]) {
     driverSocket[driverId].emit(eventName, data);
   }
@@ -123,4 +123,5 @@ export const driverSock = {
   requestForRide,
   startRide,
   endRide,
+  cancelRide,
 };

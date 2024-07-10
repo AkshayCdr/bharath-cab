@@ -15,8 +15,9 @@ import DriverDetails from "~/component/DriverDetails";
 import styles from "../styles/ride.css?url";
 import useRideDetails from "~/hooks/useRideDetails";
 import useRideSocket from "~/hooks/useRideSocket";
+import { socket } from "~/socket/websocket";
 // import "leaflet/dist/leaflet.css";
-export interface rideDetails {
+export interface Ride {
   id: string;
   source: Coordinates;
   destination: Coordinates;
@@ -45,7 +46,7 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
     throw new Response("Not Found", { status: 404 });
   }
 
-  const rideDetails: rideDetails = await ride.getRideDetails(rideId);
+  const rideDetails: Ride = await ride.getRideDetails(rideId);
 
   if (!rideDetails) {
     throw new Response("Not Found", { status: 404 });
@@ -54,8 +55,13 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
   return json({ rideDetails });
 };
 
+function handleRideCancel(rideDetails: Ride) {
+  socket.emit("cancelRide", rideDetails.id);
+}
+
 export default function Ride() {
   const [isEditable, setIsEditable] = useState(false);
+  const [isRideCancelled, setRideCancelled] = useState(false);
 
   const message = useActionData<typeof action>();
 
@@ -71,7 +77,10 @@ export default function Ride() {
     setSourceName,
     setDestinationName,
   } = useRideDetails();
-  const { isRideAccepted, driverDetails } = useRideSocket(rideDetails);
+  const { isRideAccepted, driverDetails } = useRideSocket({
+    rideDetails,
+    isRideCancelled,
+  });
 
   return (
     <div className="flex flex-row">
@@ -80,6 +89,8 @@ export default function Ride() {
           rideDetails={rideDetails}
           sourceName={sourceName}
           destinationName={destinationName}
+          handleRideCancel={handleRideCancel}
+          setRideCancelled={setRideCancelled}
         />
         {isRideAccepted ? (
           <DriverDetails driverDetails={driverDetails} />

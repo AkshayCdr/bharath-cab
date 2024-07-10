@@ -1,4 +1,4 @@
-import { Form } from "@remix-run/react";
+import { Form, useNavigate } from "@remix-run/react";
 import { ride } from "apis/ride";
 import React from "react";
 
@@ -6,8 +6,11 @@ export default function RideDetails({
   rideDetails,
   sourceName,
   destinationName,
+  handleRideCancel,
+  setRideCancelled,
 }) {
   console.log(rideDetails);
+  const navigate = useNavigate();
 
   return (
     <div>
@@ -66,7 +69,16 @@ export default function RideDetails({
         </p>
         <p>
           <button type="submit">Request for ride</button>
-          <button type="button">Cancel</button>
+          <button
+            type="button"
+            onClick={() => {
+              handleRideCancel(rideDetails);
+              setRideCancelled(true);
+              navigate(-1);
+            }}
+          >
+            Cancel
+          </button>
         </p>
       </Form>
     </div>

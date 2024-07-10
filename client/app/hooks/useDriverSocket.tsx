@@ -24,20 +24,29 @@ export default function useDriverSocket(driverId, setUserDetails, userDetails) {
       if (Id !== driverId) {
         setUserDetails({});
         console.log("ride taken");
-      } else {
-        console.log("ride confiremmed and userDeails");
-        console.log(userDetails);
-        navigate(`/finalPageDriver/${userDetailsRef.current.id}`);
+        return;
       }
+      console.log("ride confiremmed and userDeails");
+      console.log(userDetails);
+      navigate(`/finalPageDriver/${userDetailsRef.current.id}`);
     };
+
+    const handleCancelRide = (rideId) => {
+      console.log("ride id " + rideId);
+      console.log("ride id from useDetails" + userDetailsRef.current.id);
+      if (rideId !== userDetailsRef.current.id) return;
+      setUserDetails({});
+    };
+
     socket.on("connect", handleConnect);
     socket.on("rideRequest", handleRideRequest);
     socket.on("lockRide", handleLockRide);
-
+    socket.on("cancelRide", handleCancelRide);
     return () => {
       socket.off("connect");
       socket.off("rideRequest", handleRideRequest);
       socket.off("lockRide", handleLockRide);
+      socket.off("cancelRide", handleCancelRide);
     };
   }, []);
 
