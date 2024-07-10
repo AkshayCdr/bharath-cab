@@ -102,3 +102,21 @@ export async function updateRideStatus(
     throw new Error("Error getting data from ride");
   }
 }
+
+export async function getStatusFromRide(
+  id: string
+): Promise<{ status: string }> {
+  try {
+    const query = `SELECT status FROM ride WHERE id = $1 `;
+    const values = [id];
+
+    const result: QueryResult<{ status: string }> = await (
+      await client
+    ).query(query, values);
+
+    return result.rows[0];
+  } catch (error) {
+    console.error(error);
+    throw new Error("Error getting data from ride");
+  }
+}

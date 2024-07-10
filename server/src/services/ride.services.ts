@@ -4,6 +4,7 @@ import { User } from "../dtos/user.dto";
 import {
   getFromRideTable,
   getRideAndUserFromTable,
+  getStatusFromRide,
   insertIntoRideTable,
   updateReview,
   updateRideStatus,
@@ -34,6 +35,10 @@ async function updateStatus(id: string, status: string): Promise<void> {
   return updateRideStatus(id, status);
 }
 
+async function getStatus(id: string): Promise<{ status: string }> {
+  return getStatusFromRide(id);
+}
+
 async function del(): Promise<void> {}
 
 function findPrice(distance: number): number {
@@ -51,4 +56,5 @@ export const rideServices = {
   getRideAndUser,
   addReview,
   updateStatus,
+  getStatus,
 };
