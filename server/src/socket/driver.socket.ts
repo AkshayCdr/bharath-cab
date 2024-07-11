@@ -1,3 +1,4 @@
+import { rideDetails } from "../controllers/ride.controller";
 import { Ride } from "../dtos/ride.dto";
 import { User } from "../dtos/user.dto";
 import { driver } from "../services/driver.services";
@@ -29,7 +30,8 @@ async function rideAccepted(socket: {
   on: (arg0: string, arg1: (rideData: any) => Promise<void>) => void;
 }) {
   socket.on("driverAccept", async (rideData) => {
-    const { driverId, id: rideId, userId }: Ride = rideData;
+    const { driverId, rideId, userId } = rideData;
+
     const { status } = await rideServices.getStatus(rideId);
 
     const isCancelled = status === "cancelled";
@@ -75,6 +77,7 @@ function rideNearby(socket: {
 }) {
   socket.on("rideNearby", (rideDetails) => {
     const { user_id, id } = rideDetails;
+    rideServices.updateStatus(id, "started");
     clientSock.rideNearby(user_id, id);
   });
 }
@@ -84,6 +87,7 @@ function startRide(socket: {
 }) {
   socket.on("startRide", (rideDetails) => {
     const { user_id, id } = rideDetails;
+    rideServices.updateStatus(id, "onride");
     clientSock.startRide(user_id, id);
   });
 }
@@ -93,6 +97,7 @@ function endRide(socket: {
 }) {
   socket.on("endRide", (rideDetails) => {
     const { user_id, id } = rideDetails;
+    rideServices.updateStatus(id, "ride_ended");
     clientSock.endRide(user_id, id);
   });
 }
@@ -127,8 +132,8 @@ export const driverSock = {
   setOffline,
   rideAccepted,
   updateLocation,
-  rideNearby,
   requestForRide,
+  rideNearby,
   startRide,
   endRide,
   cancelRide,

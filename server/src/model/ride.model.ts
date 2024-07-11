@@ -4,6 +4,7 @@ import { QueryResult } from "pg";
 import { Id } from "../types/id";
 import { User } from "../dtos/user.dto";
 import { Review } from "../dtos/rating.dtos";
+import { Driver } from "../dtos/driver.dtos";
 
 const client = pool.connect();
 
@@ -47,7 +48,6 @@ export async function getRideAndUserFromTable(
   id: string
 ): Promise<Ride & User> {
   try {
-    console.log("inside table");
     const query = `SELECT r.id, r.source, r.destination, r.price, r.user_id, u.name, u.phone ,u,email
                   FROM RIDE as r 
                   INNER JOIN "USER" as u 
@@ -61,6 +61,20 @@ export async function getRideAndUserFromTable(
     console.error(error);
     throw new Error("Error fetching data from ride and user");
   }
+}
+
+export async function getRideAndDriverFromTable(
+  id: string
+): Promise<Ride & Driver> {
+  const query = `SELECT r.id, r.source, r.destination, r.price, r.driver_id, d.name, d.phone ,d,email
+  FROM RIDE as r 
+  INNER JOIN DRIVER as d
+  ON r.driver_id = d.account_id WHERE r.id = $1`;
+  const values = [id];
+  const result: QueryResult<Ride & Driver> = await (
+    await client
+  ).query(query, values);
+  return result.rows[0];
 }
 
 export async function updateRideTable(

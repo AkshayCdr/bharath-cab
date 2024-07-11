@@ -32,6 +32,17 @@ async function getRideDetails(rideId: string) {
   return data;
 }
 
+async function getRideAndDriver(rideId: string) {
+  const response = await fetch(`http://localhost:3000/ride/${rideId}/driver`);
+  if (!response.ok) {
+    console.error(response.status, response.statusText);
+    return;
+  }
+  const data = await response.json();
+
+  return data;
+}
+
 async function requestForRide(Id) {
   const response = await fetch(`http://localhost:3000/ride/${Id}`, {
     method: "PATCH",
@@ -70,6 +81,7 @@ async function setReview(rideDetails) {
 export const ride = {
   setLocation,
   getRideDetails,
+  getRideAndDriver,
   requestForRide,
   setReview,
 };

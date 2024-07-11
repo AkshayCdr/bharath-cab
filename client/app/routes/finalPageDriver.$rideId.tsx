@@ -1,5 +1,5 @@
 import { LoaderFunctionArgs, json } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
+import { useLoaderData, useNavigate } from "@remix-run/react";
 import { driver } from "apis/driver";
 import { ride } from "apis/ride";
 import { useEffect, useState } from "react";
@@ -29,6 +29,8 @@ export default function FinalPageDriver() {
   const [isRideEnded, setEndRide] = useState(false);
   const [isEditable, setIsEditable] = useState(false);
 
+  const navigate = useNavigate();
+
   const {
     rideDetails,
     source,
@@ -44,8 +46,6 @@ export default function FinalPageDriver() {
     currentLocation,
     destination
   );
-  console.log(distanceFromSource);
-  console.log(distanceFromDestination);
 
   useEffect(() => {
     function handleRideNearby() {
@@ -62,9 +62,11 @@ export default function FinalPageDriver() {
       setEndRide(true);
       socket.emit("endRide", rideDetails);
       socket.disconnect();
+      navigate("/login");
     }
+    const isRideNearby = distanceFromSource > 1 && distanceFromSource < 3;
     //if distance <1 -> emit driver nearby
-    if (distanceFromSource > 1 && distanceFromSource < 3) {
+    if (isRideNearby) {
       handleRideNearby();
     }
     if (distanceFromSource === 0) {
@@ -82,7 +84,7 @@ export default function FinalPageDriver() {
       socket.off("startRide", handleRideStart);
       socket.off("endRide", handleRideEnd);
     };
-  }, [distanceFromSource, distanceFromDestination, rideDetails, isRideStarted]);
+  }, []);
 
   return (
     <div className="flex flex-row m-5 p-3">

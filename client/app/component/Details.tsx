@@ -41,6 +41,30 @@ export default function RideDetails({
             readOnly
           />
         </div>
+        <div className="flex flex-col">
+          <label htmlFor="driver" className="text-2xl">
+            Driver Name
+          </label>
+          <input
+            type="text"
+            name="driver"
+            id=""
+            value={rideDetails.name}
+            readOnly
+          />
+        </div>
+        <div className="flex flex-col">
+          <label htmlFor="phone" className="text-2xl">
+            Phone
+          </label>
+          <input
+            type="text"
+            name="phone"
+            id=""
+            value={rideDetails.phone}
+            readOnly
+          />
+        </div>
       </p>
     </div>
   );

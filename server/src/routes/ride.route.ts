@@ -4,6 +4,7 @@ import {
   insertIntoRide,
   requestForRide,
   addReview,
+  getRideAndDriver,
 } from "../controllers/ride.controller";
 
 const route = Router();
@@ -11,6 +12,8 @@ const route = Router();
 route.post("/", insertIntoRide);
 
 route.get("/:id", getRide);
+
+route.get("/:id/driver", getRideAndDriver);
 
 route.patch("/:id", requestForRide);
 
