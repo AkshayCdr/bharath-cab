@@ -45,6 +45,10 @@ const reducer = (state, action) => {
   }
 };
 
+export function handleCancelRide(rideId) {
+  socket.emit("cancelRide", rideId);
+}
+
 export default function useRideLocation() {
   const [state, dispatch] = useReducer(reducer, initialState);
   useEffect(() => {

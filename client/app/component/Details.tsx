@@ -8,7 +8,7 @@ export default function RideDetails({
   console.log(rideDetails);
 
   return (
-    <div className="flex flex-col m-4 p-2 ">
+    <Form method="post" className="flex flex-col m-4 p-2 ">
       <input type="hidden" name="rideId" defaultValue={rideDetails.id} />
       <p className="ride-details-input flex flex-col gap-6">
         <div className="flex flex-col">
@@ -65,7 +65,10 @@ export default function RideDetails({
             readOnly
           />
         </div>
+        <button type="submit" name="intent" value="cancel">
+          Cancel
+        </button>
       </p>
-    </div>
+    </Form>
   );
 }

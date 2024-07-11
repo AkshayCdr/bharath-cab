@@ -1,9 +1,14 @@
-import { ActionFunctionArgs, LoaderFunctionArgs, json } from "@remix-run/node";
+import {
+  ActionFunctionArgs,
+  LoaderFunctionArgs,
+  json,
+  redirect,
+} from "@remix-run/node";
 import { ride } from "apis/ride";
 import { useEffect, useState } from "react";
 
 import useRideDetails, { RideDetails } from "~/hooks/useRideDetails";
-import useRideLocation from "~/hooks/useRideLocation";
+import useRideLocation, { handleCancelRide } from "~/hooks/useRideLocation";
 import Details from "../component/Details";
 import Review from "../component/Review";
 
@@ -25,20 +30,29 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
 export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
 
-  const rideDetails = Object.fromEntries(formData);
+  if (formData.get("intent") === "review") {
+    const rideDetails = Object.fromEntries(formData);
 
-  if (!rideDetails.review && !rideDetails.rating) {
-    return { message: "add review/rating" };
-  }
-  if (!rideDetails.rating) {
-    const updatedRideDetails = { ...rideDetails, rating: 0 };
-    const message = await ride.setReview(updatedRideDetails);
+    if (!rideDetails.review && !rideDetails.rating) {
+      return { message: "add review/rating" };
+    }
+    if (!rideDetails.rating) {
+      const updatedRideDetails = { ...rideDetails, rating: 0 };
+      const message = await ride.setReview(updatedRideDetails);
+      return message;
+    }
+
+    const message = await ride.setReview(rideDetails);
+
     return message;
   }
 
-  const message = await ride.setReview(rideDetails);
-
-  return message;
+  if (formData.get("intent") === "cancel") {
+    const rideId = formData.get("rideId");
+    console.log(rideId);
+    handleCancelRide(rideId);
+    return redirect(`/ride/${rideId}`);
+  }
 }
 
 export default function FinalPageUser() {
@@ -94,6 +108,7 @@ export default function FinalPageUser() {
       )}
       {isRideStarted && <p>Ride is started change the location</p>}
       {isRideEnded && <Review rideId={rideDetails.id} />}
+      {/* <Review rideId={rideDetails.id} /> */}
     </div>
   );
 }

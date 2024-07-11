@@ -48,6 +48,17 @@ export default function FinalPageDriver() {
   );
 
   useEffect(() => {
+    function handleCancelRide(rideId) {
+      if (rideId !== rideDetails.id) return;
+      navigate(-1);
+    }
+    socket.on("cancelRide", handleCancelRide);
+    return () => {
+      socket.off("cancelRide", handleCancelRide);
+    };
+  });
+
+  useEffect(() => {
     function handleRideNearby() {
       console.log("ride nearby inside driver page", distanceFromSource);
       socket.emit("rideNearby", rideDetails);

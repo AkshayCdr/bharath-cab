@@ -110,6 +110,7 @@ async function requestForRide(rideDetails: Ride & User) {
 }
 
 function cancelRide(eventName: string, rideId: string) {
+  //if driverid is attached sedn to that driver otherwise send to perticular driver
   emitEventToAllDriver(eventName, rideId);
 }
 

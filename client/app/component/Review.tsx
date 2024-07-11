@@ -15,7 +15,9 @@ export default function Review({ rideId }) {
       />
       <label htmlFor="review">Review</label>
       <textarea name="review" placeholder="write a review"></textarea>
-      <button>Submit</button>
+      <button type="submit" name="intent" value="review">
+        Submit
+      </button>
     </Form>
   );
 }
