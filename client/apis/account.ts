@@ -9,9 +9,10 @@ async function login(userDetails) {
 
   if (!response.ok) throw new Error("login error");
 
-  const { id } = await response.json();
-  console.log(id);
-  return id;
+  // const { id, accountType } = await response.json();
+
+  // return id;
+  return response.json();
 }
 
 export const account = {

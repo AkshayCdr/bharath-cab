@@ -28,7 +28,11 @@ export async function insertIntoSession(
     //temp logic
     const id = await account.getId(username);
 
-    res.status(200).send({ id });
+    const accountType = await account.type(id);
+
+    console.log(accountType);
+
+    res.status(200).send({ id, accountType });
   } catch (error) {
     res.status(500).send({ message: error });
   }

@@ -10,7 +10,7 @@ export default function LoginInput() {
     >
       <p className="flex flex-col gap-3  sm:w-full sm:max-w-md ">
         <input
-          className="m-5 p-2 rounded-md border"
+          className="m-5 p-2 rounded-md border text-black"
           type="text"
           name="username"
           placeholder="username"
@@ -19,7 +19,7 @@ export default function LoginInput() {
           maxLength={30}
         />
         <input
-          className="m-4 p-2 rounded-md border"
+          className="m-4 p-2 rounded-md border text-black"
           type="password"
           name="password"
           placeholder="password"

@@ -3,6 +3,7 @@ import {
   checkAccountExist,
   createAccount,
   getAccountId,
+  getAccountType,
   getPasswordFromTable,
 } from "../model/account.model";
 
@@ -22,6 +23,10 @@ export async function getId(username: string): Promise<string> {
   return getAccountId(username);
 }
 
+export async function type(id: string): Promise<string> {
+  return getAccountType(id);
+}
+
 export async function insert(account: Account) {}
 
 export const account = {
@@ -30,4 +35,5 @@ export const account = {
   checkUsername,
   getPassword,
   getId,
+  type,
 };

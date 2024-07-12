@@ -9,13 +9,15 @@ export async function action({ request }: ActionFunctionArgs) {
 
   const userDetails = Object.fromEntries(formData);
 
-  const driver = formData.get("driver") === "check";
-  const user = formData.get("user") === "check";
+  // const driver = formData.get("driver") === "check";
+  // const user = formData.get("user") === "check";
 
-  const id = await account.login(userDetails);
+  const { id, accountType } = await account.login(userDetails);
 
-  if (user) return redirect(`/user/${id}`);
-  if (driver) return redirect(`/driver/${id}`);
+  console.log(id);
+  console.log(accountType);
+  // if (user) return redirect(`/user/${id}`);
+  // if (driver) return redirect(`/driver/${id}`);
   return { message: "select user/driver" };
 }
 
@@ -24,7 +26,7 @@ export default function Login() {
     <div
       className="flex flex-col m-6 p-36  rounded-md bg-center bg-cover "
       style={{
-        backgroundImage: `url('/public/home.jpg')`,
+        backgroundImage: `url('/home.jpg')`,
       }}
     >
       <LoginInput />
