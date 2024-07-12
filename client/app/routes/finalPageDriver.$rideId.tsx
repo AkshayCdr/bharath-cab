@@ -41,7 +41,9 @@ export default function FinalPageDriver() {
   } = useRideDetails();
 
   const { currentLocation } = useLocation(rideDetails.id);
+
   const { distance: distanceFromSource } = useRoute(currentLocation, source);
+
   const { distance: distanceFromDestination } = useRoute(
     currentLocation,
     destination
@@ -76,7 +78,7 @@ export default function FinalPageDriver() {
       navigate("/login");
     }
     const isRideNearby = distanceFromSource > 1 && distanceFromSource < 3;
-    //if distance <1 -> emit driver nearby
+
     if (isRideNearby) {
       handleRideNearby();
     }
@@ -84,11 +86,8 @@ export default function FinalPageDriver() {
       handleRideStart();
     }
     if (distanceFromDestination === 0) {
-      // if (!isRideStarted) return;
       handleRideEnd();
-      //go to payment page
     }
-    //if distance <100m. ask start ride -> driver and user
 
     return () => {
       socket.off("rideNearby", handleRideNearby);

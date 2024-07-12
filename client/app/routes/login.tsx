@@ -12,9 +12,6 @@ export async function action({ request }: ActionFunctionArgs) {
   const driver = formData.get("driver") === "check";
   const user = formData.get("user") === "check";
 
-  if (!userDetails.username || !userDetails.password)
-    return { message: "invalid username or password" };
-
   const id = await account.login(userDetails);
 
   if (user) return redirect(`/user/${id}`);
@@ -23,11 +20,9 @@ export async function action({ request }: ActionFunctionArgs) {
 }
 
 export default function Login() {
-  const data = useActionData();
   return (
-    <div>
+    <div className="flex flex-col m-6 p-36 bg-slate-600 ">
       <LoginInput />
-      {data?.message && <p className="login-alert">{data.message}</p>}
     </div>
   );
 }
