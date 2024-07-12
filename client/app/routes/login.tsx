@@ -4,21 +4,36 @@ import { account } from "apis/account";
 import LoginInput from "../component/LoginInput";
 import styles from "../styles/login.css?url";
 
+const isUsernameValid = (username) => username.length > 2;
+
+const isPasswordValid = (password) => password.length > 2;
+
 export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
 
   const userDetails = Object.fromEntries(formData);
 
-  // const driver = formData.get("driver") === "check";
-  // const user = formData.get("user") === "check";
+  const errors: { username?: string; password?: string } = {};
+
+  const username = formData.get("username");
+  const password = formData.get("password");
+
+  if (!isUsernameValid(username)) errors.username = "Invalid username";
+  if (!isPasswordValid(password)) errors.password = "Invalid Password";
+
+  if (Object.keys(errors).length) {
+    return {
+      errors,
+    };
+  }
 
   const { id, accountType } = await account.login(userDetails);
 
-  console.log(id);
-  console.log(accountType);
-  // if (user) return redirect(`/user/${id}`);
-  // if (driver) return redirect(`/driver/${id}`);
-  return { message: "select user/driver" };
+  const isUser = accountType === "user";
+  const isDriver = accountType === "driver";
+
+  if (isUser) return redirect(`/user/${id}`);
+  if (isDriver) return redirect(`/driver/${id}`);
 }
 
 export default function Login() {

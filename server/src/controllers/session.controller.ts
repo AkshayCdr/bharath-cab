@@ -10,8 +10,6 @@ export async function insertIntoSession(
   try {
     const { username, password } = req.body;
 
-    // console.log(req.body);
-
     const isUserExist = await account.checkUsername(username);
 
     if (!isUserExist)
@@ -25,12 +23,9 @@ export async function insertIntoSession(
 
     if (!match) return res.status(401).send({ message: "invalid password" });
 
-    //temp logic
     const id = await account.getId(username);
 
     const accountType = await account.type(id);
-
-    console.log(accountType);
 
     res.status(200).send({ id, accountType });
   } catch (error) {
