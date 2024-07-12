@@ -1,8 +1,8 @@
 import { ActionFunctionArgs, LinksFunction } from "@remix-run/node";
 import { redirect, useActionData } from "@remix-run/react";
 import { account } from "apis/account";
-import LoginInput from "../component/LoginInput";
-import styles from "../styles/login.css?url";
+import LoginInput from "../../component/LoginInput";
+import styles from "../../styles/login.css?url";
 
 const isUsernameValid = (username) => username.length > 2;
 
