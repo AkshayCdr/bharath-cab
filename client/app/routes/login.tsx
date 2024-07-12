@@ -21,7 +21,12 @@ export async function action({ request }: ActionFunctionArgs) {
 
 export default function Login() {
   return (
-    <div className="flex flex-col m-6 p-36 bg-slate-600 ">
+    <div
+      className="flex flex-col m-6 p-36  rounded-md bg-center bg-cover "
+      style={{
+        backgroundImage: `url('/public/home.jpg')`,
+      }}
+    >
       <LoginInput />
     </div>
   );

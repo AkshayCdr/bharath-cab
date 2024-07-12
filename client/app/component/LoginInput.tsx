@@ -6,7 +6,7 @@ export default function LoginInput() {
     <Form
       method="POST"
       id="login-form"
-      className="flex flex-col min-h-full flex-1 border p-8 m-5 bg-slate-900 opacity-80 text-white items-center justify-center"
+      className="flex flex-col min-h-full flex-1 border p-8 m-5 bg-black opacity-90 text-white items-center justify-center rounded-md mx-auto "
     >
       <p className="flex flex-col gap-3  sm:w-full sm:max-w-md ">
         <input
