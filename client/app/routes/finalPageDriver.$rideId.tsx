@@ -49,6 +49,9 @@ export default function FinalPageDriver() {
     destination
   );
 
+  console.log(distanceFromSource);
+  console.log(distanceFromDestination);
+
   useEffect(() => {
     function handleCancelRide(rideId) {
       if (rideId !== rideDetails.id) return;
@@ -58,7 +61,7 @@ export default function FinalPageDriver() {
     return () => {
       socket.off("cancelRide", handleCancelRide);
     };
-  });
+  }, []);
 
   useEffect(() => {
     function handleRideNearby() {
@@ -68,6 +71,7 @@ export default function FinalPageDriver() {
 
     function handleRideStart() {
       setStartRide(true);
+      console.log("sending start ride ");
       socket.emit("startRide", rideDetails);
     }
     function handleRideEnd() {
@@ -94,7 +98,7 @@ export default function FinalPageDriver() {
       socket.off("startRide", handleRideStart);
       socket.off("endRide", handleRideEnd);
     };
-  }, []);
+  }, [distanceFromDestination, distanceFromSource, navigate, rideDetails]);
 
   return (
     <div className="flex flex-row m-5 p-3">

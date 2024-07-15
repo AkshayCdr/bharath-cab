@@ -3,37 +3,35 @@ import { redirect, useActionData } from "@remix-run/react";
 import { account } from "apis/account";
 import LoginInput from "../../component/LoginInput";
 import styles from "../../styles/login.css?url";
-
-const isUsernameValid = (username) => username.length > 2;
-
-const isPasswordValid = (password) => password.length > 2;
+import { validate } from "./validation";
 
 export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
 
   const userDetails = Object.fromEntries(formData);
 
-  const errors: { username?: string; password?: string } = {};
+  const username = String(formData.get("username"));
+  const password = String(formData.get("password"));
 
-  const username = formData.get("username");
-  const password = formData.get("password");
+  const error: { username?: string; password?: string } = {};
 
-  if (!isUsernameValid(username)) errors.username = "Invalid username";
-  if (!isPasswordValid(password)) errors.password = "Invalid Password";
+  const errors = validate(error, username, password);
 
-  if (Object.keys(errors).length) {
-    return {
-      errors,
-    };
+  if (errors) {
+    return { errors };
   }
 
-  const { id, accountType } = await account.login(userDetails);
+  const data = await account.login(userDetails);
 
-  const isUser = accountType === "user";
-  const isDriver = accountType === "driver";
+  if (!data) {
+    throw new Error("Invalid response from server");
+  }
 
-  if (isUser) return redirect(`/user/${id}`);
-  if (isDriver) return redirect(`/driver/${id}`);
+  const isUser = data.accountType === "user";
+  const isDriver = data.accountType === "driver";
+
+  if (isUser) return redirect(`/user/${data.id}`);
+  if (isDriver) return redirect(`/driver/${data.id}`);
 }
 
 export default function Login() {

@@ -7,11 +7,8 @@ async function login(userDetails) {
     body: JSON.stringify(userDetails), // Convert locationData to a JSON string
   });
 
-  if (!response.ok) throw new Error("login error");
+  if (!response.ok) return null;
 
-  // const { id, accountType } = await response.json();
-
-  // return id;
   return response.json();
 }
 
