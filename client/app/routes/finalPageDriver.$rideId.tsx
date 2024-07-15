@@ -69,11 +69,33 @@ export default function FinalPageDriver() {
       socket.emit("rideNearby", rideDetails);
     }
 
+    const isRideNearby = distanceFromSource > 1 && distanceFromSource < 3;
+    if (isRideNearby) {
+      handleRideNearby();
+    }
+
+    return () => {
+      socket.off("rideNearby", handleRideNearby);
+    };
+  }, [distanceFromSource, rideDetails]);
+
+  useEffect(() => {
     function handleRideStart() {
       setStartRide(true);
       console.log("sending start ride ");
       socket.emit("startRide", rideDetails);
     }
+
+    const isRideStarted = distanceFromSource === 0;
+    if (isRideStarted) {
+      handleRideStart();
+    }
+    return () => {
+      socket.off("startRide", handleRideStart);
+    };
+  }, [distanceFromSource, rideDetails]);
+
+  useEffect(() => {
     function handleRideEnd() {
       console.log("ride ended ");
       setEndRide(true);
@@ -81,24 +103,16 @@ export default function FinalPageDriver() {
       socket.disconnect();
       navigate("/login");
     }
-    const isRideNearby = distanceFromSource > 1 && distanceFromSource < 3;
 
-    if (isRideNearby) {
-      handleRideNearby();
-    }
-    if (distanceFromSource === 0) {
-      handleRideStart();
-    }
-    if (distanceFromDestination === 0) {
+    const isRideEnded = distanceFromDestination === 0;
+    if (isRideEnded) {
       handleRideEnd();
     }
 
     return () => {
-      socket.off("rideNearby", handleRideNearby);
-      socket.off("startRide", handleRideStart);
       socket.off("endRide", handleRideEnd);
     };
-  }, [distanceFromDestination, distanceFromSource, navigate, rideDetails]);
+  }, [distanceFromDestination, navigate, rideDetails]);
 
   return (
     <div className="flex flex-row m-5 p-3">
