@@ -13,7 +13,7 @@ import { user } from "apis/user";
 
 import UserProfile from "~/component/UserProfile";
 
-import styles from "../styles/user.css?url";
+import styles from "~/styles/user.css?url";
 
 import { useEffect, useState } from "react";
 import useUserDetails from "~/hooks/useUserDetails";

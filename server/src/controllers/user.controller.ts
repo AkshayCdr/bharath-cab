@@ -6,7 +6,7 @@ import { createHash } from "../utils/passwordUtils";
 import { Account } from "../dtos/account.dto";
 import { Id } from "../types/id";
 
-export async function getUser(req: Request<Id>, res: Response) {
+export async function getUser(req: Request, res: Response) {
   try {
     const { id } = req.params;
     const userDetails = await user.get(id);

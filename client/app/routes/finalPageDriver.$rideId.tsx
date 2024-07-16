@@ -49,9 +49,6 @@ export default function FinalPageDriver() {
     destination
   );
 
-  console.log(distanceFromSource);
-  console.log(distanceFromDestination);
-
   useEffect(() => {
     function handleCancelRide(rideId) {
       if (rideId !== rideDetails.id) return;

@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { Session } from "../dtos/session.dto";
 import { verifyPassword } from "../utils/passwordUtils";
 import { account } from "../services/account.services";
+import { session } from "../services/session.service";
 
 export async function insertIntoSession(
   req: Request<{}, {}, Session>,
@@ -25,7 +26,13 @@ export async function insertIntoSession(
 
     const id = await account.getId(username);
 
+    const sessionId = await session.add(id);
+
     const accountType = await account.type(id);
+
+    res.cookie("sessionId", sessionId);
+    res.cookie("userId", id);
+    res.cookie("accountType", accountType);
 
     res.status(200).send({ id, accountType });
   } catch (error) {

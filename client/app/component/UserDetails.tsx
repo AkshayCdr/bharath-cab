@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 
 import { Form } from "@remix-run/react";
-import { User } from "~/routes/user.$userId";
+import { User } from "~/routes/user.$userId/route";
 
 export default function UserDetails({ userData, driverId, onClick }) {
   console.log(userData);

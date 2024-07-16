@@ -5,6 +5,7 @@ const options = {
   memoryCost: 19 * 1024,
   timeCost: 2,
   parallelism: 1,
+  salt: 16,
 };
 
 export async function createHash(password: string) {

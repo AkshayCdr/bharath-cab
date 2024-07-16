@@ -1,6 +1,6 @@
 import { useActionData, useLoaderData } from "@remix-run/react";
 import { useEffect, useState } from "react";
-import { loader } from "~/routes/user.$userId";
+import { loader } from "~/routes/user.$userId/route";
 
 export default function useUserDetails() {
   const { userData } = useLoaderData<typeof loader>();
