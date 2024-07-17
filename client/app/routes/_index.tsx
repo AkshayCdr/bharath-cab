@@ -2,6 +2,7 @@ import type { LinksFunction, MetaFunction } from "@remix-run/node";
 
 import styles from "../styles/index.css?url";
 import Navbar from "~/component/Navbar";
+import InputPrice from "~/component/InputPrice";
 
 export const meta: MetaFunction = () => {
   return [
@@ -15,9 +16,10 @@ export default function Index() {
     <div>
       <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}>
         <main className="bg-black h-[80vh] flex justify-between">
-          <h1 className="text-white m-16 p-8 text-6xl font-extrabold">
-            Go anywhere with Bharat Cab
-          </h1>
+          <div className="text-white m-16 p-8">
+            <h1 className=" text-6xl font-bold">Go anywhere with Bharat Cab</h1>
+            <InputPrice />
+          </div>
           <img
             src="/public/main-bc.jpg"
             alt="Getting ride"

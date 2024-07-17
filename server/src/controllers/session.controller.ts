@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { CookieOptions, Request, Response } from "express";
 import { Session } from "../dtos/session.dto";
 import { verifyPassword } from "../utils/passwordUtils";
 import { account } from "../services/account.services";
@@ -30,25 +30,17 @@ export async function insertIntoSession(
 
     const accountType = await account.type(id);
 
-    const options = { httpOnly: true, secure: false, sameSite: "Lax" };
+    const options: CookieOptions = {
+      httpOnly: true,
+      secure: false,
+      sameSite: "lax",
+    };
 
-    res.cookie("sessionId", sessionId, {
-      httpOnly: true,
-      secure: false,
-      sameSite: "strict",
-    });
-    res.cookie("userId", id, {
-      httpOnly: true,
-      secure: false,
-      sameSite: "strict",
-    });
-    res.cookie("accountType", accountType, {
-      httpOnly: true,
-      secure: false,
-      sameSite: "strict",
-    });
+    res.cookie("sessionId", sessionId, options);
+    res.cookie("userId", id, options);
+    res.cookie("accountType", accountType, options);
 
-    res.status(200).send({ id, accountType });
+    res.status(200).send({ message: "session set" });
   } catch (error) {
     res.status(500).send({ message: error });
   }
