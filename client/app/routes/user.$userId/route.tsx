@@ -36,7 +36,8 @@ export type Coordinates = {
 };
 
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
-  // console.log(request.headers);
+  console.log("inside loader in the user ");
+  console.log(request.headers.get("cookie"));
   const { userId } = params;
 
   if (!userId) {

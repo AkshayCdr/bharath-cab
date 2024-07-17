@@ -10,9 +10,7 @@ async function login(userDetails) {
 
   if (!response.ok) return null;
 
-  console.log(response.headers.get("set-cookie"));
-
-  return response.json();
+  return response;
 }
 
 export const account = {

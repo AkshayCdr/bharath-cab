@@ -37,7 +37,7 @@ export async function insertIntoSession(
     };
 
     res.cookie("sessionId", sessionId, options);
-    res.cookie("userId", id, options);
+    res.cookie("accountId", id, options);
     res.cookie("accountType", accountType, options);
 
     res.status(200).send({ message: "session set" });

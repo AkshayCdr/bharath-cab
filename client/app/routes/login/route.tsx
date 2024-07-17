@@ -5,6 +5,19 @@ import LoginInput from "../../component/LoginInput";
 import styles from "../../styles/login.css?url";
 import { validate } from "./validation";
 
+const getHeader = (header, type) =>
+  header
+    .split(",")
+    .map((ele) =>
+      ele
+        .split(";")
+        .map((ele) => ele.split("="))
+        .filter((ele) => ele[0].trim() === type)
+    )
+    .flat()
+    .flat()[1]
+    .trim();
+
 export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
 
@@ -21,17 +34,30 @@ export async function action({ request }: ActionFunctionArgs) {
     return { errors };
   }
 
-  const data = await account.login(userDetails);
+  const response = await account.login(userDetails);
 
-  if (!data) {
+  if (!response) {
     throw new Error("Invalid response from server");
   }
 
-  const isUser = data.accountType === "user";
-  const isDriver = data.accountType === "driver";
+  const accountType = getHeader(
+    response.headers.get("set-cookie"),
+    "accountType"
+  );
 
-  if (isUser) return redirect(`/user/${data.id}`);
-  if (isDriver) return redirect(`/driver/${data.id}`);
+  const accountId = getHeader(response.headers.get("set-cookie"), "accountId");
+
+  const isUser = accountType === "user";
+  const isDriver = accountType === "driver";
+
+  if (isUser)
+    return redirect(`/user/${accountId}`, {
+      headers: {
+        "set-cookie": response.headers.get("set-cookie"),
+      },
+    });
+  if (isDriver) return redirect(`/driver/${accountId}`);
+  return redirect("/login");
 }
 
 export default function Login() {

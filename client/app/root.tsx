@@ -9,10 +9,25 @@ import {
 } from "@remix-run/react";
 
 import styles from "./styles/main.css?url";
-import { LinksFunction } from "@remix-run/node";
+import { LinksFunction, LoaderFunctionArgs } from "@remix-run/node";
 
 import stylesheet from "~/tailwind.css?url";
 import Navbar from "./component/Navbar";
+
+const parseAccountId = (input) =>
+  input
+    .split(";")
+    .map((ele) => ele.split("="))
+    .filter((ele) => ele[0].trim() === "accountId")
+    .flat()[1];
+
+export const loader = async ({ request }: LoaderFunctionArgs) => {
+  const cookieString = request.headers.get("cookie");
+
+  const accountId = parseAccountId(cookieString);
+  console.log(accountId);
+  return null;
+};
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
