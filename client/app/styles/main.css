@@ -1,36 +1,35 @@
 
-*{
+/* *{
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-}
+} */
 
 
-.nav{
-    /* border: 1px solid black; */
+/* .nav{
     display: flex;
     background-color: black;
-}
+} */
 
-.nav ul{
+/* .nav ul{
     display: flex;
-}
+} */
 
-.nav li{
+/* .nav li{
     list-style-type: none;
-}
+} */
 
-.nav .nav-item a{ 
+/* .nav .nav-item a{ 
     color: white;
     text-decoration: none;
-}
+} */
 
-.nav .nav-item a:hover,
+/* .nav .nav-item a:hover,
 .nav .nav-item a.active{
     color: grey;
 
     
-}
+} */
 
 .leaflet-container{
 

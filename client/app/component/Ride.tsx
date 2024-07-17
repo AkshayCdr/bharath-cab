@@ -1,5 +1,5 @@
 import { Form } from "@remix-run/react";
-import { ride } from "apis/ride";
+import { ride } from "~/apis/ride";
 import React from "react";
 
 export default function RideDetails({

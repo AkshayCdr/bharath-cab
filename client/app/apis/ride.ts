@@ -7,6 +7,7 @@ async function setLocation(locationData) {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(locationData),
+    credentials: "include",
   });
   if (!response.ok) {
     console.error(
@@ -22,7 +23,10 @@ async function setLocation(locationData) {
 }
 
 async function getRideDetails(rideId: string) {
-  const response = await fetch(`http://localhost:3000/ride/${rideId}`);
+  const response = await fetch(`http://localhost:3000/ride/${rideId}`, {
+    method: "GET",
+    credentials: "include",
+  });
   if (!response.ok) {
     console.error(response.status, response.statusText);
     return;
@@ -33,7 +37,10 @@ async function getRideDetails(rideId: string) {
 }
 
 async function getRideAndDriver(rideId: string) {
-  const response = await fetch(`http://localhost:3000/ride/${rideId}/driver`);
+  const response = await fetch(`http://localhost:3000/ride/${rideId}/driver`, {
+    method: "GET",
+    credentials: "include",
+  });
   if (!response.ok) {
     console.error(response.status, response.statusText);
     return;
@@ -48,6 +55,7 @@ async function requestForRide(Id) {
     method: "PATCH",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ status: "request_ride" }),
+    credentials: "include",
   });
   if (!response.ok) {
     console.error(
@@ -68,6 +76,7 @@ async function setReview(rideDetails) {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(rideDetails),
+      credentials: "include",
     }
   );
   if (!response.ok) {

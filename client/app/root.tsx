@@ -1,7 +1,6 @@
 import {
   Links,
   Meta,
-  NavLink,
   Outlet,
   Scripts,
   ScrollRestoration,
@@ -13,6 +12,7 @@ import styles from "./styles/main.css?url";
 import { LinksFunction } from "@remix-run/node";
 
 import stylesheet from "~/tailwind.css?url";
+import Navbar from "./component/Navbar";
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -24,13 +24,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
-        <nav className="nav">
-          <ul>
-            <li className="nav-item">
-              <NavLink to={`/login`}>login</NavLink>
-            </li>
-          </ul>
-        </nav>
+        <Navbar />
         {children}
         <ScrollRestoration />
         <Scripts />

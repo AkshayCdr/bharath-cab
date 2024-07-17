@@ -9,7 +9,7 @@ export async function isSessionExist(id: string): Promise<boolean> {
     const query = `SELECT 1 FROM session WHERE id = $1;`;
     const values = [id];
     const result: QueryResult<Id> = await (await client).query(query, values);
-    console.log(result);
+
     if (result.rowCount) return true;
     return false;
   } catch (error) {

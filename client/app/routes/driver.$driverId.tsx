@@ -1,6 +1,6 @@
 import { LinksFunction, json, type LoaderFunctionArgs } from "@remix-run/node";
 
-import { driver } from "apis/driver";
+import { driver } from "~/apis/driver";
 
 import UserDetails from "~/component/UserDetails";
 import DriverProfile from "~/component/DriverProfile";

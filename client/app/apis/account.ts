@@ -4,10 +4,13 @@ async function login(userDetails) {
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(userDetails), // Convert locationData to a JSON string
+    body: JSON.stringify(userDetails),
+    credentials: "include",
   });
 
   if (!response.ok) return null;
+
+  console.log(response.headers.get("set-cookie"));
 
   return response.json();
 }

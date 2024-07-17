@@ -30,9 +30,23 @@ export async function insertIntoSession(
 
     const accountType = await account.type(id);
 
-    res.cookie("sessionId", sessionId);
-    res.cookie("userId", id);
-    res.cookie("accountType", accountType);
+    const options = { httpOnly: true, secure: false, sameSite: "Lax" };
+
+    res.cookie("sessionId", sessionId, {
+      httpOnly: true,
+      secure: false,
+      sameSite: "strict",
+    });
+    res.cookie("userId", id, {
+      httpOnly: true,
+      secure: false,
+      sameSite: "strict",
+    });
+    res.cookie("accountType", accountType, {
+      httpOnly: true,
+      secure: false,
+      sameSite: "strict",
+    });
 
     res.status(200).send({ id, accountType });
   } catch (error) {

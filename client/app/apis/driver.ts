@@ -1,5 +1,8 @@
 async function get(id: string) {
-  const response = await fetch(`http://localhost:3000/driver/${id}`);
+  const response = await fetch(`http://localhost:3000/driver/${id}`, {
+    method: "GET",
+    credentials: "include",
+  });
 
   if (!response.ok) {
     console.error(

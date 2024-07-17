@@ -6,10 +6,10 @@ import {
   redirect,
 } from "@remix-run/node";
 import LocationInput from "~/component/LocationInput";
-import { ride } from "apis/ride";
+import { ride } from "~/apis/ride";
 
 import { json, useActionData, useLoaderData } from "@remix-run/react";
-import { user } from "apis/user";
+import { user } from "~/apis/user";
 
 import UserProfile from "~/component/UserProfile";
 
@@ -35,7 +35,8 @@ export type Coordinates = {
   latitude?: number;
 };
 
-export const loader = async ({ params }: LoaderFunctionArgs) => {
+export const loader = async ({ params, request }: LoaderFunctionArgs) => {
+  // console.log(request.headers);
   const { userId } = params;
 
   if (!userId) {

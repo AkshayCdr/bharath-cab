@@ -7,7 +7,7 @@ import {
   LinksFunction,
   LoaderFunctionArgs,
 } from "@remix-run/node";
-import { ride } from "apis/ride";
+import { ride } from "~/apis/ride";
 import RideDetails from "~/component/RideDetails";
 
 import DriverDetails from "~/component/DriverDetails";
