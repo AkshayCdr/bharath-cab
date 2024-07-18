@@ -3,20 +3,9 @@ import { redirect } from "@remix-run/react";
 import { account } from "~/apis/account";
 import LoginInput from "../../component/LoginInput";
 import styles from "../../styles/login.css?url";
-import { validate } from "./validation";
+import { validate } from "./validation.server";
 
-const getHeader = (header, type) =>
-  header
-    .split(",")
-    .map((ele) =>
-      ele
-        .split(";")
-        .map((ele) => ele.split("="))
-        .filter((ele) => ele[0].trim() === type)
-    )
-    .flat()
-    .flat()[1]
-    .trim();
+import { getHeader } from "~/utils/auth.server";
 
 export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();

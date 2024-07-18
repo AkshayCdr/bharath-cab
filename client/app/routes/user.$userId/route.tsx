@@ -17,6 +17,7 @@ import styles from "~/styles/user.css?url";
 
 import { useEffect, useState } from "react";
 import useUserDetails from "~/hooks/useUserDetails";
+import { requireSession } from "~/utils/auth.server";
 
 export interface User {
   account_id: string;
@@ -36,8 +37,8 @@ export type Coordinates = {
 };
 
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
-  console.log("inside loader in the user ");
-  console.log(request.headers.get("cookie"));
+  requireSession(request);
+
   const { userId } = params;
 
   if (!userId) {
