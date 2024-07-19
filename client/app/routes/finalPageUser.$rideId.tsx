@@ -11,8 +11,10 @@ import useRideDetails, { RideDetails } from "~/hooks/useRideDetails";
 import useRideLocation, { handleCancelRide } from "~/hooks/useRideLocation";
 import Details from "../component/Details";
 import Review from "../component/Review";
+import { requireSession } from "~/utils/auth.server";
 
-export const loader = async ({ params }: LoaderFunctionArgs) => {
+export const loader = async ({ params, request }: LoaderFunctionArgs) => {
+  requireSession(request);
   const { rideId } = params;
 
   if (!rideId) {

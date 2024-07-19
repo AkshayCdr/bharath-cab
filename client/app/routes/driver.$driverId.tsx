@@ -8,8 +8,10 @@ import DriverProfile from "~/component/DriverProfile";
 import styles from "../styles/driver.css?url";
 import useDriver from "~/hooks/useDriver";
 import useDriverSocket from "~/hooks/useDriverSocket";
+import { requireSession } from "~/utils/auth.server";
 
-export const loader = async ({ params }: LoaderFunctionArgs) => {
+export const loader = async ({ params, request }: LoaderFunctionArgs) => {
+  requireSession(request);
   const { driverId } = params;
 
   console.log(driverId);

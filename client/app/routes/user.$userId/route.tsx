@@ -15,9 +15,15 @@ import UserProfile from "~/component/UserProfile";
 
 import styles from "~/styles/user.css?url";
 
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import useUserDetails from "~/hooks/useUserDetails";
-import { requireSession } from "~/utils/auth.server";
+import {
+  authCookie,
+  requireAuthCookie,
+  requireSession,
+} from "~/utils/auth.server";
+
+import { useAuth } from "~/context/authContext";
 
 export interface User {
   account_id: string;
@@ -37,9 +43,7 @@ export type Coordinates = {
 };
 
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
-  requireSession(request);
-
-  const { userId } = params;
+  const userId = await requireAuthCookie(request);
 
   if (!userId) {
     throw new Response("Not Found", { status: 404 });
@@ -89,6 +93,8 @@ export async function action({ request }: ActionFunctionArgs) {
 }
 
 export default function User() {
+  const { dispatch } = useAuth();
+
   const {
     userData,
     source,
@@ -102,6 +108,14 @@ export default function User() {
     isEditable,
     MapComponent,
   } = useUserDetails();
+
+  // useEffect(() => {
+  //   function handleLogin() {
+  //     dispatch({ type: "account/login", payload: userData.account_id });
+  //   }
+  //   handleLogin();
+  //   // return() => handleLogin
+  // }, []);
 
   return (
     <div className="user-page flex flex-row">

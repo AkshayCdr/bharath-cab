@@ -15,24 +15,16 @@ import { LinksFunction, LoaderFunctionArgs } from "@remix-run/node";
 
 import stylesheet from "~/tailwind.css?url";
 import Navbar from "./component/Navbar";
+import { AuthProvider } from "./context/authContext";
+import { authCookie } from "./utils/auth.server";
 
-const parseAccountId = (input) => {
-  if (!input) return null;
-  return input
-    .split(";")
-    .map((ele) => ele.split("="))
-    .filter((ele) => ele[0].trim() === "accountId")
-    .flat()[1];
-};
-export const loader = async ({ request }: LoaderFunctionArgs) => {
-  const cookieString = request.headers.get("cookie");
-  const accountId = parseAccountId(cookieString);
-  return json({ accountId });
-};
+export async function loader({ request }: LoaderFunctionArgs) {
+  const cookieString = request.headers.get("Cookie");
+  const userId = await authCookie.parse(cookieString);
+  return { userId };
+}
 
 export function Layout({ children }: { children: React.ReactNode }) {
-  // const { accountId } = useLoaderData<typeof loader>();
-  const accountId = null;
   return (
     <html lang="en">
       <head>
@@ -42,10 +34,12 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
-        <Navbar accountId={accountId} />
-        {children}
-        <ScrollRestoration />
-        <Scripts />
+        <AuthProvider>
+          <Navbar />
+          {children}
+          <ScrollRestoration />
+          <Scripts />
+        </AuthProvider>
       </body>
     </html>
   );

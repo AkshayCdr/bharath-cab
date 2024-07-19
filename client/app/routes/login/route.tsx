@@ -5,7 +5,7 @@ import LoginInput from "../../component/LoginInput";
 import styles from "../../styles/login.css?url";
 import { validate } from "./validation.server";
 
-import { getHeader } from "~/utils/auth.server";
+import { authCookie, getHeader } from "~/utils/auth.server";
 
 export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
@@ -29,6 +29,8 @@ export async function action({ request }: ActionFunctionArgs) {
     throw new Error("Invalid response from server");
   }
 
+  const cookieHeader = response.headers.get("set-cookie");
+
   const accountType = getHeader(
     response.headers.get("set-cookie"),
     "accountType"
@@ -42,10 +44,15 @@ export async function action({ request }: ActionFunctionArgs) {
   if (isUser)
     return redirect(`/user/${accountId}`, {
       headers: {
-        "set-cookie": response.headers.get("set-cookie"),
+        "Set-Cookie": await authCookie.serialize(accountId),
       },
     });
-  if (isDriver) return redirect(`/driver/${accountId}`);
+  if (isDriver)
+    return redirect(`/driver/${accountId}`, {
+      headers: {
+        "Set-Cookie": response.headers.get("set-cookie"),
+      },
+    });
   return redirect("/login");
 }
 

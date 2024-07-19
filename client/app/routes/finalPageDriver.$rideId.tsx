@@ -8,8 +8,10 @@ import useRideDetails, { RideDetails } from "~/hooks/useRideDetails";
 import Details from "../component/Details";
 import { socket } from "~/socket/websocket";
 import useRoute from "~/hooks/useRoute";
+import { requireSession } from "~/utils/auth.server";
 
-export const loader = async ({ params }: LoaderFunctionArgs) => {
+export const loader = async ({ params, request }: LoaderFunctionArgs) => {
+  requireSession(request);
   const { rideId } = params;
 
   if (!rideId) {

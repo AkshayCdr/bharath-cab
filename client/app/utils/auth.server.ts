@@ -1,3 +1,4 @@
+import { createCookie } from "@remix-run/node";
 import { redirect } from "@remix-run/react";
 
 export const getHeader = (header: string, type: string) => {
@@ -37,4 +38,32 @@ export function requireSession(request) {
   if (!accountId) {
     throw redirect("/login");
   }
+}
+
+const secret = "default";
+
+export const authCookie = createCookie("auth", {
+  path: "/",
+  sameSite: "lax",
+  httpOnly: true,
+  secure: true,
+  secrets: [secret],
+  // expires: new Date(Date.now() + 60_000),
+  maxAge: 60,
+});
+
+export async function requireAuthCookie(request: Request) {
+  const cookieString = request.headers.get("Cookie");
+  const accountId = await authCookie.parse(cookieString);
+
+  if (!accountId) {
+    throw redirect("/login", {
+      headers: {
+        "Set-Cookie": await authCookie.serialize(",", {
+          maxAge: 0,
+        }),
+      },
+    });
+  }
+  return accountId;
 }
