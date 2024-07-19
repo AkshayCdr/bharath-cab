@@ -15,15 +15,11 @@ import UserProfile from "~/component/UserProfile";
 
 import styles from "~/styles/user.css?url";
 
-import { useContext, useEffect, useState } from "react";
 import useUserDetails from "~/hooks/useUserDetails";
-import {
-  authCookie,
-  requireAuthCookie,
-  requireSession,
-} from "~/utils/auth.server";
+import { authCookie, requireAuthCookie } from "~/utils/auth.server";
 
 import { useAuth } from "~/context/authContext";
+import { rideCookie } from "~/utils/rideCookie.server";
 
 export interface User {
   account_id: string;
@@ -42,12 +38,8 @@ export type Coordinates = {
   latitude?: number;
 };
 
-export const loader = async ({ params, request }: LoaderFunctionArgs) => {
+export const loader = async ({ request }: LoaderFunctionArgs) => {
   const userId = await requireAuthCookie(request);
-
-  if (!userId) {
-    throw new Response("Not Found", { status: 404 });
-  }
 
   const userData = await user.getDetails(userId);
 
@@ -89,12 +81,14 @@ export async function action({ request }: ActionFunctionArgs) {
     throw new Response("cannot get ride Id ");
   }
 
-  return redirect(`/ride/${rideId}`);
+  return redirect(`/ride`, {
+    headers: {
+      "Set-Cookie": await rideCookie.serialize(rideId),
+    },
+  });
 }
 
 export default function User() {
-  const { dispatch } = useAuth();
-
   const {
     userData,
     source,
@@ -108,14 +102,6 @@ export default function User() {
     isEditable,
     MapComponent,
   } = useUserDetails();
-
-  // useEffect(() => {
-  //   function handleLogin() {
-  //     dispatch({ type: "account/login", payload: userData.account_id });
-  //   }
-  //   handleLogin();
-  //   // return() => handleLogin
-  // }, []);
 
   return (
     <div className="user-page flex flex-row">

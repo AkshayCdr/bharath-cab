@@ -42,7 +42,7 @@ export async function action({ request }: ActionFunctionArgs) {
   const isDriver = accountType === "driver";
 
   if (isUser)
-    return redirect(`/user/${accountId}`, {
+    return redirect(`/user`, {
       headers: {
         "Set-Cookie": await authCookie.serialize(accountId),
       },

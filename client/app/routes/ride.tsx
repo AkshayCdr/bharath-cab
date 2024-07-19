@@ -16,7 +16,8 @@ import styles from "../styles/ride.css?url";
 import useRideDetails from "~/hooks/useRideDetails";
 import useRideSocket from "~/hooks/useRideSocket";
 import { socket } from "~/socket/websocket";
-import { requireSession } from "~/utils/auth.server";
+import { requireRideCookie } from "~/utils/rideCookie.server";
+
 // import "leaflet/dist/leaflet.css";
 export interface Ride {
   id: string;
@@ -40,10 +41,8 @@ export async function action({ request }: ActionFunctionArgs) {
   return json({ message });
 }
 
-export const loader = async ({ params, request }: LoaderFunctionArgs) => {
-  requireSession(request);
-
-  const { rideId } = params;
+export const loader = async ({ request }: LoaderFunctionArgs) => {
+  const rideId = await requireRideCookie(request);
 
   if (!rideId) {
     throw new Response("Not Found", { status: 404 });

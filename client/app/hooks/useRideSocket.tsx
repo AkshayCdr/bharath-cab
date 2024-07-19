@@ -13,7 +13,7 @@ export default function useRideSocket({ rideDetails, isRideCancelled }) {
       console.log("ride accepted by driver ", driverDetails);
       setRideStatus(true);
       setDriverDetails(driverDetails);
-      navigate(`/finalPageUser/${rideDetails.id}`);
+      navigate(`/finalPageUser`);
     };
 
     socket.emit("registerClient", rideDetails.user_id);
