@@ -10,7 +10,6 @@ export default function RideDetails({
   return (
     <div>
       <Form method="POST" id="ride-request-form" className="flex flex-col">
-        <input type="hidden" name="rideId" defaultValue={rideDetails.id} />
         <p className="flex flex-col gap-6">
           <input
             type="text"

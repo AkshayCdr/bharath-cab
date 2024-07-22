@@ -69,6 +69,33 @@ async function requestForRide(Id) {
   return message;
 }
 
+async function updateRide({ rideId, userId, source, destination }) {
+  const response = await fetch(`http://localhost:3000/ride/${rideId}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ userId, source, destination }),
+    credentials: "include",
+  });
+  if (!response.ok) {
+    console.error("failed to updateRide", response.status, response.statusText);
+    return;
+  }
+  const { message } = await response.json();
+  return message;
+}
+
+async function cancelRide(rideId) {
+  const response = await fetch(`http://localhost:3000/ride/${rideId}/cancel`, {
+    method: "PUT",
+  });
+  if (!response.ok) {
+    console.error("failed to cancel ", response.status, response.statusText);
+    return;
+  }
+  const { message } = await response.json();
+  return message;
+}
+
 async function setReview(rideDetails) {
   const response = await fetch(
     `http://localhost:3000/ride/${rideDetails.Id}/review`,
@@ -90,6 +117,8 @@ async function setReview(rideDetails) {
 export const ride = {
   setLocation,
   getRideDetails,
+  updateRide,
+  cancelRide,
   getRideAndDriver,
   requestForRide,
   setReview,

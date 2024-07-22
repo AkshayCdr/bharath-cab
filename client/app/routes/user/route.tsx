@@ -49,29 +49,45 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   return json({ userData });
 };
 
+function parseCoordinates(input: string) {
+  const [latitude, longitude] = input.split(",").map(parseFloat);
+  return { latitude, longitude };
+}
+
+function formatSourceDestination(
+  sourceInput: string,
+  destinationInput: string
+) {
+  const isSourceOrDestinationExist = !sourceInput || !destinationInput;
+
+  if (isSourceOrDestinationExist) return null;
+
+  return {
+    source: parseCoordinates(sourceInput),
+    destination: parseCoordinates(destinationInput),
+  };
+}
+
 export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
 
-  const userId = formData.get("userId");
+  const userId = String(formData.get("userId"));
 
-  const source = formData.get("source");
-  const destination = formData.get("destination");
+  const sourceString = String(formData.get("source"));
+  const destinationString = String(formData.get("destination"));
 
-  if (!source || !destination) return { message: "select source/destination" };
+  const data = formatSourceDestination(sourceString, destinationString);
 
-  const [sourceLatitude, sourceLongitude] = source.split(",");
-  const [destinationLatitude, destinationLongitude] = destination.split(",");
+  if (!data) {
+    return { message: "select source/destination" };
+  }
+
+  const { source, destination } = data;
 
   const rideDetails = {
     userId,
-    source: {
-      longitude: parseFloat(sourceLongitude),
-      latitude: parseFloat(sourceLatitude),
-    },
-    destination: {
-      longitude: parseFloat(destinationLongitude),
-      latitude: parseFloat(destinationLatitude),
-    },
+    source,
+    destination,
   };
 
   const rideId = await ride.setLocation(rideDetails);

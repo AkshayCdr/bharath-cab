@@ -15,8 +15,9 @@ import DriverDetails from "~/component/DriverDetails";
 import styles from "../styles/ride.css?url";
 import useRideDetails from "~/hooks/useRideDetails";
 import useRideSocket from "~/hooks/useRideSocket";
-import { socket } from "~/socket/websocket";
+
 import { requireRideCookie } from "~/utils/rideCookie.server";
+import { requireAuthCookie } from "~/utils/auth.server";
 
 export interface Ride {
   id: string;
@@ -40,18 +41,29 @@ export async function action({ request }: ActionFunctionArgs) {
   const isUpdate = intent === "update";
   const isRequestForRide = intent === "request-for-ride";
 
+  const rideId = await requireRideCookie(request);
+
   if (isRequestForRide) {
-    const rideID = formData.get("rideId");
-    const message = await ride.requestForRide(rideID);
+    const message = await ride.requestForRide(rideId);
     return json({ message });
   }
 
   if (isUpdate) {
-    return;
+    const userId = await requireAuthCookie(request);
+    const source = formData.get("source");
+    const destination = formData.get("destination");
+    const message = await ride.updateRide({
+      rideId,
+      userId,
+      source,
+      destination,
+    });
+    return json({ message });
   }
 
   if (isCancel) {
-    return;
+    const message = await ride.cancelRide(rideId);
+    return json({ message });
   }
 }
 
@@ -68,7 +80,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 };
 
 export default function Ride() {
-  const [isEditable, setIsEditable] = useState(false);
+  const [isEditable, setIsEditable] = useState(true);
   const [isRideCancelled, setRideCancelled] = useState(false);
 
   const message = useActionData<typeof action>();

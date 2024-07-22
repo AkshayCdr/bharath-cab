@@ -47,6 +47,8 @@ export async function updateRide(req: Request<Id, {}, Ride>, res: Response) {
     const { userId, source, destination } = req.body;
 
     console.log(source, destination);
+    console.log(typeof source);
+    console.log(typeof destination);
     // const price = 10;
 
     // const updatedRide = {
