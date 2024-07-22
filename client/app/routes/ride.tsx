@@ -33,11 +33,26 @@ type Coordinates = {
 
 export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
-  const rideID = formData.get("rideId");
-  const message = await ride.requestForRide(rideID);
-  console.log(message);
 
-  return json({ message });
+  const intent = formData.get("intent");
+
+  const isCancel = intent === "cancel";
+  const isUpdate = intent === "update";
+  const isRequestForRide = intent === "request-for-ride";
+
+  if (isRequestForRide) {
+    const rideID = formData.get("rideId");
+    const message = await ride.requestForRide(rideID);
+    return json({ message });
+  }
+
+  if (isUpdate) {
+    return;
+  }
+
+  if (isCancel) {
+    return;
+  }
 }
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
@@ -87,8 +102,6 @@ export default function Ride() {
           rideDetails={rideDetails}
           sourceName={sourceName}
           destinationName={destinationName}
-          handleRideCancel={handleRideCancel}
-          setRideCancelled={setRideCancelled}
         />
         {isRideAccepted ? (
           <DriverDetails driverDetails={driverDetails} />

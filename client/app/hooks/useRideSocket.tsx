@@ -9,7 +9,7 @@ export default function useRideSocket({ rideDetails, isRideCancelled }) {
 
   useEffect(() => {
     const handleRideAccepted = (driverDetails) => {
-      if (isRideCancelled) navigate(-1);
+      // if (isRideCancelled) navigate(-1);
       console.log("ride accepted by driver ", driverDetails);
       setRideStatus(true);
       setDriverDetails(driverDetails);

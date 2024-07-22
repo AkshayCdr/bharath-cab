@@ -1,14 +1,11 @@
-import { Form, useNavigate } from "@remix-run/react";
+import { Form } from "@remix-run/react";
 
 export default function RideDetails({
   rideDetails,
   sourceName,
   destinationName,
-  handleRideCancel,
-  setRideCancelled,
 }) {
   console.log(rideDetails);
-  const navigate = useNavigate();
 
   return (
     <div>
@@ -66,16 +63,14 @@ export default function RideDetails({
           </div>
         </p>
         <p>
-          <button type="submit">Request for ride</button>
-          <button
-            type="button"
-            onClick={() => {
-              handleRideCancel(rideDetails);
-              setRideCancelled(true);
-              navigate(-1);
-            }}
-          >
+          <button type="submit" name="intent" value="request-for-ride">
+            Request for ride
+          </button>
+          <button type="submit" name="intent" value="cancel">
             Cancel
+          </button>
+          <button type="submit" name="intent" value="update">
+            Update
           </button>
         </p>
       </Form>
