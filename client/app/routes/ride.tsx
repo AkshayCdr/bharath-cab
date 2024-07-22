@@ -18,6 +18,7 @@ import useRideSocket from "~/hooks/useRideSocket";
 
 import { requireRideCookie } from "~/utils/rideCookie.server";
 import { requireAuthCookie } from "~/utils/auth.server";
+import { formatSourceDestination } from "./user/route";
 
 export interface Ride {
   id: string;
@@ -41,7 +42,7 @@ export async function action({ request }: ActionFunctionArgs) {
   const isUpdate = intent === "update";
   const isRequestForRide = intent === "request-for-ride";
 
-  const rideId = await requireRideCookie(request);
+  const rideId = String(await requireRideCookie(request));
 
   if (isRequestForRide) {
     const message = await ride.requestForRide(rideId);
@@ -49,9 +50,25 @@ export async function action({ request }: ActionFunctionArgs) {
   }
 
   if (isUpdate) {
-    const userId = await requireAuthCookie(request);
-    const source = formData.get("source");
-    const destination = formData.get("destination");
+    console.log("inside update");
+    const userId = String(await requireAuthCookie(request));
+    const sourceString = String(formData.get("source"));
+    const destinationString = String(formData.get("destination"));
+
+    console.log(`destination string is ${destinationString}`);
+    console.log(`source string is${sourceString}`);
+
+    const data = formatSourceDestination(sourceString, destinationString);
+
+    if (!data) {
+      return { message: "select source/destination" };
+    }
+
+    const { source, destination } = data;
+
+    console.log(source);
+    console.log(destination);
+
     const message = await ride.updateRide({
       rideId,
       userId,

@@ -49,12 +49,12 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   return json({ userData });
 };
 
-function parseCoordinates(input: string) {
+export function parseCoordinates(input: string) {
   const [latitude, longitude] = input.split(",").map(parseFloat);
   return { latitude, longitude };
 }
 
-function formatSourceDestination(
+export function formatSourceDestination(
   sourceInput: string,
   destinationInput: string
 ) {

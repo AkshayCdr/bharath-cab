@@ -6,6 +6,8 @@ export default function RideDetails({
   destinationName,
 }) {
   console.log(rideDetails);
+  const source = `${rideDetails?.source?.y},${rideDetails?.source.x}`;
+  const destination = `${rideDetails?.destination?.y},${rideDetails?.destination.x}`;
 
   return (
     <div>
@@ -15,7 +17,7 @@ export default function RideDetails({
             type="text"
             readOnly
             name="source"
-            defaultValue={(rideDetails.source.x, rideDetails.source.y)}
+            defaultValue={source}
             id=""
             hidden
           />
@@ -26,9 +28,7 @@ export default function RideDetails({
             id=""
             readOnly
             hidden
-            defaultValue={
-              (rideDetails.destination.x, rideDetails.destination.y)
-            }
+            defaultValue={destination}
           />
 
           <div className="flex flex-col">
