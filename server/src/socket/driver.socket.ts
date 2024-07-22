@@ -37,7 +37,7 @@ async function rideAccepted(socket: {
     const isCancelled = status === "cancelled";
     if (isCancelled) return;
 
-    await rideServices.update(rideId, driverId);
+    await rideServices.setDriver(rideId, driverId);
     await rideServices.updateStatus(rideId, "driver_accepted");
 
     const driverDetails = await driver.get(driverId);

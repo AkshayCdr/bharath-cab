@@ -32,6 +32,28 @@ export async function insertIntoRideTable(ride: Ride): Promise<string> {
   }
 }
 
+export async function updateRideTable(ride: Ride): Promise<void> {
+  try {
+    console.log("updating ride table");
+    console.log("inside ride tabel");
+    console.log(ride);
+    const query = `UPDATE ride SET source = POINT($1,$2) , destination = POINT($3, $4),price = $5 
+    WHERE id = $6`;
+    const values = [
+      ride.source.longitude,
+      ride.source.latitude,
+      ride.destination.longitude,
+      ride.destination.latitude,
+      ride.price,
+      ride.id,
+    ];
+    await (await client).query(query, values);
+  } catch (error) {
+    console.error(error);
+    throw new Error("Error creating ride");
+  }
+}
+
 export async function getFromRideTable(id: string): Promise<Ride> {
   try {
     const query = `SELECT id,source,destination,price,user_id FROM RIDE WHERE id = $1`;
@@ -77,10 +99,7 @@ export async function getRideAndDriverFromTable(
   return result.rows[0];
 }
 
-export async function updateRideTable(
-  id: string,
-  driverId: string
-): Promise<void> {
+export async function addDriver(id: string, driverId: string): Promise<void> {
   try {
     const query = `UPDATE ride SET driver_id = $1 WHERE id = $2`;
     const values = [driverId, id];

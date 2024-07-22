@@ -3,7 +3,7 @@ import { Ride } from "../dtos/ride.dto";
 import { rideServices } from "../services/ride.services";
 import { Id } from "../types/id";
 import { user } from "../services/user.services";
-import { driverSock, driverSocket } from "../socket/driver.socket";
+import { driverSock } from "../socket/driver.socket";
 
 export async function insertIntoRide(
   req: Request<{}, {}, Ride>,
@@ -44,20 +44,20 @@ export async function getRide(req: Request<Id>, res: Response) {
 export async function updateRide(req: Request<Id, {}, Ride>, res: Response) {
   try {
     const { id } = req.params;
-    const { userId, source, destination } = req.body;
+    const { source, destination } = req.body;
 
-    console.log(source, destination);
-    console.log(typeof source);
-    console.log(typeof destination);
-    // const price = 10;
+    const price = 10;
 
-    // const updatedRide = {
-    //   userId,
-    //   source,
-    //   destination,
-    //   price,
-    // };
-    res.status(200).send({ message: "Ok" });
+    const updatedRide = {
+      id,
+      source,
+      destination,
+      price,
+    };
+
+    await rideServices.update(updatedRide);
+
+    res.status(200).send({ message: "ride Updated" });
   } catch (error) {
     res.status(500).send({ message: "cannot udpate ride ", error });
   }

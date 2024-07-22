@@ -12,3 +12,13 @@ test("get status using given id", async () => {
   const data = await rideServices.getStatus(id);
   console.log(data);
 });
+
+test("get distance for given source and destianation", async () => {
+  const id = "4279b07d-ea46-418b-b525-e3ce7b65e700";
+  const source = { longitude: 77.56197398834188, latitude: 12.942664343103248 };
+  const destination = {
+    longitude: 77.61327799123202,
+    latitude: 12.919910469324924,
+  };
+  await rideServices.update({ id, source, destination });
+});
