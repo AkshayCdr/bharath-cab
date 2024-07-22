@@ -47,11 +47,17 @@ async function getStatus(id: string): Promise<{ status: string }> {
 
 async function del(): Promise<void> {}
 
-function findPrice(distance: number): number {
+async function findPrice(source: number, destination: number): Promise<number> {
   const minFee = 10;
+  const distance = await findDistance(source, destination);
   const distanceToPrice = {};
   return minFee + 0;
 }
+
+async function findDistance(
+  source: number,
+  destination: number
+): Promise<void> {}
 
 export const rideServices = {
   create,

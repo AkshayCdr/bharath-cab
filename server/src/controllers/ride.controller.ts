@@ -14,7 +14,7 @@ export async function insertIntoRide(
 
     const distance = 10;
 
-    const price = rideServices.findPrice(distance);
+    const price = 10;
 
     const newRide = {
       userId,
@@ -38,6 +38,35 @@ export async function getRide(req: Request<Id>, res: Response) {
     res.status(200).send(JSON.stringify(rideDetails));
   } catch (error) {
     res.status(500).send({ message: "cannot reterive data", error });
+  }
+}
+
+export async function updateRide(req: Request<Id, {}, Ride>, res: Response) {
+  try {
+    const { id } = req.params;
+    const { userId, source, destination } = req.body;
+
+    console.log(source, destination);
+    // const price = 10;
+
+    // const updatedRide = {
+    //   userId,
+    //   source,
+    //   destination,
+    //   price,
+    // };
+    res.status(200).send({ message: "Ok" });
+  } catch (error) {
+    res.status(500).send({ message: "cannot udpate ride ", error });
+  }
+}
+
+export async function cancelRide(req: Request<Id>, res: Response) {
+  try {
+    const { id } = req.params;
+    res.status(200).send({ message: "Ok" });
+  } catch (error) {
+    res.status(500).send({ message: "cannot ride error ", error });
   }
 }
 
