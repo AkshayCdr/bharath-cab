@@ -57,7 +57,9 @@ async function findPrice(source: number, destination: number): Promise<number> {
 async function findDistance(
   source: number,
   destination: number
-): Promise<void> {}
+): Promise<number> {
+  return 0;
+}
 
 export const rideServices = {
   create,

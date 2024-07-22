@@ -64,6 +64,11 @@ export async function updateRide(req: Request<Id, {}, Ride>, res: Response) {
 export async function cancelRide(req: Request<Id>, res: Response) {
   try {
     const { id } = req.params;
+
+    await rideServices.updateStatus(id, "cancelled");
+
+    driverSock.cancelRide(id);
+
     res.status(200).send({ message: "Ok" });
   } catch (error) {
     res.status(500).send({ message: "cannot ride error ", error });

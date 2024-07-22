@@ -67,10 +67,6 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   return json({ rideDetails });
 };
 
-function handleRideCancel(rideDetails: Ride) {
-  socket.emit("cancelRide", rideDetails.id);
-}
-
 export default function Ride() {
   const [isEditable, setIsEditable] = useState(false);
   const [isRideCancelled, setRideCancelled] = useState(false);

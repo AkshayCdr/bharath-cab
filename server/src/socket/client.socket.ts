@@ -53,7 +53,7 @@ async function cancelRide(socket: {
 }) {
   socket.on("cancelRide", (rideId: string) => {
     rideServices.updateStatus(rideId, "cancelled");
-    driverSock.cancelRide("cancelRide", rideId);
+    driverSock.cancelRide(rideId);
   });
 }
 
