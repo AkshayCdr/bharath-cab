@@ -16,9 +16,6 @@ import { requireRideCookie } from "~/utils/rideCookie.server";
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const rideId = await requireRideCookie(request);
 
-  if (!rideId) {
-    throw new Response("Not Found", { status: 404 });
-  }
   const rideDetails: RideDetails = await ride.getRideAndDriver(rideId);
 
   if (!rideDetails) {
@@ -31,12 +28,18 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
 
-  if (formData.get("intent") === "review") {
+  const intent = formData.get("intent");
+
+  const isReview = intent === "review";
+  const isIntent = intent === "intent";
+
+  if (isReview) {
     const rideDetails = Object.fromEntries(formData);
 
     if (!rideDetails.review && !rideDetails.rating) {
       return { message: "add review/rating" };
     }
+
     if (!rideDetails.rating) {
       const updatedRideDetails = { ...rideDetails, rating: 0 };
       const message = await ride.setReview(updatedRideDetails);
@@ -48,9 +51,9 @@ export async function action({ request }: ActionFunctionArgs) {
     return message;
   }
 
-  if (formData.get("intent") === "cancel") {
+  if (isIntent) {
     const rideId = formData.get("rideId");
-    console.log(rideId);
+
     handleCancelRide(rideId);
     return redirect(`/ride/${rideId}`);
   }

@@ -1,6 +1,6 @@
 /* eslint-disable import/no-unresolved */
-import { useEffect, useState } from "react";
-import { useActionData, useNavigate } from "@remix-run/react";
+import { useState } from "react";
+import { useActionData } from "@remix-run/react";
 import {
   ActionFunctionArgs,
   json,
@@ -18,7 +18,6 @@ import useRideSocket from "~/hooks/useRideSocket";
 import { socket } from "~/socket/websocket";
 import { requireRideCookie } from "~/utils/rideCookie.server";
 
-// import "leaflet/dist/leaflet.css";
 export interface Ride {
   id: string;
   source: Coordinates;
@@ -43,10 +42,6 @@ export async function action({ request }: ActionFunctionArgs) {
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const rideId = await requireRideCookie(request);
-
-  if (!rideId) {
-    throw new Response("Not Found", { status: 404 });
-  }
 
   const rideDetails: Ride = await ride.getRideDetails(rideId);
 
@@ -79,6 +74,7 @@ export default function Ride() {
     setSourceName,
     setDestinationName,
   } = useRideDetails();
+
   const { isRideAccepted, driverDetails } = useRideSocket({
     rideDetails,
     isRideCancelled,

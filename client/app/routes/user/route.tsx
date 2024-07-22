@@ -8,7 +8,7 @@ import {
 import LocationInput from "~/component/LocationInput";
 import { ride } from "~/apis/ride";
 
-import { json, useActionData, useLoaderData } from "@remix-run/react";
+import { json } from "@remix-run/react";
 import { user } from "~/apis/user";
 
 import UserProfile from "~/component/UserProfile";
@@ -16,9 +16,8 @@ import UserProfile from "~/component/UserProfile";
 import styles from "~/styles/user.css?url";
 
 import useUserDetails from "~/hooks/useUserDetails";
-import { authCookie, requireAuthCookie } from "~/utils/auth.server";
+import { requireAuthCookie } from "~/utils/auth.server";
 
-import { useAuth } from "~/context/authContext";
 import { rideCookie } from "~/utils/rideCookie.server";
 
 export interface User {

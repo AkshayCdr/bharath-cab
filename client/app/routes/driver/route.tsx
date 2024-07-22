@@ -5,23 +5,19 @@ import { driver } from "~/apis/driver";
 import UserDetails from "~/component/UserDetails";
 import DriverProfile from "~/component/DriverProfile";
 
-import styles from "../styles/driver.css?url";
+import styles from "~/styles/driver.css?url";
 import useDriver from "~/hooks/useDriver";
 import useDriverSocket from "~/hooks/useDriverSocket";
-import { requireSession } from "~/utils/auth.server";
+import { requireAuthCookie } from "~/utils/auth.server";
 
-export const loader = async ({ params, request }: LoaderFunctionArgs) => {
-  requireSession(request);
-  const { driverId } = params;
+export const loader = async ({ request }: LoaderFunctionArgs) => {
+  const driverId = await requireAuthCookie(request);
 
-  console.log(driverId);
   if (!driverId) {
     throw new Response("Not Found", { status: 404 });
   }
 
   const driverData = await driver.get(driverId);
-
-  console.log(driverData);
 
   if (!driverData)
     throw json({ message: "Could not find driver details of id " });

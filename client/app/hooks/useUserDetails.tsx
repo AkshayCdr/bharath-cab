@@ -1,4 +1,4 @@
-import { useActionData, useLoaderData } from "@remix-run/react";
+import { useLoaderData } from "@remix-run/react";
 import { useEffect, useState } from "react";
 import { loader } from "~/routes/user.$userId/route";
 

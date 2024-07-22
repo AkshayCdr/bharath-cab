@@ -2,7 +2,7 @@ import { ActionFunctionArgs, LinksFunction } from "@remix-run/node";
 import { redirect } from "@remix-run/react";
 import { account } from "~/apis/account";
 import LoginInput from "../../component/LoginInput";
-import styles from "../../styles/login.css?url";
+import styles from "~/styles/login.css?url";
 import { validate } from "./validation.server";
 
 import { authCookie, getHeader } from "~/utils/auth.server";
@@ -31,12 +31,8 @@ export async function action({ request }: ActionFunctionArgs) {
 
   const cookieHeader = response.headers.get("set-cookie");
 
-  const accountType = getHeader(
-    response.headers.get("set-cookie"),
-    "accountType"
-  );
-
-  const accountId = getHeader(response.headers.get("set-cookie"), "accountId");
+  const accountType = getHeader(cookieHeader, "accountType");
+  const accountId = getHeader(cookieHeader, "accountId");
 
   const isUser = accountType === "user";
   const isDriver = accountType === "driver";
@@ -48,9 +44,9 @@ export async function action({ request }: ActionFunctionArgs) {
       },
     });
   if (isDriver)
-    return redirect(`/driver/${accountId}`, {
+    return redirect(`/driver`, {
       headers: {
-        "Set-Cookie": response.headers.get("set-cookie"),
+        "Set-Cookie": await authCookie.serialize(accountId),
       },
     });
   return redirect("/login");

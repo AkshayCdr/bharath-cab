@@ -1,6 +1,6 @@
 import { useLoaderData } from "@remix-run/react";
 import { useState } from "react";
-import { loader } from "~/routes/driver.$driverId";
+import { loader } from "~/routes/driver/driver";
 
 export default function useDriver() {
   const { driverData } = useLoaderData<typeof loader>();
