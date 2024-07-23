@@ -3,6 +3,7 @@ import { driverSock, driverSocket } from "./driver.socket";
 import { clientSock, clientSocket } from "./client.socket";
 import HTTPServer from "http";
 import { DefaultEventsMap } from "socket.io/dist/typed-events";
+import { parse } from "cookie";
 
 export function createSocket(
   httpServer: HTTPServer.Server<
@@ -11,13 +12,22 @@ export function createSocket(
   >
 ) {
   const io = new Server(httpServer, {
+    cookie: true,
     cors: {
-      origin: "*",
+      origin: "http://localhost:5173",
       credentials: true,
     },
   });
 
+  // io.use((socket, next) => {
+  //   // Middleware to log cookies
+  //   console.log(`Cookies: ${socket.handshake.headers.cookie}`);
+  //   next();
+  // });
+
   io.on("connect", (socket) => {
+    const cookies = parse(socket.handshake.headers.cookie || "");
+    console.log(cookies);
     console.log("connected");
     console.log(socket.id);
 
