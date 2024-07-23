@@ -1,6 +1,6 @@
 /* eslint-disable import/no-unresolved */
 import { useState } from "react";
-import { useActionData } from "@remix-run/react";
+import { Navigate, redirect, useActionData } from "@remix-run/react";
 import {
   ActionFunctionArgs,
   json,
@@ -17,7 +17,7 @@ import useRideDetails from "~/hooks/useRideDetails";
 import useRideSocket from "~/hooks/useRideSocket";
 
 import { requireRideCookie } from "~/utils/rideCookie.server";
-import { requireAuthCookie } from "~/utils/auth.server";
+
 import { formatSourceDestination } from "./user/route";
 
 export interface Ride {
@@ -50,15 +50,12 @@ export async function action({ request }: ActionFunctionArgs) {
   }
 
   if (isUpdate) {
-    console.log("inside update");
-    const userId = String(await requireAuthCookie(request));
     const sourceString = String(formData.get("source"));
     const destinationString = String(formData.get("destination"));
 
-    console.log(`destination string is ${destinationString}`);
-    console.log(`source string is${sourceString}`);
-
     const data = formatSourceDestination(sourceString, destinationString);
+
+    console.log(data);
 
     if (!data) {
       return { message: "select source/destination" };
@@ -66,12 +63,8 @@ export async function action({ request }: ActionFunctionArgs) {
 
     const { source, destination } = data;
 
-    console.log(source);
-    console.log(destination);
-
     const message = await ride.updateRide({
       rideId,
-      userId,
       source,
       destination,
     });
@@ -80,7 +73,19 @@ export async function action({ request }: ActionFunctionArgs) {
 
   if (isCancel) {
     const message = await ride.cancelRide(rideId);
-    return json({ message });
+
+    // const referer = request.headers.get("Referer");
+
+    // // Redirect to the previous page, if the referer header is present
+    // if (referer) {
+    //   return redirect(referer);
+    // }
+
+    // Default redirect if referer is not present
+    return redirect("/user");
+    // return Navigate({ to: "/user" });
+    // return json({ message });
+    // return redirect("/user");
   }
 }
 
@@ -127,6 +132,8 @@ export default function Ride() {
           rideDetails={rideDetails}
           sourceName={sourceName}
           destinationName={destinationName}
+          source={source}
+          destination={destination}
         />
         {isRideAccepted ? (
           <DriverDetails driverDetails={driverDetails} />

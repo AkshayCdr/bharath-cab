@@ -45,11 +45,11 @@ const secret = "default";
 export const authCookie = createCookie("auth", {
   path: "/",
   sameSite: "lax",
-  httpOnly: true,
-  secure: true,
+  // httpOnly: true,
+  // secure: true,
   secrets: [secret],
   // expires: new Date(Date.now() + 60_000),
-  maxAge: 60,
+  maxAge: 86400,
 });
 
 export async function requireAuthCookie(request: Request) {

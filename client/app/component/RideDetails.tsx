@@ -1,14 +1,24 @@
 import { Form } from "@remix-run/react";
+import { useEffect, useState } from "react";
 
 export default function RideDetails({
   rideDetails,
   sourceName,
   destinationName,
+  source,
+  destination,
 }) {
-  console.log(rideDetails);
-  const source = `${rideDetails?.source?.y},${rideDetails?.source.x}`;
-  const destination = `${rideDetails?.destination?.y},${rideDetails?.destination.x}`;
+  const [defaultSource, setSource] = useState("");
+  const [defaultDestination, setDestination] = useState("");
 
+  useEffect(() => {
+    if (rideDetails?.source && rideDetails?.destination) {
+      setSource(`${rideDetails.source.y},${rideDetails.source.x}`);
+      setDestination(
+        `${rideDetails.destination.y},${rideDetails.destination.x}`
+      );
+    }
+  }, [rideDetails]);
   return (
     <div>
       <Form method="POST" id="ride-request-form" className="flex flex-col">
@@ -17,7 +27,8 @@ export default function RideDetails({
             type="text"
             readOnly
             name="source"
-            defaultValue={source}
+            defaultValue={defaultSource}
+            value={source}
             id=""
             hidden
           />
@@ -28,7 +39,8 @@ export default function RideDetails({
             id=""
             readOnly
             hidden
-            defaultValue={destination}
+            defaultValue={defaultDestination}
+            value={destination}
           />
 
           <div className="flex flex-col">

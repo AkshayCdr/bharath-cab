@@ -69,11 +69,11 @@ async function requestForRide(Id) {
   return message;
 }
 
-async function updateRide({ rideId, userId, source, destination }) {
+async function updateRide({ rideId, source, destination }) {
   const response = await fetch(`http://localhost:3000/ride/${rideId}`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ userId, source, destination }),
+    body: JSON.stringify({ source, destination }),
     credentials: "include",
   });
   if (!response.ok) {
@@ -86,7 +86,7 @@ async function updateRide({ rideId, userId, source, destination }) {
 
 async function cancelRide(rideId) {
   const response = await fetch(`http://localhost:3000/ride/${rideId}/cancel`, {
-    method: "PUT",
+    method: "PATCH",
   });
   if (!response.ok) {
     console.error("failed to cancel ", response.status, response.statusText);

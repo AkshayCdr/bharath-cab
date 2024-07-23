@@ -71,7 +71,7 @@ export async function cancelRide(req: Request<Id>, res: Response) {
 
     driverSock.cancelRide(id);
 
-    res.status(200).send({ message: "Ok" });
+    res.status(200).send({ message: "ride cancellled" });
   } catch (error) {
     res.status(500).send({ message: "cannot ride error ", error });
   }
