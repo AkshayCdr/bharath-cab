@@ -8,13 +8,15 @@ import useRideDetails, { RideDetails } from "~/hooks/useRideDetails";
 import Details from "../component/Details";
 import { socket } from "~/socket/websocket";
 import useRoute from "~/hooks/useRoute";
-import { requireSession } from "~/utils/auth.server";
+import { requireAuthCookie, requireSession } from "~/utils/auth.server";
 import { requireRideCookie } from "~/utils/rideCookie.server";
 
 import Mapcontainer from "~/component/Mapcontainer";
 
-export const loader = async ({ request }: LoaderFunctionArgs) => {
-  const rideId = await requireRideCookie(request);
+export const loader = async ({ params, request }: LoaderFunctionArgs) => {
+  const userId = await requireAuthCookie(request);
+
+  const { rideId } = params;
 
   if (!rideId) {
     throw new Response("Not Found", { status: 404 });
