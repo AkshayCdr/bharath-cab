@@ -1,7 +1,7 @@
 import type { LinksFunction, MetaFunction } from "@remix-run/node";
 
 import styles from "../styles/index.css?url";
-import Navbar from "~/component/Navbar";
+
 import InputPrice from "~/component/InputPrice";
 
 export const meta: MetaFunction = () => {

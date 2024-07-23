@@ -9,7 +9,6 @@ import "leaflet/dist/leaflet.css";
 import { useState } from "react";
 import useRoute from "~/hooks/useRoute";
 import useMapClickHandler from "~/hooks/useMapClickHandler";
-import { latLng } from "leaflet";
 
 export default function Map({
   source,
