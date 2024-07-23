@@ -20,6 +20,8 @@ import { requireAuthCookie } from "~/utils/auth.server";
 
 import { rideCookie } from "~/utils/rideCookie.server";
 
+import Mapcontainer from "~/component/Mapcontainer";
+
 export interface User {
   account_id: string;
   name: string;
@@ -128,7 +130,7 @@ export default function User() {
         source={source}
         destination={destination}
       />
-      {MapComponent && (
+      {/* {MapComponent && (
         <MapComponent
           source={source}
           destination={destination}
@@ -138,7 +140,16 @@ export default function User() {
           setDestinationName={setDestinationName}
           isEditable={isEditable}
         />
-      )}
+      )} */}
+      <Mapcontainer
+        source={source}
+        destination={destination}
+        setSource={setSource}
+        setDestination={setDestination}
+        setSourceName={setSourceName}
+        setDestinationName={setDestinationName}
+        isEditable={isEditable}
+      ></Mapcontainer>
     </div>
   );
 }

@@ -43,7 +43,7 @@ export default function useRideDetails() {
   }, [rideDetails]);
 
   useEffect(() => {
-    import("../component/Map").then((module) =>
+    import("../component/Map.client").then((module) =>
       setMapComponent(() => module.default)
     );
   }, []);

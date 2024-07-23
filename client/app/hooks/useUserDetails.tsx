@@ -13,7 +13,7 @@ export default function useUserDetails() {
   const [isEditable, setIsEditable] = useState(true);
 
   useEffect(() => {
-    import("../component/Map").then((module) =>
+    import("../component/Map.client").then((module) =>
       setMapComponent(() => module.default)
     );
   });

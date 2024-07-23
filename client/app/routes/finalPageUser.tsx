@@ -13,6 +13,8 @@ import Details from "../component/Details";
 import Review from "../component/Review";
 import { requireRideCookie } from "~/utils/rideCookie.server";
 
+import Mapcontainer from "~/component/Mapcontainer";
+
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const rideId = await requireRideCookie(request);
 
@@ -102,14 +104,20 @@ export default function FinalPageUser() {
         sourceName={sourceName}
         destinationName={destinationName}
       />
-      {MapComponent && (
+      {/* {MapComponent && (
         <MapComponent
           source={source}
           destination={destination}
           isEditable={isEditable}
           rideLocation={rideLocation}
         />
-      )}
+      )} */}
+      <Mapcontainer
+        source={source}
+        destination={destination}
+        isEditable={isEditable}
+        rideLocation={rideLocation}
+      ></Mapcontainer>
       {isRideStarted && <p>Ride is started change the location</p>}
       {isRideEnded && <Review rideId={rideDetails.id} />}
       {/* <Review rideId={rideDetails.id} /> */}

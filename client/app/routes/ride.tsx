@@ -20,6 +20,8 @@ import { requireRideCookie } from "~/utils/rideCookie.server";
 
 import { formatSourceDestination } from "./user/route";
 
+import Mapcontainer from "~/component/Mapcontainer";
+
 export interface Ride {
   id: string;
   source: Coordinates;
@@ -141,7 +143,7 @@ export default function Ride() {
           message && <p className="ride-message">{message.message}</p>
         )}
       </p>
-      {MapComponent && (
+      {/* {MapComponent && (
         <MapComponent
           source={source}
           destination={destination}
@@ -151,7 +153,16 @@ export default function Ride() {
           setDestinationName={setDestinationName}
           isEditable={isEditable}
         />
-      )}
+      )} */}
+      <Mapcontainer
+        source={source}
+        destination={destination}
+        setSource={setSource}
+        setDestination={setDestination}
+        setSourceName={setSourceName}
+        setDestinationName={setDestinationName}
+        isEditable={isEditable}
+      />
     </div>
   );
 }

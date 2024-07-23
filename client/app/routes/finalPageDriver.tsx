@@ -11,6 +11,8 @@ import useRoute from "~/hooks/useRoute";
 import { requireSession } from "~/utils/auth.server";
 import { requireRideCookie } from "~/utils/rideCookie.server";
 
+import Mapcontainer from "~/component/Mapcontainer";
+
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const rideId = await requireRideCookie(request);
 
@@ -120,14 +122,21 @@ export default function FinalPageDriver() {
         sourceName={sourceName}
         destinationName={destinationName}
       />
-      {MapComponent && (
+      {/* {MapComponent && (
         <MapComponent
           source={source}
           destination={destination}
           isEditable={isEditable}
           rideLocation={currentLocation}
         />
-      )}
+      )} */}
+      <Mapcontainer
+        source={source}
+        destination={destination}
+        isEditable={isEditable}
+        rideLocation={currentLocation}
+      ></Mapcontainer>
+
       {isRideStarted && <p>ride started</p>}
       {isRideEnded && <p>ride ended</p>}
     </div>
