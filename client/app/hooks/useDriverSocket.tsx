@@ -28,7 +28,7 @@ export default function useDriverSocket(driverId, setUserDetails, userDetails) {
       }
       console.log("ride confiremmed and userDeails");
       console.log(userDetails);
-      navigate(`/finalPageDriver${userDetailsRef.current.id}`);
+      return navigate(`/finalPageDriver/${userDetailsRef.current.id}`);
     };
 
     const handleCancelRide = (rideId) => {
