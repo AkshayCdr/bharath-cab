@@ -1,6 +1,6 @@
 import { LoaderFunctionArgs, json } from "@remix-run/node";
 import { useLoaderData, useNavigate } from "@remix-run/react";
-import { driver } from "~/apis/driver";
+
 import { ride } from "~/apis/ride";
 import { useEffect, useState } from "react";
 import useLocation from "~/hooks/useLocation";
@@ -8,8 +8,7 @@ import useRideDetails, { RideDetails } from "~/hooks/useRideDetails";
 import Details from "../component/Details";
 import { socket } from "~/socket/websocket";
 import useRoute from "~/hooks/useRoute";
-import { requireAuthCookie, requireSession } from "~/utils/auth.server";
-import { requireRideCookie } from "~/utils/rideCookie.server";
+import { requireAuthCookie } from "~/utils/auth.server";
 
 import Mapcontainer from "~/component/Mapcontainer";
 
@@ -36,15 +35,9 @@ export default function FinalPageDriver() {
   const [isEditable, setIsEditable] = useState(false);
 
   const navigate = useNavigate();
-
-  const {
-    rideDetails,
-    source,
-    destination,
-    MapComponent,
-    sourceName,
-    destinationName,
-  } = useRideDetails();
+  const { rideDetails } = useLoaderData<typeof loader>();
+  const { source, destination, sourceName, destinationName } =
+    useRideDetails(rideDetails);
 
   const { currentLocation } = useLocation(rideDetails.id);
 
@@ -124,14 +117,6 @@ export default function FinalPageDriver() {
         sourceName={sourceName}
         destinationName={destinationName}
       />
-      {/* {MapComponent && (
-        <MapComponent
-          source={source}
-          destination={destination}
-          isEditable={isEditable}
-          rideLocation={currentLocation}
-        />
-      )} */}
       <Mapcontainer
         source={source}
         destination={destination}

@@ -33,7 +33,7 @@ export async function action({ request }: ActionFunctionArgs) {
   const intent = formData.get("intent");
 
   const isReview = intent === "review";
-  const isIntent = intent === "intent";
+  const isCancel = intent === "cancel";
 
   if (isReview) {
     const rideDetails = Object.fromEntries(formData);
@@ -53,11 +53,12 @@ export async function action({ request }: ActionFunctionArgs) {
     return message;
   }
 
-  if (isIntent) {
-    const rideId = formData.get("rideId");
+  if (isCancel) {
+    // const rideId = formData.get("rideId");
+    const rideId = await requireRideCookie(request);
 
     handleCancelRide(rideId);
-    return redirect(`/ride/${rideId}`);
+    return redirect(`/ride`);
   }
 }
 
@@ -69,7 +70,6 @@ export default function FinalPageUser() {
     rideDetails,
     source,
     destination,
-    MapComponent,
     sourceName,
     destinationName,
     setSource,
@@ -104,14 +104,7 @@ export default function FinalPageUser() {
         sourceName={sourceName}
         destinationName={destinationName}
       />
-      {/* {MapComponent && (
-        <MapComponent
-          source={source}
-          destination={destination}
-          isEditable={isEditable}
-          rideLocation={rideLocation}
-        />
-      )} */}
+
       <Mapcontainer
         source={source}
         destination={destination}

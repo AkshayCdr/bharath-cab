@@ -117,7 +117,6 @@ export default function User() {
     destinationName,
     setDestinationName,
     isEditable,
-    MapComponent,
   } = useUserDetails();
 
   return (
@@ -130,17 +129,6 @@ export default function User() {
         source={source}
         destination={destination}
       />
-      {/* {MapComponent && (
-        <MapComponent
-          source={source}
-          destination={destination}
-          setSource={setSource}
-          setDestination={setDestination}
-          setSourceName={setSourceName}
-          setDestinationName={setDestinationName}
-          isEditable={isEditable}
-        />
-      )} */}
       <Mapcontainer
         source={source}
         destination={destination}

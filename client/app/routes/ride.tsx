@@ -1,6 +1,11 @@
 /* eslint-disable import/no-unresolved */
 import { useState } from "react";
-import { Navigate, redirect, useActionData } from "@remix-run/react";
+import {
+  Navigate,
+  redirect,
+  useActionData,
+  useLoaderData,
+} from "@remix-run/react";
 import {
   ActionFunctionArgs,
   json,
@@ -108,19 +113,17 @@ export default function Ride() {
   const [isRideCancelled, setRideCancelled] = useState(false);
 
   const message = useActionData<typeof action>();
-
+  const { rideDetails } = useLoaderData<typeof loader>();
   const {
-    rideDetails,
     source,
     destination,
     setSource,
     setDestination,
-    MapComponent,
     sourceName,
     destinationName,
     setSourceName,
     setDestinationName,
-  } = useRideDetails();
+  } = useRideDetails(rideDetails);
 
   const { isRideAccepted, driverDetails } = useRideSocket({
     rideDetails,
@@ -143,17 +146,7 @@ export default function Ride() {
           message && <p className="ride-message">{message.message}</p>
         )}
       </p>
-      {/* {MapComponent && (
-        <MapComponent
-          source={source}
-          destination={destination}
-          setSource={setSource}
-          setDestination={setDestination}
-          setSourceName={setSourceName}
-          setDestinationName={setDestinationName}
-          isEditable={isEditable}
-        />
-      )} */}
+
       <Mapcontainer
         source={source}
         destination={destination}

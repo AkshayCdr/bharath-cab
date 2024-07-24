@@ -16,13 +16,12 @@ type Coordinates = {
   y?: number;
 };
 
-export default function useRideDetails() {
+export default function useRideDetails(rideDetails) {
   const [source, setSource] = useState(null);
   const [destination, setDestination] = useState(null);
-  const [MapComponent, setMapComponent] = useState(null);
   const [sourceName, setSourceName] = useState(null);
   const [destinationName, setDestinationName] = useState(null);
-  const { rideDetails } = useLoaderData<typeof loader>();
+
   useEffect(() => {
     (async () => {
       if (rideDetails) {
@@ -42,19 +41,11 @@ export default function useRideDetails() {
     })();
   }, [rideDetails]);
 
-  useEffect(() => {
-    import("../component/Map.client").then((module) =>
-      setMapComponent(() => module.default)
-    );
-  }, []);
-
   return {
-    rideDetails,
     source,
     destination,
     setSource,
     setDestination,
-    MapComponent,
     sourceName,
     destinationName,
     setSourceName,
