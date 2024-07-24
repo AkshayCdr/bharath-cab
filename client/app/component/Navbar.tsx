@@ -3,7 +3,9 @@ import { useAuth } from "~/context/authContext";
 import { loader } from "~/root";
 
 export default function Navbar() {
-  // const { state } = useAuth();
+  const { state } = useAuth();
+
+  console.log(state);
 
   const { userId } = useLoaderData<typeof loader>();
   return (
@@ -22,6 +24,8 @@ export default function Navbar() {
         ) : (
           <NavLink to="/login">Login</NavLink>
         )}
+
+        {state?.accountName && <p>{state.accountName}</p>}
       </ul>
     </nav>
   );
