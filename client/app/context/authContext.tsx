@@ -2,16 +2,21 @@ import { createContext, Dispatch, useContext, useReducer } from "react";
 
 interface AuthState {
   isAuthenticated: boolean;
-  accountId: string | null;
+  accountId: string;
+  accountName: string;
 }
 
 const initialState = {
   isAuthenticated: false,
   accountId: null,
+  accountName: null,
 };
 
 type AuthAction =
-  | { type: "account/login"; payload: { accountId: string } }
+  | {
+      type: "account/login";
+      payload: { accountId: string; accountName: string };
+    }
   | { type: "account/logout" };
 
 const AuthContext = createContext<{
@@ -31,12 +36,14 @@ const authReducer = (state, action) => {
         ...state,
         isAuthenticated: true,
         accountId: action.payload.accountId,
+        accountName: action.payload.accountName,
       };
     case "account/logout":
       return {
         ...state,
         isAuthenticated: false,
         accountId: null,
+        accountName: null,
       };
     default:
       return state;

@@ -3,7 +3,7 @@ import { useAuth } from "~/context/authContext";
 import { loader } from "~/root";
 
 export default function Navbar() {
-  const { state } = useAuth();
+  // const { state } = useAuth();
 
   const { userId } = useLoaderData<typeof loader>();
   return (

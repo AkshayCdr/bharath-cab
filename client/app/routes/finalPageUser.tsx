@@ -73,6 +73,8 @@ export default function FinalPageUser() {
 
   const { rideLocation, rideNearby, rideStatus } = useRideLocation();
 
+  const role = "user";
+
   useEffect(() => {
     if (rideNearby) {
       alert("ride Nearby");
@@ -99,6 +101,7 @@ export default function FinalPageUser() {
         rideDetails={rideDetails}
         sourceName={sourceName}
         destinationName={destinationName}
+        role={role}
       />
 
       <Mapcontainer

@@ -34,6 +34,8 @@ export default function FinalPageDriver() {
   const [isRideEnded, setEndRide] = useState(false);
   const [isEditable, setIsEditable] = useState(false);
 
+  const role = "driver";
+
   const navigate = useNavigate();
   const { rideDetails } = useLoaderData<typeof loader>();
 
@@ -52,7 +54,7 @@ export default function FinalPageDriver() {
   useEffect(() => {
     function handleCancelRide(rideId) {
       if (rideId !== rideDetails.id) return;
-      navigate(-1);
+      navigate("/driver");
     }
     socket.on("cancelRide", handleCancelRide);
     return () => {
@@ -98,7 +100,7 @@ export default function FinalPageDriver() {
       setEndRide(true);
       socket.emit("endRide", rideDetails);
       socket.disconnect();
-      navigate("/login");
+      navigate("/driver");
     }
 
     const isRideEnded = distanceFromDestination === 0;
@@ -117,6 +119,7 @@ export default function FinalPageDriver() {
         rideDetails={rideDetails}
         sourceName={sourceName}
         destinationName={destinationName}
+        role={role}
       />
       <Mapcontainer
         source={source}

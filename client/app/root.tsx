@@ -4,10 +4,6 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
-  isRouteErrorResponse,
-  json,
-  useLoaderData,
-  useRouteError,
 } from "@remix-run/react";
 
 import styles from "./styles/main.css?url";

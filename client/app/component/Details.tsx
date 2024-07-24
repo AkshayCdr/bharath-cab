@@ -4,9 +4,11 @@ export default function RideDetails({
   rideDetails,
   sourceName,
   destinationName,
+  role,
 }) {
   console.log(rideDetails);
-
+  const isDriver = role === "driver";
+  const isUser = role === "user";
   return (
     <Form method="post" className="flex flex-col m-4 p-2 ">
       <input type="hidden" name="rideId" defaultValue={rideDetails.id} />
@@ -41,18 +43,34 @@ export default function RideDetails({
             readOnly
           />
         </div>
-        <div className="flex flex-col">
-          <label htmlFor="driver" className="text-2xl">
-            Driver Name
-          </label>
-          <input
-            type="text"
-            name="driver"
-            id=""
-            value={rideDetails.name}
-            readOnly
-          />
-        </div>
+        {isDriver && (
+          <div className="flex flex-col">
+            <label htmlFor="driver" className="text-2xl">
+              Driver Name
+            </label>
+            <input
+              type="text"
+              name="driver"
+              id=""
+              value={rideDetails.name}
+              readOnly
+            />
+          </div>
+        )}
+        {isUser && (
+          <div className="flex flex-col">
+            <label htmlFor="user" className="text-2xl">
+              User Name
+            </label>
+            <input
+              type="text"
+              name="user"
+              id=""
+              value={rideDetails.name}
+              readOnly
+            />
+          </div>
+        )}
         <div className="flex flex-col">
           <label htmlFor="phone" className="text-2xl">
             Phone
