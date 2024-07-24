@@ -20,7 +20,7 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
   if (!rideId) {
     throw new Response("Not Found", { status: 404 });
   }
-  const rideDetails: RideDetails = await ride.getRideDetails(rideId);
+  const rideDetails = await ride.getRideAndUser(rideId);
 
   if (!rideDetails) {
     throw new Response("Not Found", { status: 404 });
@@ -36,6 +36,7 @@ export default function FinalPageDriver() {
 
   const navigate = useNavigate();
   const { rideDetails } = useLoaderData<typeof loader>();
+
   const { source, destination, sourceName, destinationName } =
     useRideDetails(rideDetails);
 

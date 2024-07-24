@@ -7,6 +7,7 @@ import {
   addReview,
   getRideAndDriver,
   cancelRide,
+  getRideAndUser,
 } from "../controllers/ride.controller";
 
 const route = Router();
@@ -18,6 +19,8 @@ route.get("/:id", getRide);
 route.put("/:id", updateRide);
 
 route.get("/:id/driver", getRideAndDriver);
+
+route.get("/:id/user", getRideAndUser);
 
 route.patch("/:id", requestForRide);
 

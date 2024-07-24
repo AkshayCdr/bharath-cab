@@ -50,6 +50,21 @@ async function getRideAndDriver(rideId: string) {
   return data;
 }
 
+async function getRideAndUser(rideId: string) {
+  console.log("sending request from cline side ");
+  const response = await fetch(`http://localhost:3000/ride/${rideId}/user`, {
+    method: "GET",
+    credentials: "include",
+  });
+  if (!response.ok) {
+    console.error(response.status, response.statusText);
+    return;
+  }
+  const data = await response.json();
+
+  return data;
+}
+
 async function requestForRide(Id) {
   const response = await fetch(`http://localhost:3000/ride/${Id}`, {
     method: "PATCH",
@@ -120,6 +135,7 @@ export const ride = {
   updateRide,
   cancelRide,
   getRideAndDriver,
+  getRideAndUser,
   requestForRide,
   setReview,
 };

@@ -23,3 +23,9 @@ test("get distance for given source and destianation", async () => {
   };
   await rideServices.update({ id, source, destination });
 });
+
+test("check ride and user", async () => {
+  const id = "5504665b-54b6-4292-92f3-243590b683f8";
+  const data = await rideServices.getRideAndUser(id);
+  console.log(data);
+});

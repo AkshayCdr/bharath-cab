@@ -88,6 +88,18 @@ export async function getRideAndDriver(req: Request<Id>, res: Response) {
   }
 }
 
+export async function getRideAndUser(req: Request<Id>, res: Response) {
+  try {
+    console.log("inside ride and user");
+    const { id } = req.params;
+    const rideDetails = await rideServices.getRideAndUser(id);
+    console.log(rideDetails);
+    res.status(200).send(JSON.stringify(rideDetails));
+  } catch (error) {
+    res.status(500).send({ message: "cannot reterive data", error });
+  }
+}
+
 export async function rideDetails(req: Request, res: Response) {
   try {
   } catch (error) {

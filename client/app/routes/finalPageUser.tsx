@@ -14,6 +14,7 @@ import Review from "../component/Review";
 import { requireRideCookie } from "~/utils/rideCookie.server";
 
 import Mapcontainer from "~/component/Mapcontainer";
+import { useLoaderData } from "@remix-run/react";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const rideId = await requireRideCookie(request);
@@ -66,14 +67,9 @@ export default function FinalPageUser() {
   const [isEditable, setIsEditable] = useState(false);
   const [isRideStarted, setRideStated] = useState(false);
   const [isRideEnded, setRideEnded] = useState(false);
-  const {
-    rideDetails,
-    source,
-    destination,
-    sourceName,
-    destinationName,
-    setSource,
-  } = useRideDetails();
+  const { rideDetails } = useLoaderData<typeof loader>();
+  const { source, destination, sourceName, destinationName, setSource } =
+    useRideDetails(rideDetails);
 
   const { rideLocation, rideNearby, rideStatus } = useRideLocation();
 
