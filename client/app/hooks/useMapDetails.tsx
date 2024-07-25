@@ -1,10 +1,6 @@
-import { useLoaderData } from "@remix-run/react";
 import { useState } from "react";
-import { loader } from "~/routes/user.$userId/route";
 
-export default function useUserDetails() {
-  const { userData } = useLoaderData<typeof loader>();
-
+export default function useMapDetails() {
   const [source, setSource] = useState("");
   const [destination, setDestination] = useState("");
   const [sourceName, setSourceName] = useState("");
@@ -12,7 +8,6 @@ export default function useUserDetails() {
   const [isEditable, setIsEditable] = useState(true);
 
   return {
-    userData,
     source,
     destination,
     setSource,

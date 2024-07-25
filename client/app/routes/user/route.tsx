@@ -8,12 +8,12 @@ import {
 import LocationInput from "~/component/LocationInput";
 import { ride } from "~/apis/ride";
 
-import { json } from "@remix-run/react";
+import { json, useLoaderData } from "@remix-run/react";
 import { user } from "~/apis/user";
 
 import styles from "~/styles/user.css?url";
 
-import useUserDetails from "~/hooks/useUserDetails";
+import useMapDetails from "~/hooks/useMapDetails";
 import { requireAuthCookie } from "~/utils/auth.server";
 
 import { rideCookie } from "~/utils/rideCookie.server";
@@ -104,8 +104,8 @@ export async function action({ request }: ActionFunctionArgs) {
 }
 
 export default function User() {
+  const { userData } = useLoaderData<typeof loader>();
   const {
-    userData,
     source,
     destination,
     setSource,
@@ -115,7 +115,7 @@ export default function User() {
     destinationName,
     setDestinationName,
     isEditable,
-  } = useUserDetails();
+  } = useMapDetails();
 
   return (
     <div className="user-page flex flex-row">
