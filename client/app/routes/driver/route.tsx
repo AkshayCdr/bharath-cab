@@ -9,6 +9,8 @@ import useDriver from "~/hooks/useDriver";
 import useDriverSocket from "~/hooks/useDriverSocket";
 import { requireAuthCookie } from "~/utils/auth.server";
 
+import Mapcontainer from "~/component/Mapcontainer";
+
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const driverId = await requireAuthCookie(request);
 
@@ -57,6 +59,7 @@ export default function Driver() {
   };
   return (
     <div className="driver-page">
+      <Mapcontainer></Mapcontainer>
       {Object.keys(userDetails).length > 0 && !isRideAccepted && (
         <Modal
           userData={userDetails}
@@ -67,7 +70,9 @@ export default function Driver() {
       {!isRideAccepted && (
         <button
           onClick={goOnline}
-          className={online ? "btn-gooffline" : "btn-goonline"}
+          className={`absolute bottom-10 right-1/2 z-10 w-20 h-24 rounded-3xl ${
+            online ? "bg-blue-600" : "bg-red-500"
+          }`}
         >
           {online ? "go-offline" : "go-online"}
         </button>

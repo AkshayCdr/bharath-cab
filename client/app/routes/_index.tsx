@@ -21,7 +21,7 @@ export default function Index() {
             <InputPrice />
           </div>
           <img
-            src="/public/main-bc.jpg"
+            src="/main-bc.jpg"
             alt="Getting ride"
             className="m-10 p-4 mr-44"
           />
