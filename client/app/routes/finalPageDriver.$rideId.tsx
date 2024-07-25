@@ -2,7 +2,7 @@ import { LoaderFunctionArgs, json } from "@remix-run/node";
 import { useLoaderData, useNavigate } from "@remix-run/react";
 
 import { ride } from "~/apis/ride";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import useLocation from "~/hooks/useLocation";
 import useRideDetails, { RideDetails } from "~/hooks/useRideDetails";
 import Details from "../component/Details";
@@ -62,14 +62,19 @@ export default function FinalPageDriver() {
     };
   }, []);
 
+  const isRideNearbySend = useRef(false);
+
   useEffect(() => {
     function handleRideNearby() {
       console.log("ride nearby inside driver page", distanceFromSource);
       socket.emit("rideNearby", rideDetails);
     }
 
+    if (isRideNearbySend.current) return;
+
     const isRideNearby = distanceFromSource > 1 && distanceFromSource < 3;
     if (isRideNearby) {
+      isRideNearbySend.current = true;
       handleRideNearby();
     }
 
@@ -78,6 +83,8 @@ export default function FinalPageDriver() {
     };
   }, [distanceFromSource, rideDetails]);
 
+  const isRideStart = useRef(false);
+
   useEffect(() => {
     function handleRideStart() {
       setStartRide(true);
@@ -85,14 +92,19 @@ export default function FinalPageDriver() {
       socket.emit("startRide", rideDetails);
     }
 
+    if (isRideStart.current) return;
+
     const isRideStarted = distanceFromSource === 0;
     if (isRideStarted) {
+      isRideStart.current = true;
       handleRideStart();
     }
     return () => {
       socket.off("startRide", handleRideStart);
     };
   }, [distanceFromSource, rideDetails]);
+
+  const isRideEnd = useRef(false);
 
   useEffect(() => {
     function handleRideEnd() {
@@ -103,8 +115,11 @@ export default function FinalPageDriver() {
       navigate("/driver");
     }
 
+    if (isRideEnd.current) return;
+
     const isRideEnded = distanceFromDestination === 0;
     if (isRideEnded) {
+      isRideEnd.current = true;
       handleRideEnd();
     }
 

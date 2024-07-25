@@ -8,7 +8,7 @@ import {
 import LocationInput from "~/component/LocationInput";
 import { ride } from "~/apis/ride";
 
-import { json, Link } from "@remix-run/react";
+import { json } from "@remix-run/react";
 import { user } from "~/apis/user";
 
 import styles from "~/styles/user.css?url";
@@ -135,7 +135,6 @@ export default function User() {
         setDestinationName={setDestinationName}
         isEditable={isEditable}
       ></Mapcontainer>
-      <Link to="profile/">profile</Link>
     </div>
   );
 }
