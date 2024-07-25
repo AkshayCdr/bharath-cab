@@ -1,13 +1,7 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
-
-import { Form } from "@remix-run/react";
-import { User } from "~/routes/user.$userId/route";
-
-export default function UserDetails({ userData, driverId, onClick }) {
+export default function Modal({ userData, driverId, onClick }) {
   console.log(userData);
 
   return (
-    // <Form method="POST">
     <div className="ride-details">
       <input type="hidden" name="driverId" defaultValue={driverId} />
       <input type="hidden" name="userId" defaultValue={userData.id} />
@@ -41,6 +35,5 @@ export default function UserDetails({ userData, driverId, onClick }) {
         Accept Ride
       </button>
     </div>
-    // </Form>
   );
 }

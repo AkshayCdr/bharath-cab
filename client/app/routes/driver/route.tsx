@@ -2,8 +2,7 @@ import { LinksFunction, json, type LoaderFunctionArgs } from "@remix-run/node";
 
 import { driver } from "~/apis/driver";
 
-import UserDetails from "~/component/UserDetails";
-import DriverProfile from "~/component/DriverProfile";
+import Modal from "~/component/Modal";
 
 import styles from "~/styles/driver.css?url";
 import useDriver from "~/hooks/useDriver";
@@ -58,9 +57,8 @@ export default function Driver() {
   };
   return (
     <div className="driver-page">
-      <DriverProfile driverData={driverData} />
       {Object.keys(userDetails).length > 0 && !isRideAccepted && (
-        <UserDetails
+        <Modal
           userData={userDetails}
           driverId={driverData.account_id}
           onClick={acceptRide}

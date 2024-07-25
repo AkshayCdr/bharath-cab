@@ -5,8 +5,6 @@ import { loader } from "~/root";
 export default function Navbar() {
   const { state } = useAuth();
 
-  console.log(state);
-
   const { userId } = useLoaderData<typeof loader>();
   return (
     <nav className="nav h-16 bg-black text-white p-10 items-center justify-center">
