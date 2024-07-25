@@ -9,8 +9,8 @@ export default function LocationInput({
 }) {
   const data = useActionData();
   return (
-    <Form method="POST" id="location-form">
-      <p className="input-form">
+    <Form method="POST" id="location-form" className="m-10 text-black">
+      <p className="">
         <input type="hidden" name="userId" value={userId} />
         <input type="text" name="source" id="" value={source} hidden />
         <input
@@ -20,27 +20,36 @@ export default function LocationInput({
           value={destination}
           hidden
         />
-        <label htmlFor="source">Source:</label>
-        <input
-          type="text"
-          name="sourceName"
-          value={sourceName}
-          readOnly
-          required
-        />
+        <div className="flex flex-col gap-3 p-5 ">
+          <input
+            type="text"
+            name="sourceName"
+            value={sourceName}
+            readOnly
+            className="h-12 rounded-lg text-left px-4"
+            placeholder="Enter pickup location"
+            required
+          />
 
-        <label htmlFor="destination">Destination:</label>
-        <input
-          type="text"
-          name="destinationName"
-          id=""
-          value={destinationName}
-          readOnly
-          required
-        />
+          <input
+            type="text"
+            name="destinationName"
+            id=""
+            value={destinationName}
+            readOnly
+            className="h-12 rounded-lg text-left px-4"
+            placeholder="Where to?"
+            required
+          />
+        </div>
       </p>
-      <p>
-        <button type="submit">submit</button>
+      <p className="flex flex-col items-center">
+        <button
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-48 "
+          type="submit"
+        >
+          submit
+        </button>
       </p>
       {data && <span className="text-red-600"> {data.message}</span>}
     </Form>

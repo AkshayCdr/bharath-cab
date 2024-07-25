@@ -12,7 +12,7 @@ import RideDetails from "~/component/RideDetails";
 
 import DriverDetails from "~/component/DriverDetails";
 
-// import styles from "../styles/ride.css?url";
+import styles from "../styles/ride.css?url";
 import useRideDetails from "~/hooks/useRideDetails";
 import useRideSocket from "~/hooks/useRideSocket";
 
@@ -155,4 +155,4 @@ export default function Ride() {
   );
 }
 
-// export const links: LinksFunction = () => [{ rel: "stylesheet", href: styles }];
+export const links: LinksFunction = () => [{ rel: "stylesheet", href: styles }];

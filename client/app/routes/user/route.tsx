@@ -118,7 +118,7 @@ export default function User() {
   } = useMapDetails();
 
   return (
-    <div className="user-page flex flex-row">
+    <div className="flex flex-row bg-black text-white min-h-screen">
       <LocationInput
         userId={userData.account_id}
         sourceName={sourceName}
@@ -126,15 +126,17 @@ export default function User() {
         source={source}
         destination={destination}
       />
-      <Mapcontainer
-        source={source}
-        destination={destination}
-        setSource={setSource}
-        setDestination={setDestination}
-        setSourceName={setSourceName}
-        setDestinationName={setDestinationName}
-        isEditable={isEditable}
-      ></Mapcontainer>
+      <div className="container w-1/2 h-screen ">
+        <Mapcontainer
+          source={source}
+          destination={destination}
+          setSource={setSource}
+          setDestination={setDestination}
+          setSourceName={setSourceName}
+          setDestinationName={setDestinationName}
+          isEditable={isEditable}
+        ></Mapcontainer>
+      </div>
     </div>
   );
 }
