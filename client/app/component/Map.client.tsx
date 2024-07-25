@@ -48,7 +48,7 @@ export default function Map({
       center={getCenter()}
       zoom={13}
       scrollWheelZoom={false}
-      className="z-0"
+      className="z-0 "
     >
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

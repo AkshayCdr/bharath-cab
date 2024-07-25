@@ -2,10 +2,10 @@ export default function Modal({ userData, driverId, onClick }) {
   console.log(userData);
 
   return (
-    <div className="ride-details">
+    <div className="">
       <input type="hidden" name="driverId" defaultValue={driverId} />
       <input type="hidden" name="userId" defaultValue={userData.id} />
-      <p className="ride-details-input">
+      <div className="">
         <label htmlFor="name">Name:</label>
         <input
           type="text"
@@ -30,7 +30,7 @@ export default function Modal({ userData, driverId, onClick }) {
           defaultValue={userData.price}
           readOnly
         />
-      </p>
+      </div>
       <button type="submit" onClick={onClick}>
         Accept Ride
       </button>
