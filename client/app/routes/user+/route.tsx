@@ -8,10 +8,8 @@ import {
 import LocationInput from "~/component/LocationInput";
 import { ride } from "~/apis/ride";
 
-import { json } from "@remix-run/react";
+import { json, Link } from "@remix-run/react";
 import { user } from "~/apis/user";
-
-import UserProfile from "~/component/UserProfile";
 
 import styles from "~/styles/user.css?url";
 
@@ -121,7 +119,6 @@ export default function User() {
 
   return (
     <div className="user-page flex flex-row">
-      <UserProfile styles={styles} userData={userData} />
       <LocationInput
         userId={userData.account_id}
         sourceName={sourceName}
@@ -138,6 +135,7 @@ export default function User() {
         setDestinationName={setDestinationName}
         isEditable={isEditable}
       ></Mapcontainer>
+      <Link to="profile/">profile</Link>
     </div>
   );
 }
