@@ -108,6 +108,8 @@ export default function Ride() {
   const [isRideCancelled, setRideCancelled] = useState(false);
 
   const message = useActionData<typeof action>();
+
+  console.log(message);
   const { rideDetails } = useLoaderData<typeof loader>();
   const {
     source,
@@ -120,14 +122,14 @@ export default function Ride() {
     setDestinationName,
   } = useRideDetails(rideDetails);
 
-  const { isRideAccepted, driverDetails } = useRideSocket({
+  const { isRideAccepted } = useRideSocket({
     rideDetails,
     isRideCancelled,
   });
 
   return (
-    <div className="flex flex-row">
-      <p className="flex flex-col">
+    <div className="flex flex-row bg-gray-950 text-white min-h-screen">
+      <div className="flex flex-col">
         <RideDetails
           rideDetails={rideDetails}
           sourceName={sourceName}
@@ -135,12 +137,8 @@ export default function Ride() {
           source={source}
           destination={destination}
         />
-        {isRideAccepted ? (
-          <DriverDetails driverDetails={driverDetails} />
-        ) : (
-          message && <p className="ride-message">{message.message}</p>
-        )}
-      </p>
+        {message && <p className="text-green-800">{message.message}</p>}
+      </div>
 
       <Mapcontainer
         source={source}

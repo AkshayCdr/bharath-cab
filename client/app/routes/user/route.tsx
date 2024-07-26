@@ -118,7 +118,7 @@ export default function User() {
   } = useMapDetails();
 
   return (
-    <div className="flex flex-row bg-black text-white min-h-screen">
+    <div className="flex flex-row bg-gray-950 text-white min-h-screen">
       <LocationInput
         userId={userData.account_id}
         sourceName={sourceName}

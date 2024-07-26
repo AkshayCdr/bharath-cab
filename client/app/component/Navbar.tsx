@@ -7,7 +7,7 @@ export default function Navbar() {
 
   const { userId } = useLoaderData<typeof loader>();
   return (
-    <nav className="nav h-16 bg-black text-white p-10 items-center justify-center">
+    <nav className="nav h-16 bg-gray-950 text-white p-10 items-center justify-center">
       <ul className="flex flex-row items-center text-lg justify-between ">
         <li className="text-3xl">
           <NavLink to={`/`}>Bharat Cab</NavLink>

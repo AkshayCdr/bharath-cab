@@ -21,7 +21,7 @@ export default function RideDetails({
   }, [rideDetails]);
   return (
     <div>
-      <Form method="POST" id="ride-request-form" className="flex flex-col">
+      <Form method="POST" id="ride-request-form" className="m-10 ">
         <p className="flex flex-col gap-6">
           <input
             type="text"
@@ -45,13 +45,19 @@ export default function RideDetails({
 
           <div className="flex flex-col">
             <label htmlFor="source" className="text-2xl">
-              Source:
+              Source
             </label>
-            <input type="text" name="sourceName" value={sourceName} readOnly />
+            <input
+              type="text"
+              name="sourceName"
+              value={sourceName}
+              readOnly
+              className="h-12 rounded-lg text-left px-4 text-black"
+            />
           </div>
           <div className="flex flex-col">
             <label htmlFor="destination" className="text-2xl">
-              Destination:
+              Destination
             </label>
             <input
               type="text"
@@ -59,31 +65,57 @@ export default function RideDetails({
               id=""
               value={destinationName}
               readOnly
+              className="h-12 rounded-lg text-left px-4 text-black"
             />
           </div>
 
-          <div className="flex flex-col">
-            <label htmlFor="price">Price:</label>
-            <input
+          <div className="flex flex-row">
+            <label htmlFor="price" className="text-4xl mr-1">
+              $
+            </label>
+            <div>
+              {rideDetails?.price && (
+                <div className="text-4xl">{rideDetails.price}</div>
+              )}
+            </div>
+            {/* <input
               type="text"
               name="price"
               id=""
               value={rideDetails.price}
               readOnly
-            />
+              className="h-12 rounded-lg text-left px-4"
+            /> */}
           </div>
         </p>
-        <p>
-          <button type="submit" name="intent" value="request-for-ride">
+        <div className="flex flex-col">
+          <button
+            type="submit"
+            name="intent"
+            value="request-for-ride"
+            className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded w-56 "
+          >
             Request for ride
           </button>
-          <button type="submit" name="intent" value="cancel">
-            Cancel
-          </button>
-          <button type="submit" name="intent" value="update">
-            Update
-          </button>
-        </p>
+          <div>
+            <button
+              type="submit"
+              name="intent"
+              value="update"
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-28 "
+            >
+              Update
+            </button>
+            <button
+              type="submit"
+              name="intent"
+              value="cancel"
+              className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded w-28 "
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
       </Form>
     </div>
   );

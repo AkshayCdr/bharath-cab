@@ -11,7 +11,7 @@ export default function LoginInput() {
     <Form
       method="POST"
       id="login-form"
-      className="flex flex-col min-h-full flex-1 border p-8 m-5 bg-black opacity-90 text-white items-center justify-center rounded-lg mx-auto "
+      className="flex flex-col min-h-full flex-1 border p-8 m-5 bg-gray-950 opacity-90 text-white items-center justify-center rounded-lg mx-auto "
     >
       <p className="flex flex-col   sm:w-full sm:max-w-md ">
         <input

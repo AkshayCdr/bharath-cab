@@ -1,9 +1,10 @@
 #root{
-    background-color: black;
+    /* background-color: black; */
 
 }
 
 body{
-    background-color: black;
-    box-sizing: border-box;
+    /* background-color: black; */
+    background-color: rgb(3 7 18);
+    /* box-sizing: border-box; */
 }
