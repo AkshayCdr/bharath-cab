@@ -30,14 +30,13 @@ export default function Modal({ userData, driverId, onClick }) {
       <div className="">
         <div className="flex justify-center text-4xl gap-2 p-3 m-2">
           <div>Rs.</div>
-          <div>80</div>
           {/* <div>{userData?.price}</div> */}
         </div>
-        <div className="m-2 p-2">
-          <div>bangaluru karnataka</div>
-          <div>rajapalaya peksra kasjf </div>
-          {/* {sourceName && <div>{sourceName}</div>}
-          {destinationName && <div>{destinationName}</div>} */}
+        <div className="m-4 p-4 border-4 border-black">
+          {sourceName && (
+            <div className="m-4 p-4 border-4 border-black">{sourceName}</div>
+          )}
+          {destinationName && <div className="text-lg">{destinationName}</div>}
         </div>
       </div>
       <div className="flex justify-center m-2 p-2">

@@ -88,7 +88,7 @@ export default function RideDetails({
             /> */}
           </div>
         </p>
-        <div className="flex flex-col">
+        <div className="flex flex-col gap-4 m-4">
           <button
             type="submit"
             name="intent"
