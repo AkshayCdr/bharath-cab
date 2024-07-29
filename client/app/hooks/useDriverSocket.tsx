@@ -35,7 +35,7 @@ export default function useDriverSocket(driverId, setUserDetails, userDetails) {
       console.log("ride id " + rideId);
       console.log("ride id from useDetails" + userDetailsRef.current.id);
       if (rideId !== userDetailsRef.current.id) return;
-      setUserDetails({});
+      setUserDetails(null);
     };
 
     socket.on("connect", handleConnect);

@@ -17,10 +17,9 @@ export default function useDriver() {
     });
   }, [dispatch, driverData.account_id, driverData.name]);
 
-  const [userDetails, setUserDetails] = useState({});
+  const [userDetails, setUserDetails] = useState(null);
   const [online, setOnline] = useState(false);
   const [isRideAccepted, setRideAccepted] = useState(false);
-  const [isModalVisible, setModalVisible] = useState(false);
 
   const toggleOnline = () => {
     setOnline(!online);

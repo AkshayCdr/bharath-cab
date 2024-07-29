@@ -1,10 +1,25 @@
-import { useEffect, useState } from "react";
+import { useEffect, useReducer, useRef, useState } from "react";
 import { getLocationName } from "~/utils/getLocationName";
 
-export default function Modal({ userData, driverId, onClick }) {
+export default function Modal({ userData, driverId, onClick, setUserDetails }) {
   console.log(userData);
   const [sourceName, setSourceName] = useState(null);
   const [destinationName, setDestinationName] = useState(null);
+
+  const modalRef = useRef<HTMLDivElement>();
+
+  function handleClickOutside(event) {
+    if (modalRef.current && !modalRef.current.contains(event.target)) {
+      setUserDetails(null);
+    }
+  }
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   useEffect(() => {
     (async () => {
@@ -24,7 +39,10 @@ export default function Modal({ userData, driverId, onClick }) {
   }, [userData]);
 
   return (
-    <div className="container bg-white max-w-md absolute m-auto left-0 right-0 bottom-1/2 rounded-2xl shadow-md">
+    <div
+      ref={modalRef}
+      className="container bg-white max-w-md absolute m-auto left-0 right-0 bottom-1/2 rounded-2xl shadow-md"
+    >
       <input type="hidden" name="driverId" defaultValue={driverId} />
       <input type="hidden" name="userId" defaultValue={userData.id} />
       <div className="">

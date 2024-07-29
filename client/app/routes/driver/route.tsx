@@ -59,11 +59,12 @@ export default function Driver() {
   return (
     <div className="driver-page">
       <Mapcontainer></Mapcontainer>
-      {Object.keys(userDetails).length > 0 && (
+      {userDetails && (
         <Modal
           userData={userDetails}
           driverId={driverData.account_id}
           onClick={acceptRide}
+          setUserDetails={setUserDetails}
         />
       )}
 
