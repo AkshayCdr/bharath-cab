@@ -60,18 +60,14 @@ export default function Driver() {
   return (
     <div className="driver-page">
       <Mapcontainer></Mapcontainer>
-      {/* {Object.keys(userDetails).length > 0 && !isRideAccepted && (
+      {Object.keys(userDetails).length > 0 && !isRideAccepted && (
         <Modal
           userData={userDetails}
           driverId={driverData.account_id}
           onClick={acceptRide}
         />
-      )} */}
-      <Modal
-        userData={userDetails}
-        driverId={driverData.account_id}
-        onClick={acceptRide}
-      />
+      )}
+
       {!isRideAccepted && (
         <button
           onClick={goOnline}

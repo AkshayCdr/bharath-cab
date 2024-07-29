@@ -33,7 +33,7 @@ export async function insertIntoSession(
     const options: CookieOptions = {
       httpOnly: true,
       secure: false,
-      sameSite: "lax",
+      sameSite: "strict",
     };
 
     res.cookie("sessionId", sessionId, options);
@@ -42,6 +42,7 @@ export async function insertIntoSession(
 
     res.status(200).send({ message: "session set" });
   } catch (error) {
-    res.status(500).send({ message: error });
+    console.error(error);
+    res.status(500).send({ message: "Invalid " });
   }
 }

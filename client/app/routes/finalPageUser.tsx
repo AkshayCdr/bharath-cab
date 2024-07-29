@@ -51,7 +51,8 @@ export async function action({ request }: ActionFunctionArgs) {
 
     const message = await ride.setReview(rideDetails);
 
-    return message;
+    // return message;
+    return redirect(`/user`);
   }
 
   if (isCancel) {
