@@ -67,3 +67,12 @@ export async function requireAuthCookie(request: Request) {
   }
   return accountId;
 }
+
+export async function isLoggedIn(request: Request) {
+  const cookieString = request.headers.get("Cookie");
+  console.log(cookieString);
+  const accountId = await authCookie.parse(cookieString);
+  console.log(accountId);
+  // if(accountId) return redirect('/')
+  // return accountId;
+}

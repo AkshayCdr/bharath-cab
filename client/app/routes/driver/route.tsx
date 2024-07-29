@@ -33,7 +33,6 @@ export default function Driver() {
     setUserDetails,
     online,
     toggleOnline,
-    isRideAccepted,
     setRideAccepted,
   } = useDriver();
 
@@ -60,7 +59,7 @@ export default function Driver() {
   return (
     <div className="driver-page">
       <Mapcontainer></Mapcontainer>
-      {Object.keys(userDetails).length > 0 && !isRideAccepted && (
+      {Object.keys(userDetails).length > 0 && (
         <Modal
           userData={userDetails}
           driverId={driverData.account_id}
@@ -68,16 +67,14 @@ export default function Driver() {
         />
       )}
 
-      {!isRideAccepted && (
-        <button
-          onClick={goOnline}
-          className={`absolute bottom-10 right-1/2 z-10 w-20 h-24 rounded-3xl ${
-            online ? "bg-blue-600" : "bg-red-500"
-          }`}
-        >
-          {online ? "go-offline" : "go-online"}
-        </button>
-      )}
+      <button
+        onClick={goOnline}
+        className={`absolute bottom-10 right-1/2 z-10 w-20 h-24 rounded-3xl ${
+          online ? "bg-blue-600" : "bg-red-500"
+        }`}
+      >
+        {online ? "go-offline" : "go-online"}
+      </button>
     </div>
   );
 }

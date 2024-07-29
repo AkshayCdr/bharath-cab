@@ -1,8 +1,13 @@
-import type { LinksFunction, MetaFunction } from "@remix-run/node";
+import type {
+  LinksFunction,
+  LoaderFunctionArgs,
+  MetaFunction,
+} from "@remix-run/node";
 
 import styles from "../styles/index.css?url";
 
 import InputPrice from "~/component/InputPrice";
+import { isLoggedIn } from "~/utils/auth.server";
 
 export const meta: MetaFunction = () => {
   return [
@@ -10,6 +15,11 @@ export const meta: MetaFunction = () => {
     { name: "description", content: "Welcome to Remix!" },
   ];
 };
+
+// export const loader = async ({ request }: LoaderFunctionArgs) => {
+//   await isLoggedIn(request);
+//   return null;
+// };
 
 export default function Index() {
   return (

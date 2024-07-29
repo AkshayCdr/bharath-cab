@@ -1,5 +1,5 @@
 import { useNavigate } from "@remix-run/react";
-import { useEffect, useCallback, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { socket } from "~/socket/websocket";
 
 export default function useRideEvents({
@@ -7,35 +7,74 @@ export default function useRideEvents({
   distanceFromSource,
   rideDetails,
 }) {
-  const isRideNearbyTriggered = useRef(false);
+  // const isRideNearbyTriggered = useRef(false);
 
+  // const isRideStartTriggered = useRef(false);
+
+  // const navigate = useNavigate();
+
+  // const handleRideNearby = () => {
+  //   socket.emit("rideNearby", rideDetails);
+  //   isRideNearbyTriggered.current = true;
+  // };
+
+  // const handleRideStart = () => {
+  //   socket.emit("startRide", rideDetails);
+  //   isRideStartTriggered.current = true;
+  // };
+
+  // const handleRideEnd = () => {
+  //   socket.emit("endRide", rideDetails);
+  //   socket.disconnect();
+  //   navigate("/driver");
+  // };
+
+  // useEffect(() => {
+  //   const isRideNearby = distanceFromSource > 1 && distanceFromSource < 3;
+
+  //   if (isRideNearby && !isRideNearbyTriggered.current) handleRideNearby();
+
+  //   const isRideStarted = distanceFromSource === 0;
+  //   if (isRideStarted && !isRideStartTriggered.current) handleRideStart();
+
+  //   const isRideEnded = distanceFromDestination === 0;
+  //   if (isRideEnded) handleRideEnd();
+
+  //   return () => {
+  //     socket.off("rideNearby", handleRideNearby);
+  //     socket.off("startRide", handleRideStart);
+  //     socket.off("endRide", handleRideEnd);
+  //   };
+  // }, [distanceFromSource, distanceFromDestination]);
+
+  const isRideNearbyTriggered = useRef(false);
   const isRideStartTriggered = useRef(false);
 
   const navigate = useNavigate();
 
-  const handleRideNearby = () => {
+  const handleRideNearby = useCallback(() => {
     socket.emit("rideNearby", rideDetails);
     isRideNearbyTriggered.current = true;
-  };
+  }, [rideDetails]);
 
-  const handleRideStart = () => {
+  const handleRideStart = useCallback(() => {
     socket.emit("startRide", rideDetails);
     isRideStartTriggered.current = true;
-  };
+  }, [rideDetails]);
 
-  const handleRideEnd = () => {
+  const handleRideEnd = useCallback(() => {
     socket.emit("endRide", rideDetails);
     socket.disconnect();
     navigate("/driver");
-  };
+  }, [rideDetails, navigate]);
 
   useEffect(() => {
     const isRideNearby = distanceFromSource > 1 && distanceFromSource < 3;
 
-    if (isRideNearby) handleRideNearby();
+    if (isRideNearby && !isRideNearbyTriggered.current) handleRideNearby();
 
     const isRideStarted = distanceFromSource === 0;
-    if (isRideStarted) handleRideStart();
+    if (isRideStarted && !isRideStartTriggered.current) handleRideStart();
 
     const isRideEnded = distanceFromDestination === 0;
     if (isRideEnded) handleRideEnd();
@@ -45,19 +84,11 @@ export default function useRideEvents({
       socket.off("startRide", handleRideStart);
       socket.off("endRide", handleRideEnd);
     };
-  }, [distanceFromSource, distanceFromDestination]);
-
-  //   useEffect(() => {
-  //     socket.on("cancelRide", handleCancelRide);
-  //     socket.on("rideNearby", handleRideNearby);
-  //     socket.on("startRide", handleStartRide);
-  //     socket.on("endRide", handleEndRide);
-
-  //     return () => {
-  //       socket.off("cancelRide", handleCancelRide);
-  //       socket.off("rideNearby", handleRideNearby);
-  //       socket.off("startRide", handleStartRide);
-  //       socket.off("endRide", handleEndRide);
-  //     };
-  //   }, []);
+  }, [
+    distanceFromSource,
+    distanceFromDestination,
+    handleRideNearby,
+    handleRideStart,
+    handleRideEnd,
+  ]);
 }

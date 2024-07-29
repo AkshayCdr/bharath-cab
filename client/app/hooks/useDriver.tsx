@@ -20,6 +20,7 @@ export default function useDriver() {
   const [userDetails, setUserDetails] = useState({});
   const [online, setOnline] = useState(false);
   const [isRideAccepted, setRideAccepted] = useState(false);
+  const [isModalVisible, setModalVisible] = useState(false);
 
   const toggleOnline = () => {
     setOnline(!online);
