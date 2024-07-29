@@ -85,7 +85,7 @@ export default function FinalPageUser() {
   useEffect(() => {
     if (rideStatus === "started") {
       alert("ride started");
-      setSource(rideLocation);
+      // setSource(rideLocation);
       setRideStated(true);
     }
     if (rideStatus === "ended") {

@@ -11,6 +11,7 @@ import useRoute from "~/hooks/useRoute";
 import { requireAuthCookie } from "~/utils/auth.server";
 
 import Mapcontainer from "~/component/Mapcontainer";
+import useRideEvents from "~/hooks/useRideEvents";
 
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
   const userId = await requireAuthCookie(request);
@@ -36,7 +37,6 @@ export default function FinalPageDriver() {
 
   const role = "driver";
 
-  const navigate = useNavigate();
   const { rideDetails } = useLoaderData<typeof loader>();
 
   const { source, destination, sourceName, destinationName } =
@@ -51,82 +51,84 @@ export default function FinalPageDriver() {
     destination
   );
 
-  useEffect(() => {
-    function handleCancelRide(rideId) {
-      if (rideId !== rideDetails.id) return;
-      navigate("/driver");
-    }
-    socket.on("cancelRide", handleCancelRide);
-    return () => {
-      socket.off("cancelRide", handleCancelRide);
-    };
-  }, []);
+  useRideEvents({ distanceFromDestination, distanceFromSource, rideDetails });
 
-  const isRideNearbySend = useRef(false);
+  // useEffect(() => {
+  //   function handleCancelRide(rideId) {
+  //     if (rideId !== rideDetails.id) return;
+  //     navigate("/driver");
+  //   }
+  //   socket.on("cancelRide", handleCancelRide);
+  //   return () => {
+  //     socket.off("cancelRide", handleCancelRide);
+  //   };
+  // }, []);
 
-  useEffect(() => {
-    function handleRideNearby() {
-      console.log("ride nearby inside driver page", distanceFromSource);
-      socket.emit("rideNearby", rideDetails);
-    }
+  // const isRideNearbySend = useRef(false);
 
-    if (isRideNearbySend.current) return;
+  // useEffect(() => {
+  //   function handleRideNearby() {
+  //     console.log("ride nearby inside driver page", distanceFromSource);
+  //     socket.emit("rideNearby", rideDetails);
+  //   }
 
-    const isRideNearby = distanceFromSource > 1 && distanceFromSource < 3;
-    if (isRideNearby) {
-      isRideNearbySend.current = true;
-      handleRideNearby();
-    }
+  //   if (isRideNearbySend.current) return;
 
-    return () => {
-      socket.off("rideNearby", handleRideNearby);
-    };
-  }, [distanceFromSource, rideDetails]);
+  //   const isRideNearby = distanceFromSource > 1 && distanceFromSource < 3;
+  //   if (isRideNearby) {
+  //     isRideNearbySend.current = true;
+  //     handleRideNearby();
+  //   }
 
-  const isRideStart = useRef(false);
+  //   return () => {
+  //     socket.off("rideNearby", handleRideNearby);
+  //   };
+  // }, [distanceFromSource, rideDetails]);
 
-  useEffect(() => {
-    function handleRideStart() {
-      setStartRide(true);
-      console.log("sending start ride ");
-      socket.emit("startRide", rideDetails);
-    }
+  // const isRideStart = useRef(false);
 
-    if (isRideStart.current) return;
+  // useEffect(() => {
+  //   function handleRideStart() {
+  //     setStartRide(true);
+  //     console.log("sending start ride ");
+  //     socket.emit("startRide", rideDetails);
+  //   }
 
-    const isRideStarted = distanceFromSource === 0;
-    if (isRideStarted) {
-      isRideStart.current = true;
-      handleRideStart();
-    }
-    return () => {
-      socket.off("startRide", handleRideStart);
-    };
-  }, [distanceFromSource, rideDetails]);
+  //   if (isRideStart.current) return;
 
-  const isRideEnd = useRef(false);
+  //   const isRideStarted = distanceFromSource === 0;
+  //   if (isRideStarted) {
+  //     isRideStart.current = true;
+  //     handleRideStart();
+  //   }
+  //   return () => {
+  //     socket.off("startRide", handleRideStart);
+  //   };
+  // }, [distanceFromSource, rideDetails]);
 
-  useEffect(() => {
-    function handleRideEnd() {
-      console.log("ride ended ");
-      setEndRide(true);
-      socket.emit("endRide", rideDetails);
-      socket.disconnect();
-      navigate("/driver");
-    }
+  // const isRideEnd = useRef(false);
 
-    if (isRideEnd.current) return;
+  // useEffect(() => {
+  //   function handleRideEnd() {
+  //     console.log("ride ended ");
+  //     setEndRide(true);
+  //     socket.emit("endRide", rideDetails);
+  //     socket.disconnect();
+  //     navigate("/driver");
+  //   }
 
-    const isRideEnded = distanceFromDestination === 0;
-    if (isRideEnded) {
-      isRideEnd.current = true;
-      handleRideEnd();
-    }
+  //   if (isRideEnd.current) return;
 
-    return () => {
-      socket.off("endRide", handleRideEnd);
-    };
-  }, [distanceFromDestination, navigate, rideDetails]);
+  //   const isRideEnded = distanceFromDestination === 0;
+  //   if (isRideEnded) {
+  //     isRideEnd.current = true;
+  //     handleRideEnd();
+  //   }
+
+  //   return () => {
+  //     socket.off("endRide", handleRideEnd);
+  //   };
+  // }, [distanceFromDestination, navigate, rideDetails]);
 
   return (
     <div className="flex flex-row m-5 p-3">
