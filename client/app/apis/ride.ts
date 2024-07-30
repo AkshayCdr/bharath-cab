@@ -66,6 +66,7 @@ async function getRideAndUser(rideId: string) {
 }
 
 async function requestForRide(Id) {
+  console.log("requesting for ride");
   const response = await fetch(`http://localhost:3000/ride/${Id}`, {
     method: "PATCH",
     headers: { "Content-Type": "application/json" },

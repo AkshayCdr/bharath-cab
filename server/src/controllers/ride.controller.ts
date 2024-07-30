@@ -116,6 +116,8 @@ export async function requestForRide(
 
     const { status } = req.body;
 
+    console.log("inside controller requesting for ride ");
+
     const rideDetails = await rideServices.getRideAndUser(id);
     console.log("ride Details user ride", rideDetails);
 

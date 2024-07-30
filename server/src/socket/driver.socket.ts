@@ -75,9 +75,9 @@ async function updateLocation(socket: {
 function rideNearby(socket: {
   on: (arg0: string, arg1: (rideDetails: any) => void) => void;
 }) {
-  socket.on("rideNearby", (rideDetails) => {
+  socket.on("rideNearby", async (rideDetails) => {
     const { user_id, id } = rideDetails;
-    rideServices.updateStatus(id, "started");
+    await rideServices.updateStatus(id, "started");
     clientSock.rideNearby(user_id, id);
   });
 }
@@ -85,9 +85,9 @@ function rideNearby(socket: {
 function startRide(socket: {
   on: (arg0: string, arg1: (rideDetails: any) => void) => void;
 }) {
-  socket.on("startRide", (rideDetails) => {
+  socket.on("startRide", async (rideDetails) => {
     const { user_id, id } = rideDetails;
-    rideServices.updateStatus(id, "onride");
+    await rideServices.updateStatus(id, "onride");
     clientSock.startRide(user_id, id);
   });
 }
@@ -95,9 +95,9 @@ function startRide(socket: {
 function endRide(socket: {
   on: (arg0: string, arg1: (rideDetails: any) => void) => void;
 }) {
-  socket.on("endRide", (rideDetails) => {
+  socket.on("endRide", async (rideDetails) => {
     const { user_id, id } = rideDetails;
-    rideServices.updateStatus(id, "ride_ended");
+    await rideServices.updateStatus(id, "ride_ended");
     clientSock.endRide(user_id, id);
   });
 }
@@ -105,7 +105,7 @@ function endRide(socket: {
 async function requestForRide(rideDetails: Ride & User) {
   //send status to request for ride
   console.log("chaning status with id ", rideDetails.id);
-  rideServices.updateStatus(rideDetails.id, "requested");
+  await rideServices.updateStatus(rideDetails.id, "requested");
   emitEventToAllDriver("rideRequest", rideDetails);
 }
 
@@ -115,10 +115,8 @@ function cancelRide(rideId: string) {
 }
 
 function emitEventToAllDriver(eventName: string, data: any) {
-  if (Object.keys(driverSocket).length > 0) {
-    for (let driverId in driverSocket) {
-      emitEventToDriver(eventName, driverId, data);
-    }
+  for (let driverId in driverSocket) {
+    emitEventToDriver(eventName, driverId, data);
   }
 }
 
