@@ -74,7 +74,7 @@ export default function Map({
       )}
       {route.length > 0 && (
         <>
-          <Polyline positions={route} color="blue" />
+          <Polyline positions={route} color="blue" weight={5} />
           {midpoint && (
             <Marker position={midpoint} icon={Icon.distance}>
               <Popup>Distance: {distance.toFixed(2)} km</Popup>

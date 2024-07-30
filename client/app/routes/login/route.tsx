@@ -5,7 +5,7 @@ import LoginInput from "../../component/LoginInput";
 import styles from "~/styles/login.css?url";
 import { validate } from "./validation.server";
 
-import { authCookie, getHeader } from "~/utils/auth.server";
+import { authCookie, parse } from "~/utils/auth.server";
 
 export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
@@ -31,8 +31,10 @@ export async function action({ request }: ActionFunctionArgs) {
 
   const cookieHeader = response.headers.get("set-cookie");
 
-  const accountType = getHeader(cookieHeader, "accountType");
-  const accountId = getHeader(cookieHeader, "accountId");
+  // console.log(cookieHeader);
+
+  const accountType = parse(cookieHeader, "accountType");
+  const accountId = parse(cookieHeader, "accountId");
 
   const isUser = accountType === "user";
   const isDriver = accountType === "driver";
@@ -40,7 +42,7 @@ export async function action({ request }: ActionFunctionArgs) {
   if (isUser)
     return redirect(`/user`, {
       headers: {
-        "Set-Cookie": await authCookie.serialize(accountId),
+        "Set-Cookie": cookieHeader,
       },
     });
   if (isDriver)

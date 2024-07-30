@@ -1,7 +1,7 @@
 import { createCookie } from "@remix-run/node";
 import { redirect } from "@remix-run/react";
 
-export const getHeader = (header: string, type: string) => {
+export const parse = (header: string, type: string) => {
   if (!header) return null;
   return header
     .split(",")

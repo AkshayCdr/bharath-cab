@@ -14,7 +14,7 @@ import { user } from "~/apis/user";
 import styles from "~/styles/user.css?url";
 
 import useMapDetails from "~/hooks/useMapDetails";
-import { requireAuthCookie } from "~/utils/auth.server";
+import { parse, requireAuthCookie } from "~/utils/auth.server";
 
 import { rideCookie } from "~/utils/rideCookie.server";
 
@@ -40,7 +40,9 @@ export type Coordinates = {
 };
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  const userId = await requireAuthCookie(request);
+  const cookies = request.headers.get("cookie");
+
+  const userId = parse(cookies, "accountId");
 
   const userData = await user.getDetails(userId);
 

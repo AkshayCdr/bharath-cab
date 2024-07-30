@@ -7,7 +7,6 @@ import type {
 import styles from "../styles/index.css?url";
 
 import InputPrice from "~/component/InputPrice";
-import { isLoggedIn } from "~/utils/auth.server";
 
 export const meta: MetaFunction = () => {
   return [
