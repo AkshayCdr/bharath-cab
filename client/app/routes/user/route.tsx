@@ -19,6 +19,8 @@ import { requireAuthCookie } from "~/utils/auth.server";
 import { rideCookie } from "~/utils/rideCookie.server";
 
 import Mapcontainer from "~/component/Mapcontainer";
+import { useAuth } from "~/context/authContext";
+import { useEffect } from "react";
 
 export interface User {
   account_id: string;
@@ -105,6 +107,19 @@ export async function action({ request }: ActionFunctionArgs) {
 
 export default function User() {
   const { userData } = useLoaderData<typeof loader>();
+
+  const { dispatch } = useAuth();
+
+  useEffect(() => {
+    dispatch({
+      type: "account/login",
+      payload: {
+        accountId: userData.account_id,
+        accountName: userData.name,
+      },
+    });
+  }, [dispatch, userData.account_id, userData.name]);
+
   const {
     source,
     destination,

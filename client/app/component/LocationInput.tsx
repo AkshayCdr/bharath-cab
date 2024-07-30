@@ -10,7 +10,7 @@ export default function LocationInput({
   const data = useActionData();
   return (
     <Form method="POST" id="location-form" className="m-10 text-black">
-      <p className="">
+      <div className="">
         <input type="hidden" name="userId" value={userId} />
         <input type="text" name="source" id="" value={source} hidden />
         <input
@@ -42,15 +42,15 @@ export default function LocationInput({
             required
           />
         </div>
-      </p>
-      <p className="flex flex-col items-center">
+      </div>
+      <div className="flex flex-col items-center">
         <button
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-48 "
           type="submit"
         >
           submit
         </button>
-      </p>
+      </div>
       {data && <span className="text-red-600"> {data.message}</span>}
     </Form>
   );
