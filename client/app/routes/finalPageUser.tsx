@@ -68,33 +68,31 @@ export default function FinalPageUser() {
   const [isEditable, setIsEditable] = useState(false);
   const [isRideStarted, setRideStated] = useState(false);
   const [isRideEnded, setRideEnded] = useState(false);
+
   const { rideDetails } = useLoaderData<typeof loader>();
-  const { source, destination, sourceName, destinationName, setSource } =
+  const { source, destination, sourceName, destinationName } =
     useRideDetails(rideDetails);
 
-  const { rideLocation, rideNearby, rideStatus } = useRideLocation();
+  const { rideLocation, rideStatus } = useRideLocation();
 
   const role = "user";
 
   useEffect(() => {
-    if (rideNearby) {
-      alert("ride Nearby");
+    switch (rideStatus) {
+      case "nearby":
+        alert("ride nearby");
+        break;
+      case "started":
+        alert("ride started");
+        setRideStated(true);
+        break;
+      case "ended": {
+        alert("ride Ended");
+        setRideEnded(true);
+        break;
+      }
     }
-  }, [rideNearby]);
-
-  useEffect(() => {
-    if (rideStatus === "started") {
-      alert("ride started");
-      // setSource(rideLocation);
-      setRideStated(true);
-    }
-    if (rideStatus === "ended") {
-      setRideStated(false);
-      alert("ride ended");
-      setRideEnded(true);
-      //go to rating page
-    }
-  }, [rideLocation, rideStatus, setSource]);
+  }, [rideStatus]);
 
   return (
     <div className="flex flex-row m-5 p-3">
@@ -111,6 +109,7 @@ export default function FinalPageUser() {
         isEditable={isEditable}
         rideLocation={rideLocation}
       ></Mapcontainer>
+
       {isRideStarted && <p>Ride is started change the location</p>}
       {isRideEnded && <Review rideId={rideDetails.id} />}
       {/* <Review rideId={rideDetails.id} /> */}

@@ -10,7 +10,6 @@ const actionTypes = {
 
 const initialState = {
   rideLocation: null,
-  rideNearby: false,
   rideId: null,
   rideStatus: "idle",
 };
@@ -22,21 +21,18 @@ const reducer = (state, action) => {
     case actionTypes.RIDE_NEARBY:
       return {
         ...state,
-        rideNearby: true,
         rideId: action.payload,
         rideStatus: "nearby",
       };
     case actionTypes.END_RIDE:
       return {
         ...state,
-        rideNearby: false,
         rideId: action.payload,
         rideStatus: "ended",
       };
     case actionTypes.START_RIDE:
       return {
         ...state,
-        rideNearby: false,
         rideId: action.payload,
         rideStatus: "started",
       };
@@ -51,10 +47,11 @@ export function handleCancelRide(rideId) {
 
 export default function useRideLocation() {
   const [state, dispatch] = useReducer(reducer, initialState);
+
   useEffect(() => {
     const handleUpdateLocation = (locationData) => {
       const [latitude, longitude] = locationData;
-      console.log(locationData);
+
       dispatch({
         type: actionTypes.UPDATE_LOCATION,
         payload: [latitude, longitude],
@@ -89,9 +86,9 @@ export default function useRideLocation() {
       socket.off("startRide", handleStartRide);
     };
   }, []);
+
   return {
     rideLocation: state.rideLocation,
-    rideNearby: state.rideNearby,
     rideId: state.rideId,
     rideStatus: state.rideStatus,
   };
