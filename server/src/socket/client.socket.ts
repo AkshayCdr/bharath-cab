@@ -3,7 +3,7 @@ import { rideServices } from "../services/ride.services";
 import { ClientSocket } from "../types/clientSocket";
 import { driverSock } from "./driver.socket";
 
-export const clientSocket: ClientSocket = {};
+const clientSocket: ClientSocket = {};
 
 async function registerClientSocket(socket: {
   on: (arg0: string, arg1: (clientID: string) => void) => void;
@@ -57,6 +57,20 @@ async function cancelRide(socket: {
   });
 }
 
+function isClientExist(socket: any) {
+  return Object.values(clientSocket).includes(socket);
+}
+
+function deleteClient(socket: any) {
+  for (let clientId in clientSocket) {
+    if (clientSocket[clientId] === socket) {
+      console.log(`client with ${clientId} disconnected`);
+      delete clientSocket[clientId];
+      break;
+    }
+  }
+}
+
 export const clientSock = {
   registerClientSocket,
   rideAccepted,
@@ -65,4 +79,6 @@ export const clientSock = {
   endRide,
   startRide,
   cancelRide,
+  isClientExist,
+  deleteClient,
 };

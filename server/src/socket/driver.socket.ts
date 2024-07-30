@@ -1,4 +1,3 @@
-import { rideDetails } from "../controllers/ride.controller";
 import { Ride } from "../dtos/ride.dto";
 import { User } from "../dtos/user.dto";
 import { driver } from "../services/driver.services";
@@ -6,7 +5,7 @@ import { rideServices } from "../services/ride.services";
 import { DriverSocket } from "../types/driverSocket";
 import { clientSock } from "./client.socket";
 
-export const driverSocket: DriverSocket = {};
+const driverSocket: DriverSocket = {};
 
 function registerDriverSocket(socket: {
   on: (arg0: string, arg1: (driverID: string) => void) => void;
@@ -126,6 +125,20 @@ function emitEventToDriver(eventName: string, driverId: string, data: any) {
   }
 }
 
+function isDriverExist(socket: any) {
+  return Object.values(driverSocket).includes(socket);
+}
+
+function deleteClient(socket: any) {
+  for (let driverId in driverSocket) {
+    if (driverSocket[driverId] === socket) {
+      console.log(`driver with ${driverId} disconnected`);
+      delete driverSocket[driverId];
+      break;
+    }
+  }
+}
+
 export const driverSock = {
   registerDriverSocket,
   setOffline,
@@ -136,4 +149,6 @@ export const driverSock = {
   startRide,
   endRide,
   cancelRide,
+  isDriverExist,
+  deleteClient,
 };

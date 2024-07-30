@@ -100,13 +100,6 @@ export async function getRideAndUser(req: Request<Id>, res: Response) {
   }
 }
 
-export async function rideDetails(req: Request, res: Response) {
-  try {
-  } catch (error) {
-    res.status(500).send({ message: "Error setting ride " });
-  }
-}
-
 export async function requestForRide(
   req: Request<Id, {}, Ride>,
   res: Response

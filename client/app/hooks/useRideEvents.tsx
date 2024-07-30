@@ -1,5 +1,5 @@
 import { useNavigate } from "@remix-run/react";
-import { useCallback, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { socket } from "~/socket/websocket";
 
 export default function useRideEvents({

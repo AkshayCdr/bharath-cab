@@ -2,11 +2,11 @@ import { LoaderFunctionArgs, json } from "@remix-run/node";
 import { useLoaderData, useNavigate } from "@remix-run/react";
 
 import { ride } from "~/apis/ride";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import useLocation from "~/hooks/useLocation";
 import useRideDetails, { RideDetails } from "~/hooks/useRideDetails";
 import Details from "../component/Details";
-import { socket } from "~/socket/websocket";
+
 import useRoute from "~/hooks/useRoute";
 import { requireAuthCookie } from "~/utils/auth.server";
 

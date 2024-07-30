@@ -1,6 +1,6 @@
 import { Server, Socket } from "socket.io";
-import { driverSock, driverSocket } from "./driver.socket";
-import { clientSock, clientSocket } from "./client.socket";
+import { driverSock } from "./driver.socket";
+import { clientSock } from "./client.socket";
 import HTTPServer from "http";
 import { DefaultEventsMap } from "socket.io/dist/typed-events";
 import { parse } from "cookie";
@@ -56,45 +56,22 @@ function handleDisconnection(
   socket: Socket<DefaultEventsMap, DefaultEventsMap, DefaultEventsMap, any>
 ) {
   socket.on("disconnect", () => {
-    if (
-      !(
-        Object.values(driverSocket).includes(socket) ||
-        Object.values(clientSocket).includes(socket)
-      )
-    ) {
+    const isRegistered =
+      driverSock.isDriverExist(socket) || clientSock.isClientExist(socket);
+
+    if (!isRegistered) {
       console.log("disconnected");
       return;
     }
-    if (Object.values(clientSocket).includes(socket)) {
-      for (let clientId in clientSocket) {
-        if (clientSocket[clientId] === socket) {
-          console.log(`client with ${clientId} disconnected`);
-          delete clientSocket[clientId];
-          break;
-        }
-      }
+
+    if (clientSock.isClientExist(socket)) {
+      clientSock.deleteClient(socket);
+      return;
     }
 
-    if (Object.values(driverSocket).includes(socket)) {
-      for (let driverId in driverSocket) {
-        if (driverSocket[driverId] === socket) {
-          console.log(`driver with ${driverId} disconnected`);
-          delete driverSocket[driverId];
-          break;
-        }
-      }
+    if (driverSock.isDriverExist(socket)) {
+      driverSock.deleteClient(socket);
+      return;
     }
   });
 }
-
-// function removeSocket(sockets, socket, role) {
-//   if (Object.values(sockets).includes(socket)) {
-//     for (let id in sockets) {
-//       if (sockets[id] === socket) {
-//         console.log(`${role} with ${id} disconnected`);
-//         delete sockets[id];
-//         break;
-//       }
-//     }
-//   }
-// }

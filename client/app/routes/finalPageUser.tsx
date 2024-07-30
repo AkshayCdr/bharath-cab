@@ -70,6 +70,7 @@ export default function FinalPageUser() {
   const [isRideEnded, setRideEnded] = useState(false);
 
   const { rideDetails } = useLoaderData<typeof loader>();
+
   const { source, destination, sourceName, destinationName } =
     useRideDetails(rideDetails);
 
