@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function useMapDetails() {
   const [source, setSource] = useState("");
@@ -6,6 +6,11 @@ export default function useMapDetails() {
   const [sourceName, setSourceName] = useState("");
   const [destinationName, setDestinationName] = useState("");
   const [isEditable, setIsEditable] = useState(true);
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   return {
     source,
@@ -17,5 +22,7 @@ export default function useMapDetails() {
     destinationName,
     setDestinationName,
     isEditable,
+    isMounted,
+    setIsMounted,
   };
 }

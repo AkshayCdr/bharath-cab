@@ -115,7 +115,12 @@ export default function User() {
     destinationName,
     setDestinationName,
     isEditable,
+    isMounted,
   } = useMapDetails();
+
+  if (!isMounted) {
+    return <h1>Loading ...</h1>;
+  }
 
   return (
     <div className="flex flex-row bg-gray-950 text-white min-h-screen">

@@ -122,7 +122,7 @@ export default function Ride() {
     setDestinationName,
   } = useRideDetails(rideDetails);
 
-  const { isRideAccepted } = useRideSocket({
+  useRideSocket({
     rideDetails,
     isRideCancelled,
   });

@@ -3,16 +3,12 @@ import { useEffect, useState } from "react";
 import { socket } from "~/socket/websocket";
 
 export default function useRideSocket({ rideDetails, isRideCancelled }) {
-  const [isRideAccepted, setRideStatus] = useState(false);
-
   const navigate = useNavigate();
 
   useEffect(() => {
     const handleRideAccepted = (driverDetails) => {
       // if (isRideCancelled) navigate(-1);
       console.log("ride accepted by driver ", driverDetails);
-      setRideStatus(true);
-
       navigate(`/finalPageUser`);
     };
 
@@ -24,6 +20,4 @@ export default function useRideSocket({ rideDetails, isRideCancelled }) {
       socket.off("rideAccepted", handleRideAccepted);
     };
   }, []);
-
-  return { isRideAccepted };
 }
