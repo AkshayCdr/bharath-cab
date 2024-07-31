@@ -1,5 +1,5 @@
 /* eslint-disable import/no-unresolved */
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { redirect, useActionData, useLoaderData } from "@remix-run/react";
 import {
   ActionFunctionArgs,
@@ -9,8 +9,6 @@ import {
 } from "@remix-run/node";
 import { ride } from "~/apis/ride";
 import RideDetails from "~/component/RideDetails";
-
-import DriverDetails from "~/component/DriverDetails";
 
 import styles from "../styles/ride.css?url";
 import useRideDetails from "~/hooks/useRideDetails";
@@ -37,6 +35,10 @@ type Coordinates = {
 
 export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
+
+  console.log("cookies from ride ");
+
+  console.log(request.headers.get("cookie"));
 
   const intent = formData.get("intent");
 
@@ -106,6 +108,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 export default function Ride() {
   const [isEditable, setIsEditable] = useState(true);
   const [isRideCancelled, setRideCancelled] = useState(false);
+  const [isMounted, setMounted] = useState(false);
 
   const message = useActionData<typeof action>();
 
@@ -126,6 +129,14 @@ export default function Ride() {
     rideDetails,
     isRideCancelled,
   });
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!isMounted) {
+    return <h1>Loading ....</h1>;
+  }
 
   return (
     <div className="flex flex-row bg-gray-950 text-white min-h-screen">

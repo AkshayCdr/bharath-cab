@@ -83,10 +83,12 @@ export default function FinalPageUser() {
       case "nearby":
         alert("ride nearby");
         break;
+
       case "started":
         alert("ride started");
         setRideStated(true);
         break;
+
       case "ended": {
         alert("ride Ended");
         setRideEnded(true);

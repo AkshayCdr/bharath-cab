@@ -44,6 +44,10 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
   const userId = parse(cookies, "accountId");
 
+  if (!userId) {
+    throw redirect("/login");
+  }
+
   const userData = await user.getDetails(userId);
 
   if (!userData) {
@@ -93,8 +97,6 @@ export async function action({ request }: ActionFunctionArgs) {
     source,
     destination,
   };
-
-  // console.log();
 
   const rideId = await ride.setLocation(
     rideDetails,
