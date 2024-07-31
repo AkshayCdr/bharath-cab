@@ -14,6 +14,14 @@ export async function insertIntoRide(
 
     const distance = 10;
 
+    console.log("cookies inside controller ");
+    const cookies = req.headers.cookie;
+    console.log(cookies);
+
+    const updatedCookie = Object.assign(req.cookies);
+
+    console.log(updatedCookie);
+
     const price = 10;
 
     const newRide = {

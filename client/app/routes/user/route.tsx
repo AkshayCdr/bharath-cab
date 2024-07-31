@@ -94,7 +94,12 @@ export async function action({ request }: ActionFunctionArgs) {
     destination,
   };
 
-  const rideId = await ride.setLocation(rideDetails);
+  // console.log();
+
+  const rideId = await ride.setLocation(
+    rideDetails,
+    request.headers.get("cookie")
+  );
 
   if (!rideId) {
     throw new Response("cannot get ride Id ");

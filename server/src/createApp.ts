@@ -7,9 +7,9 @@ import cookieParser from "cookie-parser";
 
 export function createApp() {
   const app = express();
-
-  app.use(cookieParser());
   app.use(express.json());
+  app.use(cookieParser());
+
   app.use("/user", UserRouter);
   app.use("/ride", rideRouter);
   app.use("/session", sessionRoute);

@@ -26,8 +26,8 @@ export function createSocket(
   // });
 
   io.on("connect", (socket) => {
-    const cookies = parse(socket.handshake.headers.cookie || "");
-    console.log(cookies);
+    // const cookies = parse(socket.handshake.headers.cookie || "");
+    // console.log(cookies);
     console.log("connected");
     console.log(socket.id);
 

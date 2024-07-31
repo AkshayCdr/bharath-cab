@@ -1,10 +1,11 @@
 // const addr = window.location.hostname + ":3000";
 
-async function setLocation(locationData) {
+async function setLocation(locationData, cookie) {
   const response = await fetch("http://localhost:3000/ride", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      Cookie: cookie,
     },
     body: JSON.stringify(locationData),
     credentials: "include",

@@ -9,8 +9,11 @@ import {
   cancelRide,
   getRideAndUser,
 } from "../controllers/ride.controller";
+import { validateSession } from "../utils/account.auth";
 
 const route = Router();
+
+route.use(validateSession);
 
 route.post("/", insertIntoRide);
 
