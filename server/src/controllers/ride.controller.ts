@@ -14,14 +14,6 @@ export async function insertIntoRide(
 
     const distance = 10;
 
-    console.log("cookies inside controller ");
-    const cookies = req.headers.cookie;
-    console.log(cookies);
-
-    const updatedCookie = Object.assign(req.cookies);
-
-    console.log(updatedCookie);
-
     const price = 10;
 
     const newRide = {
@@ -42,11 +34,6 @@ export async function insertIntoRide(
 export async function getRide(req: Request<Id>, res: Response) {
   try {
     const { id } = req.params;
-
-    console.log("inside getRide");
-
-    console.log(req.headers.cookie);
-    console.log(req.cookies);
 
     const rideDetails = await rideServices.read(id);
     res.status(200).send(JSON.stringify(rideDetails));
