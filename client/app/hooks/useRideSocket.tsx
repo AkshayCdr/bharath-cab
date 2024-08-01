@@ -1,5 +1,5 @@
 import { useNavigate } from "@remix-run/react";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { socket } from "~/socket/websocket";
 
 export default function useRideSocket({ rideDetails, isRideCancelled }) {

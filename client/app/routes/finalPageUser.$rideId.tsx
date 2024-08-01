@@ -9,9 +9,8 @@ import { useEffect, useState } from "react";
 
 import useRideDetails, { RideDetails } from "~/hooks/useRideDetails";
 import useRideLocation, { handleCancelRide } from "~/hooks/useRideLocation";
-import Details from "../component/Details";
-import Review from "../component/Review";
-import { requireRideCookie } from "~/utils/rideCookie.server";
+import Details from "~/component/Details";
+import Review from "~/component/Review";
 
 import Mapcontainer from "~/component/Mapcontainer";
 import { useLoaderData } from "@remix-run/react";
@@ -33,7 +32,9 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
 
-  const intent = formData.get("intent");
+  const { intent } = Object.fromEntries(formData);
+
+  // const intent = formData.get("intent");
 
   const isReview = intent === "review";
   const isCancel = intent === "cancel";
@@ -58,8 +59,7 @@ export async function action({ request }: ActionFunctionArgs) {
   }
 
   if (isCancel) {
-    // const rideId = formData.get("rideId");
-    const rideId = await requireRideCookie(request);
+    const rideId = formData.get("rideId");
 
     handleCancelRide(rideId);
     return redirect(`/ride`);
