@@ -54,7 +54,7 @@ export async function action({ request }: ActionFunctionArgs) {
   if (isDriver)
     return redirect(`/driver`, {
       headers: {
-        "Set-Cookie": await authCookie.serialize(accountId),
+        "Set-Cookie": cookieHeader,
       },
     });
   return redirect("/login");

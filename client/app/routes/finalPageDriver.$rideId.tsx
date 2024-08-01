@@ -14,8 +14,6 @@ import Mapcontainer from "~/component/Mapcontainer";
 import useRideEvents from "~/hooks/useRideEvents";
 
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
-  const userId = await requireAuthCookie(request);
-
   const { rideId } = params;
 
   if (!rideId) {
@@ -79,8 +77,8 @@ export default function FinalPageDriver() {
         rideLocation={currentLocation}
       ></Mapcontainer>
 
-      {isRideStarted && <p>ride started</p>}
-      {isRideEnded && <p>ride ended</p>}
+      {/* {isRideStarted && <p>ride started</p>}
+      {isRideEnded && <p>ride ended</p>} */}
     </div>
   );
 }

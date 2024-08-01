@@ -19,7 +19,6 @@ export default function useDriver() {
 
   const [userDetails, setUserDetails] = useState(null);
   const [online, setOnline] = useState(false);
-  const [isRideAccepted, setRideAccepted] = useState(false);
 
   const toggleOnline = () => {
     setOnline(!online);
@@ -30,7 +29,5 @@ export default function useDriver() {
     setUserDetails,
     online,
     toggleOnline,
-    isRideAccepted,
-    setRideAccepted,
   };
 }

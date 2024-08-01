@@ -31,14 +31,8 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 };
 
 export default function Driver() {
-  const {
-    driverData,
-    userDetails,
-    setUserDetails,
-    online,
-    toggleOnline,
-    setRideAccepted,
-  } = useDriver();
+  const { driverData, userDetails, setUserDetails, online, toggleOnline } =
+    useDriver();
 
   const { registerDriver, setOffline, driverAccept } = useDriverSocket(
     driverData.account_id,
@@ -58,8 +52,8 @@ export default function Driver() {
   const acceptRide = (e) => {
     e.preventDefault();
     driverAccept(userDetails.user_id, userDetails.id);
-    setRideAccepted(true);
   };
+
   return (
     <div className="driver-page">
       <Mapcontainer></Mapcontainer>
