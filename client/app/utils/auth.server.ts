@@ -1,4 +1,4 @@
-import { createCookie } from "@remix-run/node";
+import { createCookie, LoaderFunctionArgs } from "@remix-run/node";
 import { redirect } from "@remix-run/react";
 
 export const parse = (header: string, type: string) => {
@@ -75,4 +75,20 @@ export async function isLoggedIn(request: Request) {
   console.log(accountId);
   // if(accountId) return redirect('/')
   // return accountId;
+}
+
+export function getCookies(request: Request) {
+  return request.headers.get("Cookie");
+}
+
+export function isAuthenticated(request: Request) {
+  return getCookies(request);
+}
+
+export async function authLoader({ request }: LoaderFunctionArgs) {
+  if (!isAuthenticated(request)) return null;
+
+  const accountType = parse(getCookies(request), "accountType");
+
+  return redirect(`/${accountType}`);
 }

@@ -7,6 +7,7 @@ import type {
 import styles from "../styles/index.css?url";
 
 import InputPrice from "~/component/InputPrice";
+import { authLoader } from "~/utils/auth.server";
 
 export const meta: MetaFunction = () => {
   return [
@@ -15,10 +16,7 @@ export const meta: MetaFunction = () => {
   ];
 };
 
-// export const loader = async ({ request }: LoaderFunctionArgs) => {
-//   await isLoggedIn(request);
-//   return null;
-// };
+export const loader = authLoader;
 
 export default function Index() {
   return (
