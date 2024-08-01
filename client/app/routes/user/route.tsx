@@ -107,7 +107,7 @@ export async function action({ request }: ActionFunctionArgs) {
     throw new Response("cannot get ride Id ");
   }
 
-  return redirect(`/ride`, {
+  return redirect(`/ride/${rideId}`, {
     headers: {
       "Set-Cookie": await rideCookie.serialize(rideId),
     },

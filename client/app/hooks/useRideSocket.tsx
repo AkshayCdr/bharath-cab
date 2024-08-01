@@ -5,11 +5,12 @@ import { socket } from "~/socket/websocket";
 export default function useRideSocket({ rideDetails, isRideCancelled }) {
   const navigate = useNavigate();
 
+  console.log(rideDetails);
   useEffect(() => {
     const handleRideAccepted = (driverDetails) => {
       // if (isRideCancelled) navigate(-1);
       console.log("ride accepted by driver ", driverDetails);
-      navigate(`/finalPageUser`);
+      navigate(`/finalPageUser/${rideDetails.id}`);
     };
 
     socket.emit("registerClient", rideDetails.user_id);

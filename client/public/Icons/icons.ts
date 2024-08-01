@@ -1,7 +1,7 @@
 import L from "leaflet";
 
 const square = new L.Icon({
-  iconUrl: "home.jpg",
+  iconUrl: "/home.jpg",
   iconAnchor: null,
   popupAnchor: null,
   shadowUrl: null,
@@ -11,7 +11,7 @@ const square = new L.Icon({
 });
 
 const car = new L.Icon({
-  iconUrl: "car.svg",
+  iconUrl: "/public/car.svg",
 
   shadowUrl: null,
   shadowSize: null,
@@ -20,7 +20,7 @@ const car = new L.Icon({
 });
 
 const source = new L.Icon({
-  iconUrl: "source.svg",
+  iconUrl: "/public/source.svg",
 
   shadowUrl: null,
   shadowSize: null,
@@ -29,7 +29,7 @@ const source = new L.Icon({
 });
 
 const destination = new L.Icon({
-  iconUrl: "destination.svg",
+  iconUrl: "/public/destination.svg",
 
   shadowUrl: null,
   shadowSize: null,
@@ -38,7 +38,7 @@ const destination = new L.Icon({
 });
 
 const distance = new L.Icon({
-  iconUrl: "distance.svg",
+  iconUrl: "/public/distance.svg",
 
   shadowUrl: null,
   shadowSize: null,

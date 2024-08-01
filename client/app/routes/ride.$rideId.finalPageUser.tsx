@@ -16,8 +16,10 @@ import { requireRideCookie } from "~/utils/rideCookie.server";
 import Mapcontainer from "~/component/Mapcontainer";
 import { useLoaderData } from "@remix-run/react";
 
-export const loader = async ({ request }: LoaderFunctionArgs) => {
-  const rideId = await requireRideCookie(request);
+export const loader = async ({ params, request }: LoaderFunctionArgs) => {
+  // const rideId = await requireRideCookie(request);
+
+  const { rideId } = params;
 
   const rideDetails: RideDetails = await ride.getRideAndDriver(rideId);
 

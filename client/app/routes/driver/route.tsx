@@ -7,12 +7,16 @@ import Modal from "~/component/Modal";
 import styles from "~/styles/driver.css?url";
 import useDriver from "~/hooks/useDriver";
 import useDriverSocket from "~/hooks/useDriverSocket";
-import { requireAuthCookie } from "~/utils/auth.server";
+import { parse, requireAuthCookie } from "~/utils/auth.server";
 
 import Mapcontainer from "~/component/Mapcontainer";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  const driverId = await requireAuthCookie(request);
+  // const driverId = await requireAuthCookie(request);
+
+  const cookies = request.headers.get("cookie");
+
+  const driverId = parse(cookies, "accountId");
 
   if (!driverId) {
     throw new Response("Not Found", { status: 404 });

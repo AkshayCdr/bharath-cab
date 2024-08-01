@@ -23,8 +23,11 @@ async function setLocation(locationData, cookie) {
   return rideId;
 }
 
-async function getRideDetails(rideId: string) {
+async function getRideDetails(rideId: string, cookie) {
   const response = await fetch(`http://localhost:3000/ride/${rideId}`, {
+    headers: {
+      Cookie: cookie,
+    },
     method: "GET",
     credentials: "include",
   });
@@ -66,11 +69,11 @@ async function getRideAndUser(rideId: string) {
   return data;
 }
 
-async function requestForRide(Id) {
+async function requestForRide(Id, cookie) {
   console.log("requesting for ride");
   const response = await fetch(`http://localhost:3000/ride/${Id}`, {
     method: "PATCH",
-    headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json", Cookie: cookie },
     body: JSON.stringify({ status: "request_ride" }),
     credentials: "include",
   });

@@ -33,6 +33,28 @@ type Coordinates = {
   y?: number;
 };
 
+export const loader = async ({ params, request }: LoaderFunctionArgs) => {
+  // const rideId = await requireRideCookie(request);
+
+  const cookies = request.headers.get("cookie");
+
+  console.log("inside ride loader");
+
+  const { rideId } = params;
+
+  console.log(rideId);
+
+  const rideDetails: Ride = await ride.getRideDetails(rideId, cookies);
+
+  console.log(rideDetails);
+
+  if (!rideDetails) {
+    throw new Response("Not Found", { status: 404 });
+  }
+
+  return json({ rideDetails });
+};
+
 export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
 
@@ -48,8 +70,15 @@ export async function action({ request }: ActionFunctionArgs) {
 
   const rideId = String(await requireRideCookie(request));
 
+  console.log(rideId);
+
   if (isRequestForRide) {
-    const message = await ride.requestForRide(rideId);
+    console.log("inside isrequest for ride");
+    const message = await ride.requestForRide(
+      rideId,
+      request.headers.get("cookie")
+    );
+
     return json({ message });
   }
 
@@ -91,19 +120,8 @@ export async function action({ request }: ActionFunctionArgs) {
     // return json({ message });
     // return redirect("/user");
   }
+  return json({ message: "error" });
 }
-
-export const loader = async ({ request }: LoaderFunctionArgs) => {
-  const rideId = await requireRideCookie(request);
-
-  const rideDetails: Ride = await ride.getRideDetails(rideId);
-
-  if (!rideDetails) {
-    throw new Response("Not Found", { status: 404 });
-  }
-
-  return json({ rideDetails });
-};
 
 export default function Ride() {
   const [isEditable, setIsEditable] = useState(true);
