@@ -9,13 +9,7 @@ import LoginInput from "../../component/LoginInput";
 import styles from "~/styles/login.css?url";
 import { validate } from "./validation.server";
 
-import {
-  authCookie,
-  authLoader,
-  getCookies,
-  isAuthenticated,
-  parse,
-} from "~/utils/auth.server";
+import { authCookie, authLoader, parse } from "~/utils/auth.server";
 
 export const loader = authLoader;
 
