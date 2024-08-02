@@ -1,7 +1,10 @@
-async function get(id: string) {
+async function get(id: string, cookie) {
   const response = await fetch(`http://localhost:3000/driver/${id}`, {
     method: "GET",
     credentials: "include",
+    headers: {
+      Cookie: cookie,
+    },
   });
 
   if (!response.ok) {

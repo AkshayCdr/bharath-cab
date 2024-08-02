@@ -18,7 +18,10 @@ import { useLoaderData } from "@remix-run/react";
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
   const { rideId } = params;
 
-  const rideDetails: RideDetails = await ride.getRideAndDriver(rideId);
+  const rideDetails: RideDetails = await ride.getRideAndDriver(
+    rideId,
+    request.headers.get("cookie")
+  );
 
   if (!rideDetails) {
     throw new Response("Not Found", { status: 404 });
@@ -32,8 +35,6 @@ export async function action({ request }: ActionFunctionArgs) {
 
   const { intent } = Object.fromEntries(formData);
 
-  // const intent = formData.get("intent");
-
   const isReview = intent === "review";
   const isCancel = intent === "cancel";
 
@@ -46,13 +47,18 @@ export async function action({ request }: ActionFunctionArgs) {
 
     if (!rideDetails.rating) {
       const updatedRideDetails = { ...rideDetails, rating: 0 };
-      const message = await ride.setReview(updatedRideDetails);
+      const message = await ride.setReview(
+        updatedRideDetails,
+        request.headers.get("cookies")
+      );
       return message;
     }
 
-    const message = await ride.setReview(rideDetails);
+    const message = await ride.setReview(
+      rideDetails,
+      request.headers.get("cookies")
+    );
 
-    // return message;
     return redirect(`/user`);
   }
 

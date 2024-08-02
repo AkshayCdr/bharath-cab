@@ -40,10 +40,13 @@ async function getRideDetails(rideId: string, cookie) {
   return data;
 }
 
-async function getRideAndDriver(rideId: string) {
+async function getRideAndDriver(rideId: string, cookie) {
   const response = await fetch(`http://localhost:3000/ride/${rideId}/driver`, {
     method: "GET",
     credentials: "include",
+    headers: {
+      Cookie: cookie,
+    },
   });
   if (!response.ok) {
     console.error(response.status, response.statusText);
@@ -54,11 +57,14 @@ async function getRideAndDriver(rideId: string) {
   return data;
 }
 
-async function getRideAndUser(rideId: string) {
+async function getRideAndUser(rideId: string, cookie) {
   console.log("sending request from cline side ");
   const response = await fetch(`http://localhost:3000/ride/${rideId}/user`, {
     method: "GET",
     credentials: "include",
+    headers: {
+      Cookie: cookie,
+    },
   });
   if (!response.ok) {
     console.error(response.status, response.statusText);
@@ -122,12 +128,12 @@ async function cancelRide(rideId, cookie) {
   return message;
 }
 
-async function setReview(rideDetails) {
+async function setReview(rideDetails, cookies) {
   const response = await fetch(
     `http://localhost:3000/ride/${rideDetails.Id}/review`,
     {
       method: "PATCH",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json", Cookies: cookies },
       body: JSON.stringify(rideDetails),
       credentials: "include",
     }

@@ -8,7 +8,6 @@ import useRideDetails, { RideDetails } from "~/hooks/useRideDetails";
 import Details from "../component/Details";
 
 import useRoute from "~/hooks/useRoute";
-import { requireAuthCookie } from "~/utils/auth.server";
 
 import Mapcontainer from "~/component/Mapcontainer";
 import useRideEvents from "~/hooks/useRideEvents";
@@ -19,7 +18,10 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
   if (!rideId) {
     throw new Response("Not Found", { status: 404 });
   }
-  const rideDetails = await ride.getRideAndUser(rideId);
+  const rideDetails = await ride.getRideAndUser(
+    rideId,
+    request.headers.get("cookie")
+  );
 
   if (!rideDetails) {
     throw new Response("Not Found", { status: 404 });
