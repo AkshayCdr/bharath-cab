@@ -29,3 +29,13 @@ export async function addSession(accountId: string): Promise<string> {
     throw new Error("adding session falied");
   }
 }
+export async function deleteSessionFromTable(id: string): Promise<void> {
+  try {
+    const query = `DELETE FROM session WHERE id = $1;`;
+    const values = [id];
+    await (await client).query(query, values);
+  } catch (error) {
+    console.log(error);
+    throw new Error("fetching sesson failed");
+  }
+}

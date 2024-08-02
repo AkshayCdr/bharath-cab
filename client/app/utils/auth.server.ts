@@ -82,7 +82,7 @@ export function getCookies(request: Request) {
 }
 
 export function isAuthenticated(request: Request) {
-  return getCookies(request);
+  return parse(getCookies(request), "sessionId");
 }
 
 export async function authLoader({ request }: LoaderFunctionArgs) {

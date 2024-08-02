@@ -3,6 +3,7 @@ import { Session } from "../dtos/session.dto";
 import { verifyPassword } from "../utils/passwordUtils";
 import { account } from "../services/account.services";
 import { session } from "../services/session.service";
+import { Id } from "../types/id";
 
 export async function insertIntoSession(
   req: Request<{}, {}, Session>,
@@ -44,5 +45,29 @@ export async function insertIntoSession(
   } catch (error) {
     console.error(error);
     res.status(500).send({ message: "Invalid " });
+  }
+}
+
+export async function deleteSession(req: Request, res: Response) {
+  try {
+    console.log("inside delete session");
+
+    const { id } = req.params;
+
+    const options: CookieOptions = {
+      maxAge: 0,
+    };
+
+    res.cookie("sessionId", "", options);
+    res.cookie("accountId", "", options);
+    res.cookie("accountType", "", options);
+
+    await session.deleteSession(id);
+
+    console.log("session delete");
+    res.status(200).send({ message: "logged out" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "error loggin out user" });
   }
 }

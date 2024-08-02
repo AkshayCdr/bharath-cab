@@ -14,7 +14,7 @@ import { user } from "~/apis/user";
 import styles from "~/styles/user.css?url";
 
 import useMapDetails from "~/hooks/useMapDetails";
-import { parse, requireAuthCookie } from "~/utils/auth.server";
+import { parse } from "~/utils/auth.server";
 
 import { rideCookie } from "~/utils/rideCookie.server";
 
@@ -39,24 +39,6 @@ export type Coordinates = {
   latitude?: number;
 };
 
-export const loader = async ({ request }: LoaderFunctionArgs) => {
-  const cookies = request.headers.get("cookie");
-
-  const userId = parse(cookies, "accountId");
-
-  if (!userId) {
-    throw redirect("/login");
-  }
-
-  const userData = await user.getDetails(userId);
-
-  if (!userData) {
-    throw json({ message: "Could not find user details " });
-  }
-
-  return json({ userData });
-};
-
 export function parseCoordinates(input: string) {
   const [latitude, longitude] = input.split(",").map(parseFloat);
   return { latitude, longitude };
@@ -75,6 +57,24 @@ export function formatSourceDestination(
     destination: parseCoordinates(destinationInput),
   };
 }
+
+export const loader = async ({ request }: LoaderFunctionArgs) => {
+  const cookies = request.headers.get("cookie");
+
+  const userId = parse(cookies, "accountId");
+
+  if (!userId) {
+    throw redirect("/login");
+  }
+
+  const userData = await user.getDetails(userId);
+
+  if (!userData) {
+    throw json({ message: "Could not find user details " });
+  }
+
+  return json({ userData });
+};
 
 export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();

@@ -5,7 +5,7 @@ import { loader } from "~/root";
 export default function Navbar() {
   const { state } = useAuth();
 
-  const { userId } = useLoaderData<typeof loader>();
+  const { userId } = useLoaderData<typeof loader>() || {};
   return (
     <nav className="nav h-16 bg-gray-950 text-white p-10 items-center justify-center">
       <ul className="flex flex-row items-center text-lg justify-between ">
