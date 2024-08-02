@@ -4,6 +4,7 @@ import { clientSock } from "./client.socket";
 import HTTPServer from "http";
 import { DefaultEventsMap } from "socket.io/dist/typed-events";
 import { parse } from "cookie";
+import { isSessionExist } from "../model/session.model";
 
 export function createSocket(
   httpServer: HTTPServer.Server<
@@ -19,15 +20,22 @@ export function createSocket(
     },
   });
 
-  // io.use((socket, next) => {
-  //   // Middleware to log cookies
-  //   console.log(`Cookies: ${socket.handshake.headers.cookie}`);
-  //   next();
-  // });
+  io.use(async (socket, next) => {
+    const cookiesHeader = socket.handshake.headers.cookie;
+
+    if (!cookiesHeader) return next(new Error("No cookies found"));
+
+    const cookies = parse(cookiesHeader);
+    const sessionId = cookies.sessionId;
+
+    const isAuthenticated = sessionId && (await isSessionExist(sessionId));
+
+    if (!isAuthenticated) return next(new Error("Invalid"));
+
+    next();
+  });
 
   io.on("connect", (socket) => {
-    // const cookies = parse(socket.handshake.headers.cookie || "");
-    // console.log(cookies);
     console.log("connected");
     console.log(socket.id);
 
@@ -56,22 +64,23 @@ function handleDisconnection(
   socket: Socket<DefaultEventsMap, DefaultEventsMap, DefaultEventsMap, any>
 ) {
   socket.on("disconnect", () => {
-    const isRegistered =
-      driverSock.isDriverExist(socket) || clientSock.isClientExist(socket);
+    console.log("disconnected");
+    // const isRegistered =
+    //   driverSock.isDriverExist(socket) || clientSock.isClientExist(socket);
 
-    if (!isRegistered) {
-      console.log("disconnected");
-      return;
-    }
+    // if (!isRegistered) {
+    //   console.log("disconnected");
+    //   return;
+    // }
 
-    if (clientSock.isClientExist(socket)) {
-      clientSock.deleteClient(socket);
-      return;
-    }
+    // if (clientSock.isClientExist(socket)) {
+    //   clientSock.deleteClient(socket);
+    //   return;
+    // }
 
-    if (driverSock.isDriverExist(socket)) {
-      driverSock.deleteClient(socket);
-      return;
-    }
+    // if (driverSock.isDriverExist(socket)) {
+    //   driverSock.deleteClient(socket);
+    //   return;
+    // }
   });
 }
