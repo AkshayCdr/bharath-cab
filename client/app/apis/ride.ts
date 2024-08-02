@@ -89,10 +89,13 @@ async function requestForRide(Id, cookie) {
   return message;
 }
 
-async function updateRide({ rideId, source, destination }) {
+async function updateRide({ rideId, source, destination }, cookie) {
   const response = await fetch(`http://localhost:3000/ride/${rideId}`, {
     method: "PUT",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      Cookie: cookie,
+    },
     body: JSON.stringify({ source, destination }),
     credentials: "include",
   });
@@ -104,9 +107,12 @@ async function updateRide({ rideId, source, destination }) {
   return message;
 }
 
-async function cancelRide(rideId) {
+async function cancelRide(rideId, cookie) {
   const response = await fetch(`http://localhost:3000/ride/${rideId}/cancel`, {
     method: "PATCH",
+    headers: {
+      Cookie: cookie,
+    },
   });
   if (!response.ok) {
     console.error("failed to cancel ", response.status, response.statusText);

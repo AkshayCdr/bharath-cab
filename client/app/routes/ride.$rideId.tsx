@@ -83,16 +83,22 @@ export async function action({ request }: ActionFunctionArgs) {
 
     const { source, destination } = data;
 
-    const message = await ride.updateRide({
-      rideId,
-      source,
-      destination,
-    });
+    const message = await ride.updateRide(
+      {
+        rideId,
+        source,
+        destination,
+      },
+      request.headers.get("cookie")
+    );
     return json({ message });
   }
 
   if (isCancel) {
-    const message = await ride.cancelRide(rideId);
+    const message = await ride.cancelRide(
+      rideId,
+      request.headers.get("cookie")
+    );
 
     return redirect("/user");
   }
