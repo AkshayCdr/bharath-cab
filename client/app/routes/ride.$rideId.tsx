@@ -34,19 +34,11 @@ type Coordinates = {
 };
 
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
-  // const rideId = await requireRideCookie(request);
-
   const cookies = request.headers.get("cookie");
-
-  console.log("inside ride loader");
 
   const { rideId } = params;
 
-  console.log(rideId);
-
   const rideDetails: Ride = await ride.getRideDetails(rideId, cookies);
-
-  console.log(rideDetails);
 
   if (!rideDetails) {
     throw new Response("Not Found", { status: 404 });
@@ -60,8 +52,6 @@ export async function action({ request }: ActionFunctionArgs) {
 
   console.log("cookies from ride ");
 
-  console.log(request.headers.get("cookie"));
-
   const intent = formData.get("intent");
 
   const isCancel = intent === "cancel";
@@ -70,10 +60,7 @@ export async function action({ request }: ActionFunctionArgs) {
 
   const rideId = String(await requireRideCookie(request));
 
-  console.log(rideId);
-
   if (isRequestForRide) {
-    console.log("inside isrequest for ride");
     const message = await ride.requestForRide(
       rideId,
       request.headers.get("cookie")
@@ -107,18 +94,7 @@ export async function action({ request }: ActionFunctionArgs) {
   if (isCancel) {
     const message = await ride.cancelRide(rideId);
 
-    // const referer = request.headers.get("Referer");
-
-    // // Redirect to the previous page, if the referer header is present
-    // if (referer) {
-    //   return redirect(referer);
-    // }
-
-    // Default redirect if referer is not present
     return redirect("/user");
-    // return Navigate({ to: "/user" });
-    // return json({ message });
-    // return redirect("/user");
   }
   return json({ message: "error" });
 }
@@ -130,7 +106,6 @@ export default function Ride() {
 
   const message = useActionData<typeof action>();
 
-  console.log(message);
   const { rideDetails } = useLoaderData<typeof loader>();
   const {
     source,
