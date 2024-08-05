@@ -1,4 +1,9 @@
-import { LinksFunction, json, type LoaderFunctionArgs } from "@remix-run/node";
+import {
+  LinksFunction,
+  json,
+  redirect,
+  type LoaderFunctionArgs,
+} from "@remix-run/node";
 
 import { driver } from "~/apis/driver";
 
@@ -17,7 +22,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   const driverId = parse(cookies, "accountId");
 
   if (!driverId) {
-    throw new Response("Not Found", { status: 404 });
+    throw redirect("/login");
   }
 
   const driverData = await driver.get(driverId, cookies);

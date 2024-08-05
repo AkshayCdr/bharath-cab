@@ -1,4 +1,4 @@
-import { createCookie, LoaderFunctionArgs } from "@remix-run/node";
+import { LoaderFunctionArgs } from "@remix-run/node";
 import { redirect } from "@remix-run/react";
 
 export const parse = (header: string, type: string) => {
@@ -38,43 +38,6 @@ export function requireSession(request) {
   if (!accountId) {
     throw redirect("/login");
   }
-}
-
-const secret = "default";
-
-export const authCookie = createCookie("auth", {
-  path: "/",
-  sameSite: "lax",
-  // httpOnly: true,
-  // secure: true,
-  secrets: [secret],
-  // expires: new Date(Date.now() + 60_000),
-  maxAge: 86400,
-});
-
-export async function requireAuthCookie(request: Request) {
-  const cookieString = request.headers.get("Cookie");
-  const accountId = await authCookie.parse(cookieString);
-
-  if (!accountId) {
-    throw redirect("/login", {
-      headers: {
-        "Set-Cookie": await authCookie.serialize(",", {
-          maxAge: 0,
-        }),
-      },
-    });
-  }
-  return accountId;
-}
-
-export async function isLoggedIn(request: Request) {
-  const cookieString = request.headers.get("Cookie");
-  console.log(cookieString);
-  const accountId = await authCookie.parse(cookieString);
-  console.log(accountId);
-  // if(accountId) return redirect('/')
-  // return accountId;
 }
 
 export function getCookies(request: Request) {

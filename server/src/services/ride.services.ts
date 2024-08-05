@@ -1,81 +1,97 @@
+import { aW } from "vitest/dist/reporters-BU_vXAUX";
 import { Driver } from "../dtos/driver.dtos";
 import { Review } from "../dtos/rating.dtos";
-import { LocationData, Ride } from "../dtos/ride.dto";
+import { destination, LocationData, Ride, source } from "../dtos/ride.dto";
 import { User } from "../dtos/user.dto";
 import {
-  addDriver,
-  getFromRideTable,
-  getRideAndDriverFromTable,
-  getRideAndUserFromTable,
-  getStatusFromRide,
-  insertIntoRideTable,
-  updateReview,
-  updateRideStatus,
-  updateRideTable,
+    addDriver,
+    getFromRideTable,
+    getRideAndDriverFromTable,
+    getRideAndUserFromTable,
+    getStatusFromRide,
+    insertIntoRideTable,
+    updateReview,
+    updateRideStatus,
+    updateRideTable,
 } from "../model/ride.model";
 
 async function create(ride: any): Promise<string> {
-  return insertIntoRideTable(ride);
+    return insertIntoRideTable(ride);
 }
 
 async function read(id: string): Promise<Ride> {
-  return getFromRideTable(id);
+    return getFromRideTable(id);
 }
 
 async function update(ride: any): Promise<void> {
-  return updateRideTable(ride);
+    return updateRideTable(ride);
 }
 
 async function getRideAndUser(id: string): Promise<Ride & User> {
-  return getRideAndUserFromTable(id);
+    return getRideAndUserFromTable(id);
 }
 
 async function getRideAndDriver(id: string): Promise<Ride & Driver> {
-  return getRideAndDriverFromTable(id);
+    return getRideAndDriverFromTable(id);
 }
 
 async function setDriver(rideId: string, driverId: string): Promise<void> {
-  return addDriver(rideId, driverId);
+    return addDriver(rideId, driverId);
 }
 
 async function addReview(rideDetails: Review): Promise<void> {
-  return updateReview(rideDetails);
+    return updateReview(rideDetails);
 }
 
 async function updateStatus(id: string, status: string): Promise<void> {
-  return updateRideStatus(id, status);
+    return updateRideStatus(id, status);
 }
 
 async function getStatus(id: string): Promise<{ status: string }> {
-  return getStatusFromRide(id);
+    return getStatusFromRide(id);
 }
 
 async function del(): Promise<void> {}
 
 async function findPrice(source: number, destination: number): Promise<number> {
-  const minFee = 10;
-  const distance = await findDistance(source, destination);
-  const distanceToPrice = {};
-  return minFee + 0;
+    const minFee = 10;
+    const distance = await findDistance(source, destination);
+    const distanceToPrice = {};
+    return minFee + 0;
+}
+
+async function getRoute(source: source, destination: destination) {
+    const response = await fetch(
+        `http://router.project-osrm.org/route/v1/driving/${source[1]},${source[0]};${destination[1]},${destination[0]}?overview=full&geometries=geojson`
+    );
+    const data = await response.json();
+    return data.routes.length > 0 ? data.routes[0] : null;
+}
+
+async function getDistance(source: source, destination: destination) {
+    const route = await getRoute(source, destination);
+    if (!route?.distance) return null;
+    return route.distance / 1000;
 }
 
 async function findDistance(
-  source: number,
-  destination: number
+    source: number,
+    destination: number
 ): Promise<number> {
-  return 0;
+    return 0;
 }
 
 export const rideServices = {
-  create,
-  read,
-  update,
-  setDriver,
-  del,
-  findPrice,
-  getRideAndUser,
-  getRideAndDriver,
-  addReview,
-  updateStatus,
-  getStatus,
+    create,
+    read,
+    update,
+    setDriver,
+    del,
+    findPrice,
+    getRideAndUser,
+    getRideAndDriver,
+    addReview,
+    updateStatus,
+    getStatus,
+    getDistance,
 };

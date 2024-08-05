@@ -1,0 +1,4 @@
+{
+  "vim.disableExtension": false,
+  "vim.overrideCopy": true
+}

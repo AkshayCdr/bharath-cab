@@ -21,6 +21,7 @@ import { rideCookie } from "~/utils/rideCookie.server";
 import Mapcontainer from "~/component/Mapcontainer";
 import { useAuth } from "~/context/authContext";
 import { useEffect } from "react";
+import { commitSession, getSession } from "~/utils/session";
 
 export interface User {
   account_id: string;

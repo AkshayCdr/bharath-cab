@@ -29,6 +29,7 @@ export async function addSession(accountId: string): Promise<string> {
     throw new Error("adding session falied");
   }
 }
+
 export async function deleteSessionFromTable(id: string): Promise<void> {
   try {
     const query = `DELETE FROM session WHERE id = $1;`;

@@ -14,14 +14,18 @@ import Review from "~/component/Review";
 
 import Mapcontainer from "~/component/Mapcontainer";
 import { useLoaderData } from "@remix-run/react";
+import { parse } from "~/utils/auth.server";
 
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
+  const cookie = request.headers.get("cookie");
+  const userId = parse(cookie, "accountId");
+
+  if (!userId) {
+    throw redirect("/login");
+  }
   const { rideId } = params;
 
-  const rideDetails: RideDetails = await ride.getRideAndDriver(
-    rideId,
-    request.headers.get("cookie")
-  );
+  const rideDetails: RideDetails = await ride.getRideAndDriver(rideId, cookie);
 
   if (!rideDetails) {
     throw new Response("Not Found", { status: 404 });

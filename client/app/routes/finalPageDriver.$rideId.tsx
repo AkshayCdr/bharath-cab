@@ -1,4 +1,4 @@
-import { LoaderFunctionArgs, json } from "@remix-run/node";
+import { LoaderFunctionArgs, json, redirect } from "@remix-run/node";
 import { useLoaderData, useNavigate } from "@remix-run/react";
 
 import { ride } from "~/apis/ride";
@@ -11,17 +11,21 @@ import useRoute from "~/hooks/useRoute";
 
 import Mapcontainer from "~/component/Mapcontainer";
 import useRideEvents from "~/hooks/useRideEvents";
+import { parse } from "~/utils/auth.server";
 
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
+  const cookies = request.headers.get("cookie");
+  const userId = parse(cookies, "accountId");
+
+  if (!userId) {
+    throw redirect("/login");
+  }
   const { rideId } = params;
 
   if (!rideId) {
     throw new Response("Not Found", { status: 404 });
   }
-  const rideDetails = await ride.getRideAndUser(
-    rideId,
-    request.headers.get("cookie")
-  );
+  const rideDetails = await ride.getRideAndUser(rideId, cookies);
 
   if (!rideDetails) {
     throw new Response("Not Found", { status: 404 });
@@ -44,14 +48,14 @@ export default function FinalPageDriver() {
 
   const { currentLocation } = useLocation(rideDetails.id);
 
-  const { distance: distanceFromSource } = useRoute(currentLocation, source);
+  // const { distance: distanceFromSource } = useRoute(currentLocation, source);
 
-  const { distance: distanceFromDestination } = useRoute(
-    currentLocation,
-    destination
-  );
+  // const { distance: distanceFromDestination } = useRoute(
+  //   currentLocation,
+  //   destination
+  // );
 
-  useRideEvents({ distanceFromDestination, distanceFromSource, rideDetails });
+  // useRideEvents({ distanceFromDestination, distanceFromSource, rideDetails });
 
   // useEffect(() => {
   //   function handleCancelRide(rideId) {

@@ -12,14 +12,12 @@ import { LinksFunction, LoaderFunctionArgs } from "@remix-run/node";
 import stylesheet from "~/tailwind.css?url";
 import Navbar from "./component/Navbar";
 import { AuthProvider } from "./context/authContext";
-import { authCookie, parse } from "./utils/auth.server";
+import { parse } from "./utils/auth.server";
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const cookieString = request.headers.get("Cookie");
-  // const userId = await authCookie.parse(cookieString);
   const userId = parse(cookieString, "accountId");
-  console.log(userId);
-  return { userId };
+  return userId;
 }
 
 export function Layout({ children }: { children: React.ReactNode }) {
