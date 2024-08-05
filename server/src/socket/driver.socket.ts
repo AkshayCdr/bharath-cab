@@ -56,14 +56,7 @@ function lockRide(
 }
 
 async function updateLocation(socket: {
-    on: (
-        arg0: string,
-        arg1: (data: {
-            rideId: string;
-            latitude: number;
-            longitude: number;
-        }) => void
-    ) => void;
+    on: (arg0: string, arg1: (data: any) => Promise<void>) => void;
 }) {
     socket.on("updateLocation", async (data) => {
         const { rideId, latitude, longitude } = data;
@@ -73,7 +66,9 @@ async function updateLocation(socket: {
 
         const { source, destination } = await getLocation(rideId);
 
-        const rideLocation = { latitude, longitude };
+        console.log("source from database");
+        console.log(source);
+        const rideLocation = { longitude, latitude };
 
         const rideDistanceFromSource = await rideServices.getDistance(
             rideLocation,
@@ -95,37 +90,48 @@ async function updateLocation(socket: {
             rideDistanceFromSource < 2 &&
             rideDistanceFromSource > 0.5;
 
+        if (isRideNearby) {
+            await rideNearby(user_id, rideId);
+            return;
+        }
         //rideStarted
 
         const isRideStarted =
             rideDistanceFromSource &&
             rideDistanceFromSource <= 0.5 &&
             rideDistanceFromSource >= 0;
+
+        if (isRideStarted) {
+            await startRide(user_id, rideId);
+            return;
+        }
         //rideEnded
 
         const isRideEnded =
             rideDistanceFromDestination &&
             rideDistanceFromDestination <= 0.5 &&
             rideDistanceFromDestination >= 0;
+
+        if (isRideEnded) {
+            await endRide(user_id, rideId);
+            return;
+        }
     });
 }
 
-function rideNearby() {
-    const { user_id, id } = rideDetails;
-    await rideServices.updateStatus(id, "started");
-    clientSock.rideNearby(user_id, id);
+async function rideNearby(userId: string, rideId: string) {
+    await rideServices.updateStatus(rideId, "started");
+    clientSock.rideNearby(userId, rideId);
 }
 
-function startRide() {
-    const { user_id, id } = rideDetails;
-    await rideServices.updateStatus(id, "onride");
-    clientSock.startRide(user_id, id);
+async function startRide(userId: string, rideId: string) {
+    await rideServices.updateStatus(rideId, "onride");
+    clientSock.startRide(userId, rideId);
 }
 
-function endRide() {
-    const { user_id, id } = rideDetails;
-    await rideServices.updateStatus(id, "ride_ended");
-    clientSock.endRide(user_id, id);
+async function endRide(userId: string, rideId: string) {
+    await rideServices.updateStatus(userId, "ride_ended");
+    clientSock.endRide(userId, rideId);
 }
 
 async function requestForRide(rideDetails: Ride & User) {

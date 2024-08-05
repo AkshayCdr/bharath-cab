@@ -18,10 +18,10 @@ export async function insertIntoRideTable(ride: Ride): Promise<string> {
         `;
         const values = [
             ride.userId,
-            ride.source.longitude,
             ride.source.latitude,
-            ride.destination.longitude,
+            ride.source.longitude,
             ride.destination.latitude,
+            ride.destination.longitude,
             ride.price,
         ];
         const result: QueryResult<Id> = await (
@@ -43,10 +43,11 @@ export async function updateRideTable(ride: Ride): Promise<void> {
         const query = `UPDATE ride SET source = POINT($1,$2) , destination = POINT($3, $4),price = $5 
     WHERE id = $6`;
         const values = [
-            ride.source.longitude,
             ride.source.latitude,
-            ride.destination.longitude,
+            ride.source.longitude,
             ride.destination.latitude,
+            ride.destination.longitude,
+
             ride.price,
             ride.id,
         ];

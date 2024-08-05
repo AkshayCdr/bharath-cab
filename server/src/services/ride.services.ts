@@ -60,15 +60,21 @@ async function findPrice(source: number, destination: number): Promise<number> {
     return minFee + 0;
 }
 
-async function getRoute(source: source, destination: destination) {
+async function getRoute(source: any, destination: any) {
+    console.log(source[0]);
+    console.log(destination[0]);
+
     const response = await fetch(
         `http://router.project-osrm.org/route/v1/driving/${source[1]},${source[0]};${destination[1]},${destination[0]}?overview=full&geometries=geojson`
     );
+
     const data = await response.json();
+
+    console.log(data);
     return data.routes.length > 0 ? data.routes[0] : null;
 }
 
-async function getDistance(source: source, destination: destination) {
+async function getDistance(source: any, destination: any) {
     const route = await getRoute(source, destination);
     if (!route?.distance) return null;
     return route.distance / 1000;
