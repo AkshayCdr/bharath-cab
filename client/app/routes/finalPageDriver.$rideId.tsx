@@ -35,11 +35,6 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 };
 
 export default function FinalPageDriver() {
-    const [isRideStarted, setStartRide] = useState(false);
-    const [isRideEnded, setEndRide] = useState(false);
-    const [isEditable, setIsEditable] = useState(false);
-    const [isMounted, setIsMounted] = useState(false);
-
     const role = "driver";
 
     const { rideDetails } = useLoaderData<typeof loader>();
@@ -48,6 +43,22 @@ export default function FinalPageDriver() {
         useRideDetails(rideDetails);
 
     const { currentLocation } = useLocation(rideDetails.id);
+    const { distance: distanceFromDestination } = useRoute(
+        currentLocation,
+        destination
+    );
+
+    const [isRideStarted, setStartRide] = useState(false);
+    const [isRideEnded, setEndRide] = useState(false);
+    const [isEditable, setIsEditable] = useState(false);
+    const [isMounted, setIsMounted] = useState(false);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const isRideEnded =
+            distanceFromDestination === 0 || distanceFromDestination <= 0.2;
+        if (isRideEnded) navigate("/");
+    }, [distanceFromDestination, navigate]);
 
     useEffect(() => {
         setIsMounted(true);
@@ -56,13 +67,7 @@ export default function FinalPageDriver() {
     if (!isMounted) {
         return <h1>Loading ....</h1>;
     }
-
     // const { distance: distanceFromSource } = useRoute(currentLocation, source);
-
-    // const { distance: distanceFromDestination } = useRoute(
-    //   currentLocation,
-    //   destination
-    // );
 
     // useRideEvents({ distanceFromDestination, distanceFromSource, rideDetails });
 
