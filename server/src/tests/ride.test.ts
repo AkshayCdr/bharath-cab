@@ -41,3 +41,25 @@ test("get location ", async () => {
     console.log(source);
     console.log(destination);
 });
+
+// test('testing location data'async() =>{
+//     const rideId = '0155b2a2-915c-49a4-a9d2-c212a24cf138'
+//     const
+// (77.57318609587904,12.948540850865397)
+// (77.62023665368513,12.919436561781483)
+// })
+
+test("getting distance from api", async () => {
+    const source = {
+        x: 12.948540850865397,
+        y: 77.57318609587904,
+    };
+    const destination = {
+        x: 12.919436561781483,
+        y: 77.62023665368513,
+    };
+
+    const distance = await rideServices.getDistance(source, destination);
+
+    console.log(distance);
+});

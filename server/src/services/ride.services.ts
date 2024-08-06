@@ -1,7 +1,7 @@
 import { aW } from "vitest/dist/reporters-BU_vXAUX";
 import { Driver } from "../dtos/driver.dtos";
 import { Review } from "../dtos/rating.dtos";
-import { destination, LocationData, Ride, source } from "../dtos/ride.dto";
+import { LocationData, Ride } from "../dtos/ride.dto";
 import { User } from "../dtos/user.dto";
 import {
     addDriver,
@@ -60,24 +60,26 @@ async function findPrice(source: number, destination: number): Promise<number> {
     return minFee + 0;
 }
 
-async function getRoute(source: any, destination: any) {
-    console.log(source[0]);
-    console.log(destination[0]);
+function renameCoordinates(obj: LocationData) {
+    return {
+        x: obj.latitude,
+        y: obj.longitude,
+    };
+}
 
+async function getRoute(source: any, destination: any) {
     const response = await fetch(
-        `http://router.project-osrm.org/route/v1/driving/${source[1]},${source[0]};${destination[1]},${destination[0]}?overview=full&geometries=geojson`
+        `http://router.project-osrm.org/route/v1/driving/${source.y},${source.x};${destination.y},${destination.x}?overview=full&geometries=geojson`
     );
 
     const data = await response.json();
 
-    console.log(data);
     return data.routes.length > 0 ? data.routes[0] : null;
 }
 
 async function getDistance(source: any, destination: any) {
     const route = await getRoute(source, destination);
-    if (!route?.distance) return null;
-    return route.distance / 1000;
+    return route && route.distance !== undefined && route.distance / 1000;
 }
 
 async function findDistance(
@@ -100,4 +102,5 @@ export const rideServices = {
     updateStatus,
     getStatus,
     getDistance,
+    renameCoordinates,
 };

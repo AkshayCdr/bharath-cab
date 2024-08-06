@@ -24,6 +24,3 @@ enum RideStatus {
     Accepted = "driver_accepted",
     Cancelled = "cancelled",
 }
-
-export type source = LocationData;
-export type destination = LocationData;

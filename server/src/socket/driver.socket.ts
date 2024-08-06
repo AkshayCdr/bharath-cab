@@ -62,13 +62,14 @@ async function updateLocation(socket: {
         const { rideId, latitude, longitude } = data;
         const { user_id } = await rideServices.read(rideId);
 
-        clientSock.sendLocation(user_id, latitude, longitude);
+        await clientSock.sendLocation(user_id, latitude, longitude);
 
-        const { source, destination } = await getLocation(rideId);
+        let { source, destination } = await getLocation(rideId);
 
-        console.log("source from database");
-        console.log(source);
-        const rideLocation = { longitude, latitude };
+        const rideLocation = rideServices.renameCoordinates({
+            longitude,
+            latitude,
+        });
 
         const rideDistanceFromSource = await rideServices.getDistance(
             rideLocation,
@@ -97,7 +98,7 @@ async function updateLocation(socket: {
         //rideStarted
 
         const isRideStarted =
-            rideDistanceFromSource &&
+            (rideDistanceFromSource || rideDistanceFromSource === 0) &&
             rideDistanceFromSource <= 0.5 &&
             rideDistanceFromSource >= 0;
 
@@ -108,7 +109,8 @@ async function updateLocation(socket: {
         //rideEnded
 
         const isRideEnded =
-            rideDistanceFromDestination &&
+            (rideDistanceFromDestination ||
+                rideDistanceFromDestination === 0) &&
             rideDistanceFromDestination <= 0.5 &&
             rideDistanceFromDestination >= 0;
 

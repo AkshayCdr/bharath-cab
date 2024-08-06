@@ -1,4 +1,4 @@
-import { destination, Ride, source } from "../dtos/ride.dto";
+import { Ride } from "../dtos/ride.dto";
 import { pool } from "../config/db";
 import { QueryResult } from "pg";
 import { Id } from "../types/id";
@@ -161,8 +161,13 @@ export async function getStatusFromRide(
 }
 
 type Location = {
-    source: source;
-    destination: destination;
+    source: coordinates;
+    destination: coordinates;
+};
+
+type coordinates = {
+    x: number;
+    y: number;
 };
 
 export async function getLocation(id: string) {
