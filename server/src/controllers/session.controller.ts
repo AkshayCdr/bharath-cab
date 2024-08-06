@@ -78,7 +78,7 @@ export async function deleteSession(req: Request, res: Response) {
 export async function getAccountType(req: Request, res: Response) {
     try {
         const sessionId = req.cookies.sessionId;
-
+        console.log(sessionId);
         const accountType = await getAccountTypeTable(sessionId);
         res.status(200).json({ accountType });
     } catch (error) {
