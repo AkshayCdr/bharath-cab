@@ -7,54 +7,58 @@ import { driver } from "../services/driver.services";
 import { Id } from "../types/id";
 
 export async function createDriver(
-  req: Request<{}, {}, Driver & Account>,
-  res: Response
+    req: Request<{}, {}, Driver & Account>,
+    res: Response
 ) {
-  try {
-    const {
-      cabType,
-      cabRegNo,
-      status,
-      name,
-      email,
-      phone,
-      username,
-      password,
-    } = req.body;
+    try {
+        const {
+            cabType,
+            cabRegNo,
+            status,
+            name,
+            email,
+            phone,
+            username,
+            password,
+        } = req.body;
 
-    const passwordHash = await createHash(password);
-    const accountType = "driver";
+        const passwordHash = await createHash(password);
+        const accountType = "driver";
 
-    const accountId = await account.create({
-      username,
-      password: passwordHash,
-      accountType,
-    });
+        const accountId = await account.create({
+            username,
+            password: passwordHash,
+            accountType,
+        });
 
-    const driverId = await driver.create({
-      cabType,
-      cabRegNo,
-      status,
-      name,
-      email,
-      phone,
-      accountId,
-    });
+        const driverId = await driver.create({
+            cabType,
+            cabRegNo,
+            status,
+            name,
+            email,
+            phone,
+            accountId,
+        });
 
-    res.status(201).send(JSON.stringify({ driverId }));
-  } catch (error) {
-    res
-      .status(500)
-      .send({ message: "server error, driver not created", error });
-  }
+        res.status(201).send(JSON.stringify({ driverId }));
+    } catch (error) {
+        res.status(500).send({
+            message: "server error, driver not created",
+            error,
+        });
+    }
 }
 
-export async function getDriver(req: Request<Id>, res: Response) {
-  try {
-    const { id } = req.params;
-    const driverData = await driver.get(id);
-    res.status(200).send({ driverData });
-  } catch (error) {
-    res.status(500).send({ message: "server error ,cannot get driver", error });
-  }
+export async function getDriver(req: Request, res: Response) {
+    try {
+        const { id } = req.params;
+        const driverData = await driver.get(id);
+        res.status(200).send({ driverData });
+    } catch (error) {
+        res.status(500).send({
+            message: "server error ,cannot get driver",
+            error,
+        });
+    }
 }

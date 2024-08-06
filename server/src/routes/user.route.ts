@@ -5,6 +5,6 @@ import { validateSession } from "../utils/account.auth";
 const router = Router();
 
 router.get("/:id", getUser);
-router.post("/", createUser);
+router.post("/", validateSession, createUser);
 
 export default router;
