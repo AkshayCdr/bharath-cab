@@ -2,10 +2,10 @@
 import { useEffect, useState } from "react";
 import { redirect, useActionData, useLoaderData } from "@remix-run/react";
 import {
-  ActionFunctionArgs,
-  json,
-  LinksFunction,
-  LoaderFunctionArgs,
+    ActionFunctionArgs,
+    json,
+    LinksFunction,
+    LoaderFunctionArgs,
 } from "@remix-run/node";
 import { ride } from "~/apis/ride";
 import RideDetails from "~/component/RideDetails";
@@ -22,150 +22,150 @@ import Mapcontainer from "~/component/Mapcontainer";
 import { parse } from "~/utils/auth.server";
 
 export interface Ride {
-  id: string;
-  source: Coordinates;
-  destination: Coordinates;
-  price: string;
-  user_id: string;
+    id: string;
+    source: Coordinates;
+    destination: Coordinates;
+    price: string;
+    user_id: string;
 }
 
 type Coordinates = {
-  x?: number;
-  y?: number;
+    x?: number;
+    y?: number;
 };
 
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
-  const cookies = request.headers.get("cookie");
-  const userId = parse(cookies, "accountId");
+    const cookies = request.headers.get("cookie");
+    const userId = parse(cookies, "accountId");
 
-  if (!userId) {
-    throw redirect("/login");
-  }
-  const { rideId } = params;
+    if (!userId) {
+        throw redirect("/login");
+    }
+    const { rideId } = params;
 
-  const rideDetails: Ride = await ride.getRideDetails(rideId, cookies);
+    const rideDetails: Ride = await ride.getRideDetails(rideId, cookies);
 
-  if (!rideDetails) {
-    throw new Response("Not Found", { status: 404 });
-  }
+    if (!rideDetails) {
+        throw new Response("Not Found", { status: 404 });
+    }
 
-  return json({ rideDetails });
+    return json({ rideDetails });
 };
 
 export async function action({ request }: ActionFunctionArgs) {
-  const formData = await request.formData();
+    const formData = await request.formData();
 
-  console.log("cookies from ride ");
+    console.log("cookies from ride ");
 
-  const intent = formData.get("intent");
+    const intent = formData.get("intent");
 
-  const isCancel = intent === "cancel";
-  const isUpdate = intent === "update";
-  const isRequestForRide = intent === "request-for-ride";
+    const isCancel = intent === "cancel";
+    const isUpdate = intent === "update";
+    const isRequestForRide = intent === "request-for-ride";
 
-  const rideId = String(await requireRideCookie(request));
+    const rideId = String(await requireRideCookie(request));
 
-  if (isRequestForRide) {
-    const message = await ride.requestForRide(
-      rideId,
-      request.headers.get("cookie")
-    );
+    if (isRequestForRide) {
+        const message = await ride.requestForRide(
+            rideId,
+            request.headers.get("cookie")
+        );
 
-    return json({ message });
-  }
-
-  if (isUpdate) {
-    const sourceString = String(formData.get("source"));
-    const destinationString = String(formData.get("destination"));
-
-    const data = formatSourceDestination(sourceString, destinationString);
-
-    console.log(data);
-
-    if (!data) {
-      return { message: "select source/destination" };
+        return json({ message });
     }
 
-    const { source, destination } = data;
+    if (isUpdate) {
+        const sourceString = String(formData.get("source"));
+        const destinationString = String(formData.get("destination"));
 
-    const message = await ride.updateRide(
-      {
-        rideId,
-        source,
-        destination,
-      },
-      request.headers.get("cookie")
-    );
-    return json({ message });
-  }
+        const data = formatSourceDestination(sourceString, destinationString);
 
-  if (isCancel) {
-    const message = await ride.cancelRide(
-      rideId,
-      request.headers.get("cookie")
-    );
+        console.log(data);
 
-    return redirect("/user");
-  }
-  return json({ message: "error" });
+        if (!data) {
+            return { message: "select source/destination" };
+        }
+
+        const { source, destination } = data;
+
+        const message = await ride.updateRide(
+            {
+                rideId,
+                source,
+                destination,
+            },
+            request.headers.get("cookie")
+        );
+        return json({ message });
+    }
+
+    if (isCancel) {
+        const message = await ride.cancelRide(
+            rideId,
+            request.headers.get("cookie")
+        );
+
+        return redirect("/user");
+    }
+    return json({ message: "error" });
 }
 
 export default function Ride() {
-  const [isEditable, setIsEditable] = useState(true);
-  const [isRideCancelled, setRideCancelled] = useState(false);
-  const [isMounted, setMounted] = useState(false);
+    const [isEditable, setIsEditable] = useState(true);
+    const [isRideCancelled, setRideCancelled] = useState(false);
+    const [isMounted, setMounted] = useState(false);
 
-  const message = useActionData<typeof action>();
+    const message = useActionData<typeof action>();
 
-  const { rideDetails } = useLoaderData<typeof loader>();
-  const {
-    source,
-    destination,
-    setSource,
-    setDestination,
-    sourceName,
-    destinationName,
-    setSourceName,
-    setDestinationName,
-  } = useRideDetails(rideDetails);
+    const { rideDetails } = useLoaderData<typeof loader>();
+    const {
+        source,
+        destination,
+        setSource,
+        setDestination,
+        sourceName,
+        destinationName,
+        setSourceName,
+        setDestinationName,
+    } = useRideDetails(rideDetails);
 
-  useRideSocket({
-    rideDetails,
-    isRideCancelled,
-  });
+    useRideSocket({
+        rideDetails,
+        isRideCancelled,
+    });
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+    useEffect(() => {
+        setMounted(true);
+    }, []);
 
-  if (!isMounted) {
-    return <h1>Loading ....</h1>;
-  }
+    if (!isMounted) {
+        return <h1>Loading ....</h1>;
+    }
 
-  return (
-    <div className="flex flex-row bg-gray-950 text-white min-h-screen">
-      <div className="flex flex-col">
-        <RideDetails
-          rideDetails={rideDetails}
-          sourceName={sourceName}
-          destinationName={destinationName}
-          source={source}
-          destination={destination}
-        />
-        {message && <p className="text-green-800">{message.message}</p>}
-      </div>
+    return (
+        <div className="flex flex-row bg-gray-950 text-white min-h-screen">
+            <div className="flex flex-col">
+                <RideDetails
+                    rideDetails={rideDetails}
+                    sourceName={sourceName}
+                    destinationName={destinationName}
+                    source={source}
+                    destination={destination}
+                />
+                {message && <p className="text-green-800">{message.message}</p>}
+            </div>
 
-      <Mapcontainer
-        source={source}
-        destination={destination}
-        setSource={setSource}
-        setDestination={setDestination}
-        setSourceName={setSourceName}
-        setDestinationName={setDestinationName}
-        isEditable={isEditable}
-      />
-    </div>
-  );
+            <Mapcontainer
+                source={source}
+                destination={destination}
+                setSource={setSource}
+                setDestination={setDestination}
+                setSourceName={setSourceName}
+                setDestinationName={setDestinationName}
+                isEditable={isEditable}
+            />
+        </div>
+    );
 }
 
 export const links: LinksFunction = () => [{ rel: "stylesheet", href: styles }];

@@ -52,9 +52,13 @@ export function isAuthenticated(request: Request) {
 export async function authLoader({ request }: LoaderFunctionArgs) {
     if (!isAuthenticated(request)) return null;
 
-    const data = await account.getAccountType(getCookies(request));
+    // const data = await account.getAccountType(getCookies(request));
+    // console.log(data);
+    // if (!data) return null;
+    // console.log(data.accountType);
 
-    if (!data) return null;
+    const accountType = parse(getCookies(request), "accountType");
 
-    return redirect(`/${data.accountType}`);
+    return redirect(`/${accountType}`);
+    // return redirect(`/${data.accountType}`);
 }
