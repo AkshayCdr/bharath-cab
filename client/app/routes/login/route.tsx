@@ -1,7 +1,7 @@
 import {
-  ActionFunctionArgs,
-  LinksFunction,
-  LoaderFunctionArgs,
+    ActionFunctionArgs,
+    LinksFunction,
+    LoaderFunctionArgs,
 } from "@remix-run/node";
 import { redirect } from "@remix-run/react";
 import { account } from "~/apis/account";
@@ -9,68 +9,70 @@ import LoginInput from "../../component/LoginInput";
 import styles from "~/styles/login.css?url";
 import { validate } from "./validation.server";
 
-import { authCookie, authLoader, parse } from "~/utils/auth.server";
+import { authCookie, authLoader, getCookies, parse } from "~/utils/auth.server";
 
 export const loader = authLoader;
 
 export async function action({ request }: ActionFunctionArgs) {
-  const formData = await request.formData();
+    const formData = await request.formData();
 
-  const userDetails = Object.fromEntries(formData);
+    const userDetails = Object.fromEntries(formData);
 
-  const username = String(formData.get("username"));
-  const password = String(formData.get("password"));
+    const username = String(formData.get("username"));
+    const password = String(formData.get("password"));
 
-  const error: { username?: string; password?: string } = {};
+    const error: { username?: string; password?: string } = {};
 
-  const errors = validate(error, username, password);
+    const errors = validate(error, username, password);
 
-  if (errors) {
-    return { errors };
-  }
+    if (errors) {
+        return { errors };
+    }
 
-  const response = await account.login(userDetails);
+    const response = await account.login(userDetails);
 
-  if (!response) {
-    throw new Error("Invalid response from server");
-  }
+    if (!response) {
+        throw new Error("Invalid response from server");
+    }
 
-  const cookieHeader = response.headers.get("set-cookie");
+    const cookieHeader = response.headers.get("set-cookie");
 
-  // console.log(cookieHeader);
+    // console.log(cookieHeader);
 
-  const accountType = parse(cookieHeader, "accountType");
-  const accountId = parse(cookieHeader, "accountId");
+    const data = await account.getAccountType(getCookies(request));
+    if (!data) return;
+    // const accountType = parse(cookieHeader, "accountType");
+    const accountId = parse(cookieHeader, "accountId");
 
-  const isUser = accountType === "user";
-  const isDriver = accountType === "driver";
+    const isUser = data.accountType === "user";
+    const isDriver = data.accountType === "driver";
 
-  if (isUser)
-    return redirect(`/user`, {
-      headers: {
-        "Set-Cookie": cookieHeader,
-      },
-    });
-  if (isDriver)
-    return redirect(`/driver`, {
-      headers: {
-        "Set-Cookie": cookieHeader,
-      },
-    });
-  return redirect("/login");
+    if (isUser)
+        return redirect(`/user`, {
+            headers: {
+                "Set-Cookie": cookieHeader,
+            },
+        });
+    if (isDriver)
+        return redirect(`/driver`, {
+            headers: {
+                "Set-Cookie": cookieHeader,
+            },
+        });
+    return redirect("/login");
 }
 
 export default function Login() {
-  return (
-    <div
-      className="flex flex-col m-6 p-36  rounded-md bg-center bg-cover"
-      style={{
-        backgroundImage: `url('/home.jpg')`,
-      }}
-    >
-      <LoginInput />
-    </div>
-  );
+    return (
+        <div
+            className="flex flex-col m-6 p-36  rounded-md bg-center bg-cover"
+            style={{
+                backgroundImage: `url('/home.jpg')`,
+            }}
+        >
+            <LoginInput />
+        </div>
+    );
 }
 
 export const links: LinksFunction = () => [{ rel: "stylesheet", href: styles }];
