@@ -122,7 +122,7 @@ async function eventRideEnd(
 ) {
     const { status } = await rideServices.getStatus(rideId);
 
-    const isRideStarted = status === "started";
+    const isRideStarted = status === "onride";
 
     if (!isRideStarted) return;
 
@@ -156,8 +156,6 @@ async function endRide(userId: string, rideId: string) {
 }
 
 async function requestForRide(rideDetails: Ride & User) {
-    //send status to request for ride
-    console.log("chaning status with id ", rideDetails.id);
     await rideServices.updateStatus(rideDetails.id, "requested");
     emitEventToAllDriver("rideRequest", rideDetails);
 }

@@ -185,3 +185,17 @@ export async function getLocation(id: string) {
         throw new Error("Error getting location");
     }
 }
+
+export async function getDriverId(id: string) {
+    try {
+        const query = `SELECT driver_id from ride WHERE id = $1`;
+        const values = [id];
+
+        const result = await (await client).query(query, values);
+        if (result.rows.length) return { driverId: result.rows[0].driver_id };
+        return { driverId: "" };
+    } catch (error) {
+        console.log(error);
+        throw new Error("Error getting location");
+    }
+}
