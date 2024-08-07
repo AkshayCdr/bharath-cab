@@ -63,7 +63,7 @@ export async function action({ request }: ActionFunctionArgs) {
     const isUpdate = intent === "update";
     const isRequestForRide = intent === "request-for-ride";
 
-    const rideId = String(await requireRideCookie(request));
+    const rideId = String(formData.get("rideId"));
 
     if (isRequestForRide) {
         const message = await ride.requestForRide(

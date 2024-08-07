@@ -9,7 +9,7 @@ import LoginInput from "../../component/LoginInput";
 import styles from "~/styles/login.css?url";
 import { validate } from "./validation.server";
 
-import { authCookie, authLoader, getCookies, parse } from "~/utils/auth.server";
+import { authLoader } from "~/utils/auth.server";
 
 export const loader = authLoader;
 
@@ -39,10 +39,8 @@ export async function action({ request }: ActionFunctionArgs) {
 
     // console.log(cookieHeader);
 
-    const data = await account.getAccountType(getCookies(request));
-    if (!data) return;
-    // const accountType = parse(cookieHeader, "accountType");
-    const accountId = parse(cookieHeader, "accountId");
+    const data = await account.getAccountType(cookieHeader);
+    if (!data) return null;
 
     const isUser = data.accountType === "user";
     const isDriver = data.accountType === "driver";
