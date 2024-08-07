@@ -81,44 +81,54 @@ async function updateLocation(socket: {
             destination
         );
 
-        console.log(rideDistanceFromSource);
-        console.log(rideDistanceFromDestination);
-
-        //rideNearby
-
-        const isRideNearby =
-            rideDistanceFromSource &&
-            rideDistanceFromSource < 2 &&
-            rideDistanceFromSource > 0.5;
-
-        if (isRideNearby) {
-            await rideNearby(user_id, rideId);
-            return;
-        }
-        //rideStarted
-
-        const isRideStarted =
-            (rideDistanceFromSource || rideDistanceFromSource === 0) &&
-            rideDistanceFromSource <= 0.5 &&
-            rideDistanceFromSource >= 0;
-
-        if (isRideStarted) {
-            await startRide(user_id, rideId);
-            return;
-        }
-        //rideEnded
-
-        const isRideEnded =
-            (rideDistanceFromDestination ||
-                rideDistanceFromDestination === 0) &&
-            rideDistanceFromDestination <= 0.5 &&
-            rideDistanceFromDestination >= 0;
-
-        if (isRideEnded) {
-            await endRide(user_id, rideId);
-            return;
-        }
+        eventRideNearby(rideDistanceFromSource, user_id, rideId);
+        eventRideStart(rideDistanceFromSource, user_id, rideId);
+        eventRideEnd(rideDistanceFromDestination, user_id, rideId);
     });
+}
+
+async function eventRideNearby(
+    rideDistanceFromSource: number,
+    user_id: string,
+    rideId: string
+) {
+    const isRideNearby =
+        rideDistanceFromSource &&
+        rideDistanceFromSource < 2 &&
+        rideDistanceFromSource > 0.5;
+    if (!isRideNearby) return;
+
+    await rideNearby(user_id, rideId);
+}
+
+async function eventRideStart(
+    rideDistanceFromSource: number,
+    user_id: string,
+    rideId: string
+) {
+    const isRideStarted =
+        (rideDistanceFromSource || rideDistanceFromSource === 0) &&
+        rideDistanceFromSource <= 0.5 &&
+        rideDistanceFromSource >= 0;
+
+    if (!isRideStarted) return;
+    await startRide(user_id, rideId);
+}
+
+async function eventRideEnd(
+    rideDistanceFromDestination: number,
+    user_id: string,
+    rideId: string
+) {
+    const isRideEnded =
+        (rideDistanceFromDestination || rideDistanceFromDestination === 0) &&
+        rideDistanceFromDestination <= 0.5 &&
+        rideDistanceFromDestination >= 0;
+
+    if (isRideEnded) {
+        await endRide(user_id, rideId);
+        return;
+    }
 }
 
 async function rideNearby(userId: string, rideId: string) {
