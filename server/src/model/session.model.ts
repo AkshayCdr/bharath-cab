@@ -1,42 +1,57 @@
-import { QueryResult, QueryResultRow } from "pg";
-import { pool } from "../config/db";
+import { QueryResult } from "pg";
+import { Id } from "../types/id";
 
-export async function excecuteQuery<T>(
-    query: string,
-    values: any[]
-): Promise<QueryResult<QueryResultRow>> {
+import { pool } from "../config/db";
+const client = pool.connect();
+
+export async function isSessionExist(id: string): Promise<boolean> {
     try {
-        const client = await pool.connect();
-        return await client.query(query, values);
+        const query = `SELECT 1 FROM session WHERE id = $1;`;
+        const values = [id];
+        const result: QueryResult<Id> = await (
+            await client
+        ).query(query, values);
+
+        if (result.rowCount) return true;
+        return false;
     } catch (error) {
-        console.error(error);
-        throw new Error("Query failed");
+        console.log(error);
+        throw new Error("fetching sesson failed");
     }
 }
 
-export async function isSessionExist(id: string): Promise<boolean> {
-    const query = `SELECT 1 FROM session WHERE id = $1;`;
-    const result = await excecuteQuery(query, [id]);
-
-    if (result.rowCount) return true;
-
-    return false;
-}
-
 export async function addSession(accountId: string): Promise<string> {
-    const query = `INSERT INTO session (account_id) VALUES ($1) RETURNING id`;
-    const result = await excecuteQuery(query, [accountId]);
-    return result.rows[0].id;
+    try {
+        const query = `INSERT INTO session (account_id) VALUES ($1) RETURNING id`;
+        const values = [accountId];
+        const result: QueryResult<Id> = await (
+            await client
+        ).query(query, values);
+        return result.rows[0].id;
+    } catch (error) {
+        console.log(error);
+        throw new Error("adding session falied");
+    }
 }
 
 export async function deleteSessionFromTable(id: string): Promise<void> {
-    const query = `DELETE FROM session WHERE id = $1;`;
-    const values = [id];
-    await excecuteQuery(query, values);
+    try {
+        const query = `DELETE FROM session WHERE id = $1;`;
+        const values = [id];
+        await (await client).query(query, values);
+    } catch (error) {
+        console.log(error);
+        throw new Error("fetching sesson failed");
+    }
 }
 
 export async function getAccountTypeTable(id: string): Promise<string> {
-    const query = `select account_type from account join  session on session.account_id =  account.id where session.id = $1`;
-    const result = await excecuteQuery(query, [id]);
-    return result.rows[0].account_type;
+    try {
+        const query = `select account_type from account join  session on session.account_id =  account.id where session.id = $1`;
+        const result = await (await client).query(query, [id]);
+        return result.rows[0].account_type;
+    } catch (error) {
+        console.error(error);
+        throw new Error("cannot get account type tab;e");
+    }
 }
