@@ -1,9 +1,9 @@
 import {
-  Links,
-  Meta,
-  Outlet,
-  Scripts,
-  ScrollRestoration,
+    Links,
+    Meta,
+    Outlet,
+    Scripts,
+    ScrollRestoration,
 } from "@remix-run/react";
 
 import styles from "./styles/main.css?url";
@@ -15,39 +15,43 @@ import { AuthProvider } from "./context/authContext";
 import { parse } from "./utils/auth.server";
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  const cookieString = request.headers.get("Cookie");
-  const userId = parse(cookieString, "accountId");
-  return userId;
+    const cookieString = request.headers.get("Cookie");
+    const userId = parse(cookieString, "accountId");
+    if (userId) return userId;
+    return null;
 }
 
 export function Layout({ children }: { children: React.ReactNode }) {
-  return (
-    <html lang="en">
-      <head>
-        <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <Meta />
-        <Links />
-      </head>
-      <body>
-        <AuthProvider>
-          <Navbar />
-          {children}
-          <ScrollRestoration />
-          <Scripts />
-        </AuthProvider>
-      </body>
-    </html>
-  );
+    return (
+        <html lang="en">
+            <head>
+                <meta charSet="utf-8" />
+                <meta
+                    name="viewport"
+                    content="width=device-width, initial-scale=1"
+                />
+                <Meta />
+                <Links />
+            </head>
+            <body>
+                <AuthProvider>
+                    <Navbar />
+                    {children}
+                    <ScrollRestoration />
+                    <Scripts />
+                </AuthProvider>
+            </body>
+        </html>
+    );
 }
 
 export const links: LinksFunction = () => [
-  { rel: "stylesheet", href: styles },
-  { rel: "stylesheet", href: stylesheet },
+    { rel: "stylesheet", href: styles },
+    { rel: "stylesheet", href: stylesheet },
 ];
 
 export default function App() {
-  return <Outlet />;
+    return <Outlet />;
 }
 
 // export function ErrorBoundary() {
