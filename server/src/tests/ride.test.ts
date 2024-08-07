@@ -1,5 +1,5 @@
 import { aW } from "vitest/dist/reporters-BU_vXAUX";
-import { getLocation } from "../model/ride.model";
+import { getDriverId, getLocation } from "../model/ride.model";
 import { rideServices } from "../services/ride.services";
 import { test, assert } from "vitest";
 
@@ -62,4 +62,10 @@ test("getting distance from api", async () => {
     const distance = await rideServices.getDistance(source, destination);
 
     console.log(distance);
+});
+
+test("getting driver id from ride ID", async () => {
+    const rideId = "0632dc4b-0c35-4e38-9057-122ccdb173df";
+    const id = await getDriverId(rideId);
+    console.log(id);
 });

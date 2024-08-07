@@ -12,6 +12,7 @@ import useRoute from "~/hooks/useRoute";
 import Mapcontainer from "~/component/Mapcontainer";
 import useRideEvents from "~/hooks/useRideEvents";
 import { parse } from "~/utils/auth.server";
+import { socket } from "~/socket/websocket";
 
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
     const cookies = request.headers.get("cookie");
@@ -54,6 +55,25 @@ export default function FinalPageDriver() {
     const [isMounted, setIsMounted] = useState(false);
     const navigate = useNavigate();
 
+    function handleCancelRide(rideId) {
+        if (rideId !== rideDetails.id) return;
+        navigate("/driver");
+    }
+
+    function handleEndRide() {
+        console.log("ride endd");
+        navigate("/");
+    }
+
+    useEffect(() => {
+        socket.on("endRide", handleEndRide);
+        socket.on("cancelRide", handleCancelRide);
+        return () => {
+            socket.off("cancelRide", handleCancelRide);
+            socket.off("endRide", handleEndRide);
+        };
+    }, []);
+
     useEffect(() => {
         setIsMounted(true);
     }, []);
@@ -64,17 +84,6 @@ export default function FinalPageDriver() {
     // const { distance: distanceFromSource } = useRoute(currentLocation, source);
 
     // useRideEvents({ distanceFromDestination, distanceFromSource, rideDetails });
-
-    // useEffect(() => {
-    //   function handleCancelRide(rideId) {
-    //     if (rideId !== rideDetails.id) return;
-    //     navigate("/driver");
-    //   }
-    //   socket.on("cancelRide", handleCancelRide);
-    //   return () => {
-    //     socket.off("cancelRide", handleCancelRide);
-    //   };
-    // }, []);
 
     return (
         <div className="flex flex-row m-5 p-3">

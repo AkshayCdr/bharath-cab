@@ -1,6 +1,6 @@
 import { Ride } from "../dtos/ride.dto";
 import { User } from "../dtos/user.dto";
-import { getLocation } from "../model/ride.model";
+import { getDriverId, getLocation } from "../model/ride.model";
 import { driver } from "../services/driver.services";
 import { rideServices } from "../services/ride.services";
 import { DriverSocket } from "../types/driverSocket";
@@ -120,15 +120,20 @@ async function eventRideEnd(
     user_id: string,
     rideId: string
 ) {
+    const { status } = await rideServices.getStatus(rideId);
+
+    const isRideStarted = status === "started";
+
+    if (!isRideStarted) return;
+
     const isRideEnded =
         (rideDistanceFromDestination || rideDistanceFromDestination === 0) &&
         rideDistanceFromDestination <= 0.5 &&
         rideDistanceFromDestination >= 0;
 
-    if (isRideEnded) {
-        await endRide(user_id, rideId);
-        return;
-    }
+    if (!isRideEnded) return;
+
+    await endRide(user_id, rideId);
 }
 
 async function rideNearby(userId: string, rideId: string) {
@@ -144,6 +149,10 @@ async function startRide(userId: string, rideId: string) {
 async function endRide(userId: string, rideId: string) {
     await rideServices.updateStatus(userId, "ride_ended");
     clientSock.endRide(userId, rideId);
+    const { driverId } = await getDriverId(rideId);
+    console.log("emiting event to driver");
+    console.log(driverId);
+    emitEventToDriver("endRide", driverId, "");
 }
 
 async function requestForRide(rideDetails: Ride & User) {
