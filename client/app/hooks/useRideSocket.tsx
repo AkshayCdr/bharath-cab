@@ -2,23 +2,32 @@ import { useNavigate } from "@remix-run/react";
 import { useEffect } from "react";
 import { socket } from "~/socket/websocket";
 
-export default function useRideSocket({ rideDetails, isRideCancelled }) {
-  const navigate = useNavigate();
-
-  console.log(rideDetails);
-  useEffect(() => {
-    const handleRideAccepted = (driverDetails) => {
-      // if (isRideCancelled) navigate(-1);
-      console.log("ride accepted by driver ", driverDetails);
-      navigate(`/finalPageUser/${rideDetails.id}`);
-    };
-
+function registerClient(rideDetails) {
     socket.emit("registerClient", rideDetails.user_id);
-    socket.on("rideAccepted", handleRideAccepted);
+}
 
-    return () => {
-      socket.off("registerClient");
-      socket.off("rideAccepted", handleRideAccepted);
-    };
-  }, []);
+export default function useRideSocket({ rideDetails }) {
+    const navigate = useNavigate();
+
+    console.log(rideDetails);
+
+    useEffect(() => {
+        registerClient(rideDetails);
+        return () => {
+            socket.off("registerClient");
+        };
+    }, []);
+
+    useEffect(() => {
+        const handleRideAccepted = (driverDetails) => {
+            console.log("ride accepted by driver ", driverDetails);
+            navigate(`/finalPageUser/${rideDetails.id}`);
+        };
+
+        socket.on("rideAccepted", handleRideAccepted);
+
+        return () => {
+            socket.off("rideAccepted", handleRideAccepted);
+        };
+    }, [rideDetails.id]);
 }

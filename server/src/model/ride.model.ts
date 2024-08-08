@@ -37,9 +37,6 @@ export async function insertIntoRideTable(ride: Ride): Promise<string> {
 
 export async function updateRideTable(ride: Ride): Promise<void> {
     try {
-        console.log("updating ride table");
-        console.log("inside ride tabel");
-        console.log(ride);
         const query = `UPDATE ride SET source = POINT($1,$2) , destination = POINT($3, $4),price = $5 
     WHERE id = $6`;
         const values = [
@@ -135,7 +132,6 @@ export async function updateRideStatus(
         const query = `UPDATE ride SET status = $2  WHERE id = $1`;
         const values = [id, status];
         const data = await (await client).query(query, values);
-        console.log(data);
     } catch (error) {
         console.error(error);
         throw new Error("Error getting data from ride");
@@ -181,7 +177,7 @@ export async function getLocation(id: string) {
 
         return result.rows[0];
     } catch (error) {
-        console.log(error);
+        console.error(error);
         throw new Error("Error getting location");
     }
 }
@@ -195,7 +191,22 @@ export async function getDriverId(id: string) {
         if (result.rows.length) return { driverId: result.rows[0].driver_id };
         return { driverId: "" };
     } catch (error) {
-        console.log(error);
+        console.error(error);
+        throw new Error("Error getting location");
+    }
+}
+
+export async function getUserId(rideId: string) {
+    try {
+        const query = `SELECT user_id from ride WHERE id = $1`;
+        const values = [rideId];
+
+        const result = await (await client).query(query, values);
+
+        if (result.rows.length) return { userId: result.rows[0].user_id };
+        return { userId: null };
+    } catch (error) {
+        console.error(error);
         throw new Error("Error getting location");
     }
 }

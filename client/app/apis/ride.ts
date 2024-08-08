@@ -61,7 +61,6 @@ async function getRideAndDriver(rideId: string, cookie) {
 }
 
 async function getRideAndUser(rideId: string, cookie) {
-    console.log("sending request from cline side ");
     const response = await fetch(`http://localhost:3000/ride/${rideId}/user`, {
         method: "GET",
         credentials: "include",
@@ -79,7 +78,6 @@ async function getRideAndUser(rideId: string, cookie) {
 }
 
 async function requestForRide(Id, cookie) {
-    console.log("requesting for ride");
     const response = await fetch(`http://localhost:3000/ride/${Id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json", Cookie: cookie },

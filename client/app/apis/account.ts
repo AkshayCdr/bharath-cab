@@ -38,8 +38,6 @@ async function getAccountType(cookie) {
 
     if (!response.ok) return null;
 
-    console.log(response);
-
     const accountType = await response.json();
 
     if (!accountType) return null;

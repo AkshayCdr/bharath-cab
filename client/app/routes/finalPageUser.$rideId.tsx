@@ -70,10 +70,11 @@ export async function action({ request }: ActionFunctionArgs) {
     }
 
     if (isCancel) {
+        console.log("cancelling ride clicked ....");
         const rideId = formData.get("rideId");
-
+        console.log(rideId);
         handleCancelRide(rideId);
-        return redirect(`/ride`);
+        return redirect(`/`);
     }
 }
 

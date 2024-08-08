@@ -14,6 +14,16 @@ import useRideEvents from "~/hooks/useRideEvents";
 import { parse } from "~/utils/auth.server";
 import { socket } from "~/socket/websocket";
 
+function handleCancelRide(navigate) {
+    alert("ride cancelled by user...");
+    navigate("/driver");
+}
+
+function handleEndRide(navigate) {
+    console.log("ride endd...");
+    navigate("/");
+}
+
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
     const cookies = request.headers.get("cookie");
     const userId = parse(cookies, "accountId");
@@ -53,21 +63,12 @@ export default function FinalPageDriver() {
     const [isRideEnded, setEndRide] = useState(false);
     const [isEditable, setIsEditable] = useState(false);
     const [isMounted, setIsMounted] = useState(false);
+
     const navigate = useNavigate();
 
-    function handleCancelRide(rideId) {
-        if (rideId !== rideDetails.id) return;
-        navigate("/driver");
-    }
-
-    function handleEndRide() {
-        console.log("ride endd");
-        navigate("/");
-    }
-
     useEffect(() => {
-        socket.on("endRide", handleEndRide);
-        socket.on("cancelRide", handleCancelRide);
+        socket.on("endRide", () => handleEndRide(navigate));
+        socket.on("cancelRide", () => handleCancelRide(navigate));
         return () => {
             socket.off("cancelRide", handleCancelRide);
             socket.off("endRide", handleEndRide);

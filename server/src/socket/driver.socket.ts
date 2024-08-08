@@ -1,6 +1,6 @@
 import { Ride } from "../dtos/ride.dto";
 import { User } from "../dtos/user.dto";
-import { getDriverId, getLocation } from "../model/ride.model";
+import { getDriverId, getLocation, getUserId } from "../model/ride.model";
 import { driver } from "../services/driver.services";
 import { rideServices } from "../services/ride.services";
 import { DriverSocket } from "../types/driverSocket";
@@ -149,9 +149,9 @@ async function startRide(userId: string, rideId: string) {
 async function endRide(userId: string, rideId: string) {
     await rideServices.updateStatus(userId, "ride_ended");
     clientSock.endRide(userId, rideId);
+
     const { driverId } = await getDriverId(rideId);
-    console.log("emiting event to driver");
-    console.log(driverId);
+
     emitEventToDriver("endRide", driverId, "");
 }
 
@@ -160,9 +160,15 @@ async function requestForRide(rideDetails: Ride & User) {
     emitEventToAllDriver("rideRequest", rideDetails);
 }
 
-function cancelRide(rideId: string) {
-    //if driverid is attached sedn to that driver otherwise send to perticular driver
-    emitEventToAllDriver("cancelRide", rideId);
+async function cancelRide(rideId: string) {
+    const { driverId } = await getDriverId(rideId);
+
+    console.log("driver id inside cancel ride ");
+    console.log(driverId);
+
+    if (!driverId) return emitEventToAllDriver("cancelRide", rideId);
+
+    emitEventToDriver("cancelRide", driverId, "");
 }
 
 function emitEventToAllDriver(eventName: string, data: any) {

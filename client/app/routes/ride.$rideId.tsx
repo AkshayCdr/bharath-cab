@@ -14,8 +14,6 @@ import styles from "../styles/ride.css?url";
 import useRideDetails from "~/hooks/useRideDetails";
 import useRideSocket from "~/hooks/useRideSocket";
 
-import { requireRideCookie } from "~/utils/rideCookie.server";
-
 import { formatSourceDestination } from "./user/route";
 
 import Mapcontainer from "~/component/Mapcontainer";
@@ -131,7 +129,6 @@ export default function Ride() {
 
     useRideSocket({
         rideDetails,
-        isRideCancelled,
     });
 
     useEffect(() => {
