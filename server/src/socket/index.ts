@@ -15,7 +15,12 @@ export function createSocket(
     const io = new Server(httpServer, {
         cookie: false,
         cors: {
-            origin: "http://localhost:5173",
+            origin: [
+                "http://localhost:5173",
+                "http://localhost:38801",
+                "http://localhost:37233 ",
+                "http://localhost:5000",
+            ],
             credentials: true,
         },
     });

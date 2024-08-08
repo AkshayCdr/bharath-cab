@@ -5,15 +5,22 @@ import sessionRoute from "./routes/session.route";
 import driverRoute from "./routes/driver.route";
 import cookieParser from "cookie-parser";
 
+// import { createRequestHandler } from "@remix-run/express";
+// import * as build from "../client/build/server/index.js";
+
 export function createApp() {
-  const app = express();
-  app.use(express.json());
-  app.use(cookieParser());
+    const app = express();
+    app.use(express.json());
+    app.use(cookieParser());
 
-  app.use("/user", UserRouter);
-  app.use("/ride", rideRouter);
-  app.use("/session", sessionRoute);
-  app.use("/driver", driverRoute);
+    // app.use(express.static("/build/client"));
 
-  return app;
+    // app.all("*", createRequestHandler({ build }));
+
+    app.use("/user", UserRouter);
+    app.use("/ride", rideRouter);
+    app.use("/session", sessionRoute);
+    app.use("/driver", driverRoute);
+
+    return app;
 }
