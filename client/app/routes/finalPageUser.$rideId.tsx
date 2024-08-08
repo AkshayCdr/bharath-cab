@@ -40,6 +40,7 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 export async function action({ request }: ActionFunctionArgs) {
     const formData = await request.formData();
 
+    const cookie = request.headers.get("cookie");
     const { intent } = Object.fromEntries(formData);
 
     const isReview = intent === "review";
@@ -54,26 +55,22 @@ export async function action({ request }: ActionFunctionArgs) {
 
         if (!rideDetails.rating) {
             const updatedRideDetails = { ...rideDetails, rating: 0 };
-            const message = await ride.setReview(
-                updatedRideDetails,
-                request.headers.get("cookies")
-            );
+            const message = await ride.setReview(updatedRideDetails, cookie);
             return message;
         }
 
-        const message = await ride.setReview(
-            rideDetails,
-            request.headers.get("cookies")
-        );
+        const message = await ride.setReview(rideDetails, cookie);
 
         return redirect(`/user`);
     }
 
     if (isCancel) {
         console.log("cancelling ride clicked ....");
-        const rideId = formData.get("rideId");
+        const rideId = String(formData.get("rideId"));
+
+        await ride.cancelRide(rideId, cookie);
         console.log(rideId);
-        handleCancelRide(rideId);
+        // handleCancelRide(rideId);
         return redirect(`/`);
     }
 }

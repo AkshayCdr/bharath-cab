@@ -62,7 +62,7 @@ export async function deleteSession(req: Request, res: Response) {
 
         res.cookie("sessionId", "", options);
         res.cookie("accountId", "", options);
-        res.cookie("accountType", "", options);
+        // res.cookie("accountType", "", options);
 
         await session.deleteSession(id);
 

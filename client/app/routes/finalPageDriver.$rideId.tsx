@@ -14,11 +14,6 @@ import useRideEvents from "~/hooks/useRideEvents";
 import { parse } from "~/utils/auth.server";
 import { socket } from "~/socket/websocket";
 
-function handleCancelRide(navigate) {
-    alert("ride cancelled by user...");
-    navigate("/driver");
-}
-
 function handleEndRide(navigate) {
     console.log("ride endd...");
     navigate("/");
@@ -67,8 +62,13 @@ export default function FinalPageDriver() {
     const navigate = useNavigate();
 
     useEffect(() => {
+        function handleCancelRide() {
+            alert("ride cancelled by user...");
+            navigate("/");
+        }
+
         socket.on("endRide", () => handleEndRide(navigate));
-        socket.on("cancelRide", () => handleCancelRide(navigate));
+        socket.on("cancelRide", handleCancelRide);
         return () => {
             socket.off("cancelRide", handleCancelRide);
             socket.off("endRide", handleEndRide);
