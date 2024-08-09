@@ -1,3 +1,4 @@
+import { redirect } from "@remix-run/node";
 import { config } from "../utils/config";
 
 const API_KEY = config.API_KEY;

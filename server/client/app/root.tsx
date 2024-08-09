@@ -1,9 +1,11 @@
 import {
+    isRouteErrorResponse,
     Links,
     Meta,
     Outlet,
     Scripts,
     ScrollRestoration,
+    useRouteError,
 } from "@remix-run/react";
 
 import styles from "./styles/main.css?url";
@@ -12,12 +14,13 @@ import { LinksFunction, LoaderFunctionArgs } from "@remix-run/node";
 import stylesheet from "~/tailwind.css?url";
 import Navbar from "./component/Navbar";
 import { AuthProvider } from "./context/authContext";
-import { parse } from "./utils/auth.server";
+
 import { account } from "./apis/account.server";
+import ErrorRoot from "./component/ErrorRoot";
 
 export async function loader({ request }: LoaderFunctionArgs) {
     const response = await account.getAccountId(request.headers.get("Cookie"));
-    if (!response) return null;
+    if (!response.ok) return null;
 
     const userId = response?.accountId;
 
@@ -58,28 +61,21 @@ export default function App() {
     return <Outlet />;
 }
 
-// export function ErrorBoundary() {
-//   const error = useRouteError();
+export function ErrorBoundary() {
+    const error = useRouteError();
 
-//   if (isRouteErrorResponse(error)) {
-//     return (
-//       <div>
-//         <h1>
-//           {error.status} {error.statusText}
-//         </h1>
-//         <p>{error.data}</p>
-//       </div>
-//     );
-//   } else if (error instanceof Error) {
-//     return (
-//       <div>
-//         <h1>Error</h1>
-//         <p>{error.message}</p>
-//         <p>The stack trace is:</p>
-//         <pre>{error.stack}</pre>
-//       </div>
-//     );
-//   } else {
-//     return <h1>Unknown Error</h1>;
-//   }
-// }
+    if (isRouteErrorResponse(error)) {
+        return (
+            <div>
+                <h1>
+                    {error.status} {error.statusText}
+                </h1>
+                <p>{error.data}</p>
+            </div>
+        );
+    } else if (error instanceof Error) {
+        return <ErrorRoot message={error.message} stack={error.stack} />;
+    } else {
+        return <h1>Unknown Error</h1>;
+    }
+}
