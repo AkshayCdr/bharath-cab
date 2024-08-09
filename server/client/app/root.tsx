@@ -13,10 +13,14 @@ import stylesheet from "~/tailwind.css?url";
 import Navbar from "./component/Navbar";
 import { AuthProvider } from "./context/authContext";
 import { parse } from "./utils/auth.server";
+import { account } from "./apis/account.server";
 
 export async function loader({ request }: LoaderFunctionArgs) {
-    const cookieString = request.headers.get("Cookie");
-    const userId = parse(cookieString, "accountId");
+    const response = await account.getAccountId(request.headers.get("Cookie"));
+    if (!response) return null;
+
+    const userId = response?.accountId;
+
     if (userId) return userId;
     return null;
 }

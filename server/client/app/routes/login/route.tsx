@@ -37,8 +37,6 @@ export async function action({ request }: ActionFunctionArgs) {
 
     const cookieHeader = response.headers.get("set-cookie");
 
-    // console.log(cookieHeader);
-
     const data = await account.getAccountType(cookieHeader);
     if (!data) return null;
 

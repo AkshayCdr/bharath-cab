@@ -15,17 +15,18 @@ import useDriverSocket from "~/hooks/useDriverSocket";
 import { parse } from "~/utils/auth.server";
 
 import Mapcontainer from "~/component/Mapcontainer";
+import { account } from "~/apis/account.server";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
     const cookies = request.headers.get("cookie");
 
-    const driverId = parse(cookies, "accountId");
+    const response = await account.getAccountId(cookies);
 
-    if (!driverId) {
+    if (!response?.accountId) {
         throw redirect("/login");
     }
 
-    const driverData = await driver.get(driverId, cookies);
+    const driverData = await driver.get(response.accountId, cookies);
 
     if (!driverData)
         throw json({ message: "Could not find driver details of id " });

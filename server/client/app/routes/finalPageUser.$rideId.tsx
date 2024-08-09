@@ -17,17 +17,12 @@ import { useLoaderData } from "@remix-run/react";
 import { parse } from "~/utils/auth.server";
 
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
-    const cookie = request.headers.get("cookie");
-    const userId = parse(cookie, "accountId");
-
-    if (!userId) {
-        throw redirect("/login");
-    }
+    const cookies = request.headers.get("cookie");
     const { rideId } = params;
 
     const rideDetails: RideDetails = await ride.getRideAndDriver(
         rideId,
-        cookie
+        cookies
     );
 
     if (!rideDetails) {

@@ -50,8 +50,23 @@ async function getAccountType(cookie) {
     return accountType;
 }
 
+async function getAccountId(cookie) {
+    const response = await fetch(`${API_KEY}/${SESSION}/account-id`, {
+        method: "GET",
+        headers: {
+            Cookie: cookie,
+        },
+        credentials: "include",
+    });
+
+    if (!response.ok) return null;
+
+    return response.json();
+}
+
 export const account = {
     login,
     logout,
     getAccountType,
+    getAccountId,
 };
