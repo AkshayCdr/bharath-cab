@@ -6,17 +6,14 @@ import {
     redirect,
 } from "@remix-run/node";
 import LocationInput from "~/component/LocationInput";
-import { ride } from "~/apis/ride";
+import { ride } from "~/apis/ride.server";
 
 import { json, useLoaderData } from "@remix-run/react";
-import { user } from "~/apis/user";
+import { user } from "~/apis/user.server";
 
 import styles from "~/styles/user.css?url";
 
 import useMapDetails from "~/hooks/useMapDetails";
-import { parse } from "~/utils/auth.server";
-
-import { rideCookie } from "~/utils/rideCookie.server";
 
 import Mapcontainer from "~/component/Mapcontainer";
 import { useAuth } from "~/context/authContext";

@@ -1,7 +1,7 @@
 import { LoaderFunctionArgs, json, redirect } from "@remix-run/node";
 import { useLoaderData, useNavigate } from "@remix-run/react";
 
-import { ride } from "~/apis/ride";
+import { ride } from "~/apis/ride.server";
 import { useEffect, useState } from "react";
 import useLocation from "~/hooks/useLocation";
 import useRideDetails, { RideDetails } from "~/hooks/useRideDetails";

@@ -5,7 +5,7 @@ import {
     type LoaderFunctionArgs,
 } from "@remix-run/node";
 
-import { driver } from "~/apis/driver";
+import { driver } from "~/apis/driver.server";
 
 import Modal from "~/component/Modal";
 

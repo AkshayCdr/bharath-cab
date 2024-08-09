@@ -4,7 +4,7 @@ import {
     LoaderFunctionArgs,
 } from "@remix-run/node";
 import { redirect } from "@remix-run/react";
-import { account } from "~/apis/account";
+import { account } from "~/apis/account.server";
 import LoginInput from "../../component/LoginInput";
 import styles from "~/styles/login.css?url";
 import { validate } from "./validation.server";

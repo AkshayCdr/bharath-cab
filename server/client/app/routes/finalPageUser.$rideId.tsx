@@ -4,7 +4,7 @@ import {
     json,
     redirect,
 } from "@remix-run/node";
-import { ride } from "~/apis/ride";
+import { ride } from "~/apis/ride.server";
 import { useEffect, useState } from "react";
 
 import useRideDetails, { RideDetails } from "~/hooks/useRideDetails";

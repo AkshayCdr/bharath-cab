@@ -1,6 +1,6 @@
 import { LoaderFunctionArgs } from "@remix-run/node";
 import { redirect } from "@remix-run/react";
-import { account } from "~/apis/account";
+import { account } from "~/apis/account.server";
 
 export const parse = (header: string, type: string) => {
     if (!header) return null;
