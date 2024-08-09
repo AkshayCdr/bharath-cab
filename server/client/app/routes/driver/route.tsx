@@ -12,7 +12,6 @@ import Modal from "~/component/Modal";
 import styles from "~/styles/driver.css?url";
 import useDriver from "~/hooks/useDriver";
 import useDriverSocket from "~/hooks/useDriverSocket";
-import { parse } from "~/utils/auth.server";
 
 import Mapcontainer from "~/component/Mapcontainer";
 import { account } from "~/apis/account.server";

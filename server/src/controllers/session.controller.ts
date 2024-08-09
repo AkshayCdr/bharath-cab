@@ -32,8 +32,6 @@ export async function insertIntoSession(
 
         const sessionId = await session.add(id);
 
-        const accountType = await account.type(id);
-
         const options: CookieOptions = {
             httpOnly: true,
             secure: false,
@@ -41,7 +39,6 @@ export async function insertIntoSession(
         };
 
         res.cookie("sessionId", sessionId, options);
-        // res.cookie("accountId", id, options);
 
         res.status(200).send({ message: "session set" });
     } catch (error) {
@@ -61,8 +58,6 @@ export async function deleteSession(req: Request, res: Response) {
         };
 
         res.cookie("sessionId", "", options);
-        // res.cookie("accountId", "", options);
-        // res.cookie("accountType", "", options);
 
         await session.deleteSession(id);
 
