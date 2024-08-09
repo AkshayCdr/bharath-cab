@@ -4,7 +4,7 @@ import { verifyPassword } from "../utils/passwordUtils";
 import { account } from "../services/account.services";
 import { session } from "../services/session.service";
 import { Id } from "../types/id";
-import { getAccountTypeTable } from "../model/session.model";
+import { getAccountIdTable, getAccountTypeTable } from "../model/session.model";
 
 export async function insertIntoSession(
     req: Request<{}, {}, Session>,
@@ -32,8 +32,6 @@ export async function insertIntoSession(
 
         const sessionId = await session.add(id);
 
-        const accountType = await account.type(id);
-
         const options: CookieOptions = {
             httpOnly: true,
             secure: false,
@@ -41,7 +39,6 @@ export async function insertIntoSession(
         };
 
         res.cookie("sessionId", sessionId, options);
-        res.cookie("accountId", id, options);
 
         res.status(200).send({ message: "session set" });
     } catch (error) {
@@ -61,8 +58,6 @@ export async function deleteSession(req: Request, res: Response) {
         };
 
         res.cookie("sessionId", "", options);
-        res.cookie("accountId", "", options);
-        // res.cookie("accountType", "", options);
 
         await session.deleteSession(id);
 
@@ -77,11 +72,23 @@ export async function deleteSession(req: Request, res: Response) {
 export async function getAccountType(req: Request, res: Response) {
     try {
         const sessionId = req.cookies.sessionId;
-        console.log(sessionId);
+
         const accountType = await getAccountTypeTable(sessionId);
         res.status(200).json({ accountType });
     } catch (error) {
         console.error(error);
         res.status(500).send({ message: "error getting account type" });
+    }
+}
+
+export async function getAccountId(req: Request, res: Response) {
+    try {
+        const sessionId = req.cookies.sessionId;
+
+        const accountId = await getAccountIdTable(sessionId);
+        res.status(200).json({ accountId });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send({ message: "error getting account" });
     }
 }

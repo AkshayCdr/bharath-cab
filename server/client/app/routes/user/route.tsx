@@ -22,6 +22,7 @@ import Mapcontainer from "~/component/Mapcontainer";
 import { useAuth } from "~/context/authContext";
 import { useEffect } from "react";
 import { commitSession, getSession } from "~/utils/session";
+import { account } from "~/apis/account.server";
 
 export interface User {
     account_id: string;
@@ -62,13 +63,13 @@ export function formatSourceDestination(
 export const loader = async ({ request }: LoaderFunctionArgs) => {
     const cookies = request.headers.get("cookie");
 
-    const userId = parse(cookies, "accountId");
+    const response = await account.getAccountId(cookies);
 
-    if (!userId) {
+    if (!response?.accountId) {
         throw redirect("/login");
     }
 
-    const userData = await user.getDetails(userId, cookies);
+    const userData = await user.getDetails(response.accountId, cookies);
 
     if (!userData) {
         throw json({ message: "Could not find user details " });

@@ -1,7 +1,10 @@
-// const addr = window.location.hostname + ":3000";
+import { config } from "../utils/config";
+
+const API_KEY = config.API_KEY;
+const RIDE = "ride";
 
 async function setLocation(locationData, cookie) {
-    const response = await fetch("http://localhost:3000/ride", {
+    const response = await fetch(`${API_KEY}/${RIDE}`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -24,7 +27,7 @@ async function setLocation(locationData, cookie) {
 }
 
 async function getRideDetails(rideId: string, cookie) {
-    const response = await fetch(`http://localhost:3000/ride/${rideId}`, {
+    const response = await fetch(`${API_KEY}/${RIDE}/${rideId}`, {
         headers: {
             Cookie: cookie,
         },
@@ -41,16 +44,13 @@ async function getRideDetails(rideId: string, cookie) {
 }
 
 async function getRideAndDriver(rideId: string, cookie) {
-    const response = await fetch(
-        `http://localhost:3000/ride/${rideId}/driver`,
-        {
-            method: "GET",
-            credentials: "include",
-            headers: {
-                Cookie: cookie,
-            },
-        }
-    );
+    const response = await fetch(`${API_KEY}/${RIDE}/${rideId}/driver`, {
+        method: "GET",
+        credentials: "include",
+        headers: {
+            Cookie: cookie,
+        },
+    });
     if (!response.ok) {
         console.error(response.status, response.statusText);
         return;
@@ -61,7 +61,7 @@ async function getRideAndDriver(rideId: string, cookie) {
 }
 
 async function getRideAndUser(rideId: string, cookie) {
-    const response = await fetch(`http://localhost:3000/ride/${rideId}/user`, {
+    const response = await fetch(`${API_KEY}/${RIDE}/${rideId}/user`, {
         method: "GET",
         credentials: "include",
         headers: {
@@ -78,7 +78,7 @@ async function getRideAndUser(rideId: string, cookie) {
 }
 
 async function requestForRide(Id, cookie) {
-    const response = await fetch(`http://localhost:3000/ride/${Id}`, {
+    const response = await fetch(`${API_KEY}/${RIDE}/${Id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json", Cookie: cookie },
         body: JSON.stringify({ status: "request_ride" }),
@@ -97,7 +97,7 @@ async function requestForRide(Id, cookie) {
 }
 
 async function updateRide({ rideId, source, destination }, cookie) {
-    const response = await fetch(`http://localhost:3000/ride/${rideId}`, {
+    const response = await fetch(`${API_KEY}/${RIDE}/${rideId}`, {
         method: "PUT",
         headers: {
             "Content-Type": "application/json",
@@ -119,15 +119,12 @@ async function updateRide({ rideId, source, destination }, cookie) {
 }
 
 async function cancelRide(rideId, cookie) {
-    const response = await fetch(
-        `http://localhost:3000/ride/${rideId}/cancel`,
-        {
-            method: "PATCH",
-            headers: {
-                Cookie: cookie,
-            },
-        }
-    );
+    const response = await fetch(`${API_KEY}/${RIDE}/${rideId}/cancel`, {
+        method: "PATCH",
+        headers: {
+            Cookie: cookie,
+        },
+    });
     if (!response.ok) {
         console.error(
             "failed to cancel ",
@@ -142,7 +139,7 @@ async function cancelRide(rideId, cookie) {
 
 async function setReview(rideDetails, cookies) {
     const response = await fetch(
-        `http://localhost:3000/ride/${rideDetails.Id}/review`,
+        `${API_KEY}/${RIDE}/${rideDetails.Id}/review`,
         {
             method: "PATCH",
             headers: { "Content-Type": "application/json", Cookies: cookies },

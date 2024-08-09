@@ -34,11 +34,6 @@ type Coordinates = {
 
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
     const cookies = request.headers.get("cookie");
-    const userId = parse(cookies, "accountId");
-
-    if (!userId) {
-        throw redirect("/login");
-    }
     const { rideId } = params;
 
     const rideDetails: Ride = await ride.getRideDetails(rideId, cookies);

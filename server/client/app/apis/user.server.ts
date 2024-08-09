@@ -1,5 +1,10 @@
+import { config } from "../utils/config";
+
+const API_KEY = config.API_KEY;
+const USER = "user";
+
 export async function getDetails(id: string, cookie) {
-    const response = await fetch(`http://localhost:3000/user/${id}`, {
+    const response = await fetch(`${API_KEY}/${USER}/${id}`, {
         method: "GET",
         headers: {
             Cookie: cookie,

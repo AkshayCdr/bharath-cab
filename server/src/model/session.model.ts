@@ -55,3 +55,14 @@ export async function getAccountTypeTable(id: string): Promise<string> {
         throw new Error("cannot get account type tab;e");
     }
 }
+
+export async function getAccountIdTable(id: string): Promise<string> {
+    try {
+        const query = `select account_id from session where id = $1`;
+        const result = await (await client).query(query, [id]);
+        return result.rows[0].account_id;
+    } catch (error) {
+        console.error(error);
+        throw new Error("cannot get account type tab;e");
+    }
+}

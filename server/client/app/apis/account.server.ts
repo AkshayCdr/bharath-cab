@@ -1,5 +1,10 @@
+import { config } from "../utils/config";
+
+const API_KEY = config.API_KEY;
+const SESSION = "session";
+
 async function login(userDetails) {
-    const response = await fetch("http://localhost:3000/session", {
+    const response = await fetch(`${API_KEY}/${SESSION}`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -14,7 +19,7 @@ async function login(userDetails) {
 }
 
 async function logout(id, cookie) {
-    const response = await fetch(`http://localhost:3000/session/${id}`, {
+    const response = await fetch(`${API_KEY}/${SESSION}/${id}`, {
         method: "DELETE",
         headers: {
             Cookie: cookie,
@@ -28,7 +33,7 @@ async function logout(id, cookie) {
 }
 
 async function getAccountType(cookie) {
-    const response = await fetch(`http://localhost:3000/session/account-type`, {
+    const response = await fetch(`${API_KEY}/${SESSION}/account-type`, {
         method: "GET",
         headers: {
             Cookie: cookie,
@@ -45,8 +50,23 @@ async function getAccountType(cookie) {
     return accountType;
 }
 
+async function getAccountId(cookie) {
+    const response = await fetch(`${API_KEY}/${SESSION}/account-id`, {
+        method: "GET",
+        headers: {
+            Cookie: cookie,
+        },
+        credentials: "include",
+    });
+
+    if (!response.ok) return null;
+
+    return response.json();
+}
+
 export const account = {
     login,
     logout,
     getAccountType,
+    getAccountId,
 };
