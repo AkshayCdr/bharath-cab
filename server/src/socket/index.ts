@@ -2,7 +2,7 @@ import { Server, Socket } from "socket.io";
 import { driverSock } from "./driver.socket";
 import { clientSock } from "./client.socket";
 import HTTPServer from "http";
-import { DefaultEventsMap } from "socket.io/dist/typed-events";
+
 import { parse } from "cookie";
 import { isSessionExist } from "../model/session.model";
 
@@ -11,7 +11,7 @@ export function createSocket(
         typeof HTTPServer.IncomingMessage,
         typeof HTTPServer.ServerResponse
     >
-) {
+): Server {
     const io = new Server(httpServer, {
         cookie: false,
         cors: {
@@ -61,9 +61,7 @@ export function createSocket(
     return io;
 }
 
-function handleDisconnection(
-    socket: Socket<DefaultEventsMap, DefaultEventsMap, DefaultEventsMap, any>
-) {
+function handleDisconnection(socket) {
     socket.on("disconnect", () => {
         console.log("disconnected");
         // const isRegistered =

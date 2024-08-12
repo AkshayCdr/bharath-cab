@@ -1,4 +1,3 @@
-import { aW } from "vitest/dist/reporters-BU_vXAUX";
 import { Driver } from "../dtos/driver.dtos";
 import { Review } from "../dtos/rating.dtos";
 import { LocationData, Ride } from "../dtos/ride.dto";

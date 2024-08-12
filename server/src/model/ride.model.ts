@@ -5,7 +5,6 @@ import { Id } from "../types/id";
 import { User } from "../dtos/user.dto";
 import { Review } from "../dtos/rating.dtos";
 import { Driver } from "../dtos/driver.dtos";
-import { Q } from "vitest/dist/reporters-BU_vXAUX";
 
 const client = pool.connect();
 
