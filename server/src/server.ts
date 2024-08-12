@@ -1,11 +1,11 @@
 import { createApp } from "./createApp";
-import dotenv from "dotenv";
+
 import http from "http";
 import "./migrations/table.migrations";
 import { createSocket } from "./socket";
-dotenv.config();
+import { config } from "./config/config";
 
-const PORT = process.env.PORT;
+const PORT = config.port;
 
 const app = createApp();
 

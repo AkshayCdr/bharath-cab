@@ -18,16 +18,6 @@ import { AuthProvider } from "./context/authContext";
 import { account } from "./apis/account.server";
 import ErrorRoot from "./component/ErrorRoot";
 
-export async function loader({ request }: LoaderFunctionArgs) {
-    const response = await account.getAccountId(request.headers.get("Cookie"));
-    if (!response.ok) return null;
-
-    const userId = response?.accountId;
-
-    if (userId) return userId;
-    return null;
-}
-
 export function Layout({ children }: { children: React.ReactNode }) {
     return (
         <html lang="en">

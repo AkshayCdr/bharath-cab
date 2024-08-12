@@ -5,8 +5,6 @@ import { loader } from "~/root";
 export default function Navbar() {
     const { state } = useAuth();
 
-    const userId = useLoaderData<typeof loader>();
-
     return (
         <nav className="nav h-16 bg-gray-950 text-white p-10 items-center justify-center">
             <ul className="flex flex-row items-center text-lg justify-between ">
@@ -14,7 +12,7 @@ export default function Navbar() {
                     <NavLink to={`/`}>Bharat Cab</NavLink>
                 </li>
 
-                {userId ? (
+                {state.isAuthenticated ? (
                     <div className="flex flex-row gap-5">
                         <form action="/logout" method="post">
                             <button>Logout</button>
