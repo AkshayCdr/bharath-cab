@@ -35,6 +35,6 @@
     "allowSyntheticDefaultImports": true, // Allow default imports from modules with no default export
     "isolatedModules": true        // Ensure each file can be safely transpiled without relying on other imports
   },
-  "include": ["src/**/*"],          // Include all files in the `src` folder
+  // "include": ["src/**/*"],          // Include all files in the `src` folder
   "exclude": ["tests","node_modules","tests"]
 }
