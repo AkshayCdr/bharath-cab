@@ -5,7 +5,7 @@ import { Id } from "../types/id";
 import { User } from "../dtos/user.dto";
 import { Review } from "../dtos/rating.dtos";
 import { Driver } from "../dtos/driver.dtos";
-
+import { Location } from "../dtos/ride.dto";
 const client = pool.connect();
 
 export async function insertIntoRideTable(ride: Ride): Promise<string> {
@@ -154,16 +154,6 @@ export async function getStatusFromRide(
         throw new Error("Error getting data from ride");
     }
 }
-
-type Location = {
-    source: coordinates;
-    destination: coordinates;
-};
-
-type coordinates = {
-    x: number;
-    y: number;
-};
 
 export async function getLocation(id: string) {
     try {

@@ -1,6 +1,6 @@
 import { Driver } from "../dtos/driver.dtos";
 import { Review } from "../dtos/rating.dtos";
-import { LocationData, Ride } from "../dtos/ride.dto";
+import { coordinates, LocationData, Ride } from "../dtos/ride.dto";
 import { User } from "../dtos/user.dto";
 import {
     addDriver,
@@ -59,26 +59,33 @@ async function findPrice(source: number, destination: number): Promise<number> {
     return minFee + 0;
 }
 
-function renameCoordinates(obj: LocationData) {
+function renameCoordinates(obj: LocationData): coordinates {
     return {
         x: obj.latitude,
         y: obj.longitude,
     };
 }
 
-async function getRoute(source: any, destination: any) {
+async function getRoute(source: coordinates, destination: coordinates) {
+    console.log(source);
+    console.log(destination);
     const response = await fetch(
         `http://router.project-osrm.org/route/v1/driving/${source.y},${source.x};${destination.y},${destination.x}?overview=full&geometries=geojson`
     );
+
+    if (!response.ok) return null;
 
     const data = await response.json();
 
     return data.routes.length > 0 ? data.routes[0] : null;
 }
 
-async function getDistance(source: any, destination: any) {
+async function getDistance(source: coordinates, destination: coordinates) {
     const route = await getRoute(source, destination);
-    return route && route.distance !== undefined && route.distance / 1000;
+
+    // if (!route) return null;
+
+    return route && route.distance / 1000;
 }
 
 async function findDistance(

@@ -24,3 +24,13 @@ enum RideStatus {
     Accepted = "driver_accepted",
     Cancelled = "cancelled",
 }
+
+export type Location = {
+    source: coordinates;
+    destination: coordinates;
+};
+
+export type coordinates = {
+    x: number;
+    y: number;
+};

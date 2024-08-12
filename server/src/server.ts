@@ -6,7 +6,12 @@ import { createSocket } from "./socket";
 import { config } from "./config/config";
 import { Server } from "socket.io";
 
-const PORT = config.port;
+// import dotenv from "dotenv";
+import { PoolConfig } from "pg";
+
+// dotenv.config();
+
+const PORT = 3000;
 
 const app = createApp();
 

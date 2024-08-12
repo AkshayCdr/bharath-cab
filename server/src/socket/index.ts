@@ -61,7 +61,7 @@ export function createSocket(
     return io;
 }
 
-function handleDisconnection(socket) {
+function handleDisconnection(socket: any) {
     socket.on("disconnect", () => {
         console.log("disconnected");
         // const isRegistered =
