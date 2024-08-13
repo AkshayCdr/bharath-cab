@@ -17,7 +17,7 @@
     "isolatedModules": true        // Ensure each file can be safely transpiled without relying on other imports
   },
   
-  "include": ["./",],
+  "include": ["./"],
   "exclude": ["node_modules","tests"]          // Include all files in the `src` folder
 }
 

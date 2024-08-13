@@ -1,28 +1,22 @@
 import dotenv from "dotenv";
-import { PoolConfig } from "pg";
 
 dotenv.config();
 
-interface config {
-    dbConfig: DbConfig;
-    port: number;
-}
+console.log(dotenv.config());
 
-interface DbConfig {
-    user: string;
-    host: string;
-    database: string;
-    password: string;
-    port: number;
-}
+// export const config = {
+//     dbConfig: {
+//         user: process.env.DB_USER,
+//         host: process.env.DB_HOST,
+//         database: process.env.DB_DATABASE,
+//         password: process.env.DB_PASSWORD,
+//         port: Number(process.env.DB_PORT),
+//     },
+//     port: 3000,
+// };
 
-export const config: { dbConfig: DbConfig; port: number } = {
-    dbConfig: {
-        user: String(process.env.DB_USER),
-        host: String(process.env.DB_HOST),
-        database: String(process.env.DB_DATABASE),
-        password: String(process.env.DB_PASSWORD),
-        port: Number(process.env.DB_PORT),
-    },
-    port: 3000,
-};
+export const user = process.env.DB_USER;
+export const host = process.env.DB_HOST;
+export const database = process.env.DB_DATABASE;
+export const password = process.env.DB_PASSWORD;
+export const port = Number(process.env.DB_PORT);
