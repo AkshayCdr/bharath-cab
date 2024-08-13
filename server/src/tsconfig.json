@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+   "rootDir": ".",
     "target": "ES2022",            // Transpile TypeScript to ES2023
     "module": "Node16",            // Use the latest ECMAScript module system
     "moduleResolution": "Node16",    // Use Node's module resolution
@@ -15,7 +16,8 @@
     "allowSyntheticDefaultImports": true, // Allow default imports from modules with no default export
     "isolatedModules": true        // Ensure each file can be safely transpiled without relying on other imports
   },
-  "include": ["./"],
+  
+  "include": ["./",],
   "exclude": ["node_modules","tests"]          // Include all files in the `src` folder
 }
 

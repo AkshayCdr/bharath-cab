@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "vitest",
-    "build": "tsc --build",
+    "build": "tsc --build && npm run copy",
+    "copy":"cp ./migrations/createTable.sql ./dist/migrations/createTable.sql",
     "start": "node ./dist/index.js",
     "dev": "nodemon /index.ts"
   },
