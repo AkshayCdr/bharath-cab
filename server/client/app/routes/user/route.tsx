@@ -18,7 +18,7 @@ import useMapDetails from "~/hooks/useMapDetails";
 import Mapcontainer from "~/component/Mapcontainer";
 import { useAuth } from "~/context/authContext";
 import { useEffect } from "react";
-import { commitSession, getSession } from "~/utils/session";
+
 import { account } from "~/apis/account.server";
 
 export interface User {
