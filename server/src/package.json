@@ -5,8 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "vitest",
-    "build": "tsc --build && npm run copy",
-    "copy":"cp ./migrations/createTable.sql ./dist/migrations/createTable.sql",
+    "build": "tsc --build && npm run copy-migration ",
+    "copy-migration":"cp ./migrations/createTable.sql ./dist/migrations/createTable.sql",
+    "copy-env":"cp ./.env  dist/",
     "start": "node ./dist/index.js",
     "dev": "nodemon /index.ts"
   },

@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-   "rootDir": ".",
+   "rootDir": "./",
     "target": "ES2022",            // Transpile TypeScript to ES2023
     "module": "Node16",            // Use the latest ECMAScript module system
     "moduleResolution": "Node16",    // Use Node's module resolution

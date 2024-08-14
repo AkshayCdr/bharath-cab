@@ -5,17 +5,10 @@ import sessionRoute from "./routes/session.route";
 import driverRoute from "./routes/driver.route";
 import cookieParser from "cookie-parser";
 
-// import { createRequestHandler } from "@remix-run/express";
-// import * as build from "../client/build/server/index.js";
-
 export function createApp() {
     const app = express();
     app.use(express.json());
     app.use(cookieParser());
-
-    // app.use(express.static("/build/client"));
-
-    // app.all("*", createRequestHandler({ build }));
 
     app.use("/user", UserRouter);
     app.use("/ride", rideRouter);
