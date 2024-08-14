@@ -6,9 +6,12 @@ import { createSocket } from "./socket";
 
 import { Server } from "socket.io";
 
-import { openPort } from "./config/config";
+// import { openPort } from "./config/config";
+import dotenv from "dotenv";
 
-const PORT = openPort || 3000;
+dotenv.config();
+
+const PORT = process.env.PORT || 3000;
 
 const app = createApp();
 

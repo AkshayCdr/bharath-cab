@@ -8,7 +8,7 @@
     "build": "npm install && tsc --build && npm run copy-migration ",
     "copy-migration":"cp ./migrations/createTable.sql ./dist/migrations/createTable.sql",
     "copy-env":"cp ./.env  dist/",
-    "start":"npx ts-node index.ts",
+    "start":"node /dist/index.js",
     "dev": "nodemon /index.ts"
   },
   "author": "",
