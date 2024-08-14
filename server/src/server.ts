@@ -6,7 +6,9 @@ import { createSocket } from "./socket";
 
 import { Server } from "socket.io";
 
-const PORT = 3000;
+import { openPort } from "./config/config";
+
+const PORT = openPort || 3000;
 
 const app = createApp();
 

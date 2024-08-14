@@ -6,6 +6,7 @@ declare global {
             DB_DATABASE: string;
             DB_PASSWORD: string;
             DB_PORT: string;
+            PORT: string;
         }
     }
 }
