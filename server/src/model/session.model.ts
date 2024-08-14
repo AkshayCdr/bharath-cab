@@ -1,7 +1,7 @@
 import { QueryResult } from "pg";
 import { Id } from "../types/id";
 
-import { pool } from "../config/db";
+import { pool } from "../db";
 const client = pool.connect();
 
 export async function isSessionExist(id: string): Promise<boolean> {

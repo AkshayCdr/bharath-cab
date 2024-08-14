@@ -1,5 +1,5 @@
 import { Ride } from "../dtos/ride.dto";
-import { pool } from "../config/db";
+import { pool } from "../db";
 import { QueryResult } from "pg";
 import { Id } from "../types/id";
 import { User } from "../dtos/user.dto";
