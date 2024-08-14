@@ -20,7 +20,10 @@ export default function Navbar() {
                         {state?.accountName && <p>{state.accountName}</p>}
                     </div>
                 ) : (
-                    <NavLink to="/login">Login</NavLink>
+                    <div className="flex flex-row gap-4">
+                        <NavLink to="/login">Login</NavLink>
+                        <NavLink to="/signUp">Sign Up</NavLink>
+                    </div>
                 )}
             </ul>
         </nav>
