@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "vitest",
-    "build": "npm install",
-    "build-dev":"tsc --build && npm run copy-migration ",
+    "build": "npm install tsc --build && npm run copy-migration && npm run copy-env",
+    "build-dev":"tsc --build && npm run copy-migration && npm run copy-env",
     "copy-migration":"cp ./migrations/createTable.sql ./dist/migrations/createTable.sql",
     "copy-env":"cp ./.env  dist/",
     "start":"npx ts-node ./index.ts",
