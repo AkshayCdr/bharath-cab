@@ -1,2 +1,4 @@
 import { io } from "socket.io-client";
-export const socket = io("http://localhost:3000", { withCredentials: true });
+import { config } from "~/utils/config";
+
+export const socket = io(config.API_KEY, { withCredentials: true });

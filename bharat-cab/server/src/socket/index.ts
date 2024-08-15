@@ -20,6 +20,7 @@ export function createSocket(
                 "http://localhost:38801",
                 "http://localhost:37233 ",
                 "http://localhost:5000",
+                "https://bharat-cab-client.onrender.com",
             ],
             credentials: true,
         },
