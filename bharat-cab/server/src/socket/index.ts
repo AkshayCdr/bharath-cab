@@ -26,20 +26,20 @@ export function createSocket(
         },
     });
 
-    io.use(async (socket, next) => {
-        const cookiesHeader = socket.handshake.headers.cookie;
+    // io.use(async (socket, next) => {
+    //     const cookiesHeader = socket.handshake.headers.cookie;
 
-        if (!cookiesHeader) return next(new Error("No cookies found"));
+    //     if (!cookiesHeader) return next(new Error("No cookies found"));
 
-        const cookies = parse(cookiesHeader);
-        const sessionId = cookies.sessionId;
+    //     const cookies = parse(cookiesHeader);
+    //     const sessionId = cookies.sessionId;
 
-        const isAuthenticated = sessionId && (await isSessionExist(sessionId));
+    //     const isAuthenticated = sessionId && (await isSessionExist(sessionId));
 
-        if (!isAuthenticated) return next(new Error("Invalid"));
+    //     if (!isAuthenticated) return next(new Error("Invalid"));
 
-        next();
-    });
+    //     next();
+    // });
 
     io.on("connect", (socket) => {
         console.log("connected");
