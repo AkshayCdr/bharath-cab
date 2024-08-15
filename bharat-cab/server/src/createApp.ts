@@ -10,6 +10,10 @@ export function createApp() {
     app.use(express.json());
     app.use(cookieParser());
 
+    app.get("/", (req, res) => {
+        res.send("hello");
+    });
+
     app.use("/user", UserRouter);
     app.use("/ride", rideRouter);
     app.use("/session", sessionRoute);
