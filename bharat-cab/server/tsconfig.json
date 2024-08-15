@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-   "rootDir": "./",
+   "rootDir": "./src",
     "target": "ES2022",            // Transpile TypeScript to ES2023
     "module": "Node16",            // Use the latest ECMAScript module system
     "moduleResolution": "Node16",    // Use Node's module resolution
@@ -8,7 +8,7 @@
     "esModuleInterop": true,       // Enable interoperability between CommonJS and ES modules
     "skipLibCheck": true,          // Skip type checking of declaration files
     "forceConsistentCasingInFileNames": true, // Disallow inconsistent casing in file names
-    "outDir": "dist",            // Redirect output structure to the `dist` directory
+    "outDir": "./dist",            // Redirect output structure to the `dist` directory
     "resolveJsonModule": true,     // Include modules imported with `.json`
     "sourceMap": true,             // Generate corresponding `.map` files
     // "declaration": true,           // Generate `.d.ts` declaration files
@@ -17,8 +17,8 @@
     "isolatedModules": true        // Ensure each file can be safely transpiled without relying on other imports
   },
   
-  "include": ["./"],
-  "exclude": ["node_modules","tests"]          // Include all files in the `src` folder
+  "include": ["src/**/*"],
+  "exclude": ["node_modules","src/tests"]          // Include all files in the `src` folder
 }
 
 // {

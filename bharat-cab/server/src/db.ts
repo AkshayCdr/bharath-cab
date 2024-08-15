@@ -2,10 +2,11 @@ import { Pool } from "pg";
 
 // import { user, host, database, password, port } from "./config";
 import dotenv from "dotenv";
+import path from "node:path";
 
-dotenv.config();
+// dotenv.config();
 
-console.log(dotenv.config());
+dotenv.config({ path: path.join(process.cwd(), "../.env") });
 
 export const pool = new Pool({
     user: process.env.DB_USER,

@@ -8,6 +8,8 @@ export async function createSchema(): Promise<void> {
     try {
         const __dirname = path.resolve(".");
         const filePath = path.join(__dirname, "migrations", "createTable.sql");
+        // const filePath = path.join( "createTable.sql");
+
         const query = fs.readFileSync(filePath, "utf-8");
         const dbClient = await client;
         await dbClient.query(query);
