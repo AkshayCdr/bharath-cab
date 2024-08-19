@@ -58,7 +58,7 @@ export default function RideDetails({
                             name="sourceName"
                             value={sourceName}
                             readOnly
-                            className="h-12 rounded-lg text-left px-4 text-black"
+                            className="h-12 rounded-lg text-left px-4 text-black max-w-96"
                         />
                     </div>
                     <div className="flex flex-col">
@@ -71,7 +71,7 @@ export default function RideDetails({
                             id=""
                             value={destinationName}
                             readOnly
-                            className="h-12 rounded-lg text-left px-4 text-black"
+                            className="h-12 rounded-lg text-left px-4 text-black max-w-96"
                         />
                     </div>
 
@@ -96,7 +96,7 @@ export default function RideDetails({
             /> */}
                     </div>
                 </p>
-                <div className="flex flex-col gap-4 m-4">
+                <div className="flex flex-col gap-4 m-4 justify-items-center">
                     <button
                         type="submit"
                         name="intent"

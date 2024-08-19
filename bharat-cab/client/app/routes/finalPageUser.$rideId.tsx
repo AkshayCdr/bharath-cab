@@ -1,5 +1,6 @@
 import {
     ActionFunctionArgs,
+    LinksFunction,
     LoaderFunctionArgs,
     json,
     redirect,
@@ -14,7 +15,7 @@ import Review from "~/component/Review";
 
 import Mapcontainer from "~/component/Mapcontainer";
 import { useLoaderData } from "@remix-run/react";
-import { parse } from "~/utils/auth.server";
+import style from "~/styles/finalPageUser.css?url";
 
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
     const cookies = request.headers.get("cookie");
@@ -113,7 +114,7 @@ export default function FinalPageUser() {
     }
 
     return (
-        <div className="flex flex-row m-5 p-3">
+        <div className="flex flex-col lg:flex-row p-3">
             <Details
                 rideDetails={rideDetails}
                 sourceName={sourceName}
@@ -134,3 +135,5 @@ export default function FinalPageUser() {
         </div>
     );
 }
+
+export const links: LinksFunction = () => [{ rel: "stylesheet", href: style }];

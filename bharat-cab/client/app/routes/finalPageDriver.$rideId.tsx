@@ -1,4 +1,9 @@
-import { LoaderFunctionArgs, json, redirect } from "@remix-run/node";
+import {
+    LinksFunction,
+    LoaderFunctionArgs,
+    json,
+    redirect,
+} from "@remix-run/node";
 import { useLoaderData, useNavigate } from "@remix-run/react";
 
 import { ride } from "~/apis/ride.server";
@@ -11,8 +16,9 @@ import useRoute from "~/hooks/useRoute";
 
 import Mapcontainer from "~/component/Mapcontainer";
 import useRideEvents from "~/hooks/useRideEvents";
-import { parse } from "~/utils/auth.server";
+
 import { socket } from "~/socket/websocket";
+import style from "~/styles/finalPageDriver.css?url";
 
 function handleEndRide(navigate) {
     console.log("ride endd...");
@@ -82,7 +88,7 @@ export default function FinalPageDriver() {
     // useRideEvents({ distanceFromDestination, distanceFromSource, rideDetails });
 
     return (
-        <div className="flex flex-row m-5 p-3">
+        <div className="flex flex-col lg:flex-row  p-3">
             <Details
                 rideDetails={rideDetails}
                 sourceName={sourceName}
@@ -101,3 +107,5 @@ export default function FinalPageDriver() {
         </div>
     );
 }
+
+export const links: LinksFunction = () => [{ rel: "stylesheet", href: style }];

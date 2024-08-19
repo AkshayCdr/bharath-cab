@@ -41,7 +41,7 @@ export default function Modal({ userData, driverId, onClick, setUserDetails }) {
     return (
         <div
             ref={modalRef}
-            className="container bg-white max-w-md absolute m-auto left-0 right-0 bottom-1/2 rounded-2xl shadow-md"
+            className="container bg-white max-w-md absolute m-auto left-0 right-0 bottom-1/3 rounded-2xl shadow-md"
         >
             <input type="hidden" name="driverId" defaultValue={driverId} />
             <input type="hidden" name="userId" defaultValue={userData.id} />
