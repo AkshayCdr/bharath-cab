@@ -88,7 +88,7 @@ export default function FinalPageDriver() {
     // useRideEvents({ distanceFromDestination, distanceFromSource, rideDetails });
 
     return (
-        <div className="flex flex-col lg:flex-row  p-3">
+        <div className="flex flex-col lg:flex-row  p-3 bg-gray-950 text-white min-h-screen">
             <Details
                 rideDetails={rideDetails}
                 sourceName={sourceName}
