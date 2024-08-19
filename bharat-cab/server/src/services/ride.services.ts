@@ -70,7 +70,7 @@ async function getRoute(source: coordinates, destination: coordinates) {
     console.log(source);
     console.log(destination);
     const response = await fetch(
-        `http://router.project-osrm.org/route/v1/driving/${source.y},${source.x};${destination.y},${destination.x}?overview=full&geometries=geojson`
+        `https://router.project-osrm.org/route/v1/driving/${source.y},${source.x};${destination.y},${destination.x}?overview=full&geometries=geojson`
     );
 
     if (!response.ok) return null;
