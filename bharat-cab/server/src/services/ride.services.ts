@@ -66,18 +66,43 @@ function renameCoordinates(obj: LocationData): coordinates {
     };
 }
 
-async function getRoute(source: coordinates, destination: coordinates) {
+// async function getRoute(source: coordinates, destination: coordinates) {
+//     console.log(source);
+//     console.log(destination);
+//     const response = await fetch(
+//         `https://router.project-osrm.org/route/v1/driving/${source.y},${source.x};${destination.y},${destination.x}?overview=full&geometries=geojson`
+//     );
+
+//     if (!response.ok) return null;
+
+//     const data = await response.json();
+
+//     return data.routes.length > 0 ? data.routes[0] : null;
+// }
+async function getRoute(source, destination) {
     console.log(source);
     console.log(destination);
-    const response = await fetch(
-        `https://router.project-osrm.org/route/v1/driving/${source.y},${source.x};${destination.y},${destination.x}?overview=full&geometries=geojson`
-    );
 
-    if (!response.ok) return null;
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 10000); // 10 seconds timeout
 
-    const data = await response.json();
+    try {
+        const response = await fetch(
+            `https://router.project-osrm.org/route/v1/driving/${source.y},${source.x};${destination.y},${destination.x}?overview=full&geometries=geojson`,
+            { signal: controller.signal }
+        );
 
-    return data.routes.length > 0 ? data.routes[0] : null;
+        clearTimeout(timeout);
+
+        if (!response.ok) return null;
+
+        const data = await response.json();
+
+        return data.routes.length > 0 ? data.routes[0] : null;
+    } catch (error) {
+        console.error("Fetch error:", error);
+        return null;
+    }
 }
 
 async function getDistance(source: coordinates, destination: coordinates) {
