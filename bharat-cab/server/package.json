@@ -10,7 +10,7 @@
     "copy-migration":"cp ./src/migrations/createTable.sql ./dist/migrations/createTable.sql",
     "copy-env":"cp ./.env  dist/",
     "start":"cd ./dist && node index.js",
-    "dev": "nodemon .src/index.ts"
+    "dev": "nodemon ./src/index.ts"
   },
   "author": "",
   "license": "ISC",
