@@ -35,7 +35,7 @@ export default function SignUp() {
 
     return (
         <div className="bg-gray-950 h-screen">
-            <div className="flex flex-col w-fit mx-auto border-2 rounded-lg">
+            <div className="flex flex-col max-w-96 mx-auto border-2 rounded-lg">
                 <div className="mx-auto mt-10 ">
                     <select
                         name="role"
