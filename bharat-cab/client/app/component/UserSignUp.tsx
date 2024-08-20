@@ -11,7 +11,7 @@ export default function UserSignUp() {
                 name="name"
                 id=""
                 required
-                className="h-10 bg-gray-950 border-b-2  focus:outline-none text-2xl"
+                className="h-10 bg-gray-950 border-b-2  focus:outline-none text-2xl focus:border-b-4  focus:border-yellow-300 hover:border-b-4"
                 placeholder="Name"
             />
 
@@ -19,7 +19,7 @@ export default function UserSignUp() {
                 type="email"
                 name="email"
                 id=""
-                className="h-10  bg-gray-950 border-b-2  focus:outline-none text-2xl"
+                className="h-10  bg-gray-950 border-b-2  focus:outline-none text-2xl focus:border-b-4  focus:border-yellow-300 hover:border-b-4"
                 placeholder="Email"
             />
 
@@ -30,7 +30,7 @@ export default function UserSignUp() {
                 maxLength={10}
                 id=""
                 required
-                className="h-10 bg-gray-950 border-b-2  focus:outline-none text-2xl"
+                className="h-10 bg-gray-950 border-b-2  focus:outline-none text-2xl focus:border-b-4  focus:border-yellow-300 hover:border-b-4"
                 placeholder="Phone"
             />
 
@@ -40,7 +40,7 @@ export default function UserSignUp() {
                 minLength={3}
                 id=""
                 required
-                className="h-10  bg-gray-950 border-b-2  focus:outline-none text-2xl"
+                className="h-10  bg-gray-950 border-b-2  focus:outline-none text-2xl focus:border-b-4  focus:border-yellow-300 hover:border-b-4"
                 placeholder="Username"
             />
 
@@ -49,12 +49,12 @@ export default function UserSignUp() {
                 name="password"
                 minLength={3}
                 required
-                className="h-10  bg-gray-950 border-b-2  focus:outline-none text-2xl"
+                className="h-10  bg-gray-950 border-b-2  focus:outline-none text-2xl focus:border-b-4  focus:border-yellow-300 hover:border-b-4"
                 placeholder="Password"
             />
 
             <button
-                className="submit bg-blue-600 text-white py-2 px-5 rounded-md w-40 m-auto"
+                className="submit bg-blue-600 text-white py-2 px-5 rounded-md w-40 m-auto hover:bg-blue-800"
                 name="intent"
                 value="createUser"
             >

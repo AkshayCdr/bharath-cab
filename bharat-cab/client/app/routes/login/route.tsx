@@ -61,9 +61,10 @@ export async function action({ request }: ActionFunctionArgs) {
 export default function Login() {
     return (
         <div
-            className="flex flex-col m-6 p-36  rounded-md bg-center bg-cover"
+            className="flex flex-col m-6  rounded-md bg-center bg-cover"
             style={{
                 backgroundImage: `url('/home.jpg')`,
+                height: "500px",
             }}
         >
             <LoginInput />

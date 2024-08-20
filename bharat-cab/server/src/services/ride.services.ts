@@ -83,16 +83,16 @@ async function getRoute(source, destination) {
     console.log(source);
     console.log(destination);
 
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 10000); // 10 seconds timeout
+    // const controller = new AbortController();
+    // const timeout = setTimeout(() => controller.abort(), 10000); // 10 seconds timeout
 
     try {
         const response = await fetch(
-            `https://router.project-osrm.org/route/v1/driving/${source.y},${source.x};${destination.y},${destination.x}?overview=full&geometries=geojson`,
-            { signal: controller.signal }
+            `https://router.project-osrm.org/route/v1/driving/${source.y},${source.x};${destination.y},${destination.x}?overview=full&geometries=geojson`
+            // { signal: controller.signal }
         );
 
-        clearTimeout(timeout);
+        // clearTimeout(timeout);
 
         if (!response.ok) return null;
 
@@ -108,7 +108,7 @@ async function getRoute(source, destination) {
 async function getDistance(source: coordinates, destination: coordinates) {
     const route = await getRoute(source, destination);
 
-    // if (!route) return null;
+    if (!route) return null;
 
     return route && route.distance / 1000;
 }

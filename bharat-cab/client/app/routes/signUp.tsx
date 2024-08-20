@@ -34,21 +34,23 @@ export default function SignUp() {
     const [role, setRole] = useState("user");
 
     return (
-        <div className=" flex flex-col m-4 p-5">
-            <div className="m-auto">
-                <select
-                    name="role"
-                    id=""
-                    onChange={(e) => setRole(e.target.value)}
-                    className="h-10 w-52"
-                >
-                    <option value="user">User</option>
-                    <option value="driver">Driver</option>
-                </select>
-            </div>
-            <div>
-                {role === "user" && <UserSignUp />}
-                {role === "driver" && <DriverSignUp />}
+        <div className="bg-gray-950 h-screen">
+            <div className="flex flex-col w-fit mx-auto border-2 rounded-lg">
+                <div className="mx-auto mt-10 ">
+                    <select
+                        name="role"
+                        id=""
+                        onChange={(e) => setRole(e.target.value)}
+                        className="h-10 w-52 text-white bg-gray-950 border-4 rounded-md p-2"
+                    >
+                        <option value="user">User</option>
+                        <option value="driver">Driver</option>
+                    </select>
+                </div>
+                <div>
+                    {role === "user" && <UserSignUp />}
+                    {role === "driver" && <DriverSignUp />}
+                </div>
             </div>
         </div>
     );
