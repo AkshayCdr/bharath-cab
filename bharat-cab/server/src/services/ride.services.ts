@@ -99,7 +99,10 @@ async function getRoute(source, destination) {
     }
 }
 
+//@return distance in kms
 async function getDistance(source: coordinates, destination: coordinates) {
+    if (!source || !destination) return null;
+
     const route = await getRoute(source, destination);
 
     if (!route) return null;
