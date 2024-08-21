@@ -105,6 +105,12 @@ async function eventRideNearby(
     user_id: string,
     rideId: string
 ) {
+    const { status } = await rideServices.getStatus(rideId);
+    console.log(status);
+
+    const isDriverAccepted = status === "driver_accepted";
+    if (!isDriverAccepted) return;
+
     const isRideNearby =
         rideDistanceFromSource &&
         rideDistanceFromSource < 2 &&
@@ -119,6 +125,14 @@ async function eventRideStart(
     user_id: string,
     rideId: string
 ) {
+    const { status } = await rideServices.getStatus(rideId);
+    console.log(status);
+
+    const isDriverAceptedOrRideNearby =
+        status === "driver_accepted" || status === "started";
+
+    if (!isDriverAceptedOrRideNearby) return;
+
     const isRideStarted =
         (rideDistanceFromSource || rideDistanceFromSource === 0) &&
         rideDistanceFromSource <= 0.5 &&
@@ -135,6 +149,7 @@ async function eventRideEnd(
 ) {
     const { status } = await rideServices.getStatus(rideId);
 
+    console.log(status);
     const isRideStarted = status === "onride";
 
     if (!isRideStarted) return;
