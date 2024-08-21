@@ -2,6 +2,8 @@ import { Driver } from "../dtos/driver.dtos";
 import { Review } from "../dtos/rating.dtos";
 import { coordinates, LocationData, Ride } from "../dtos/ride.dto";
 import { User } from "../dtos/user.dto";
+// import fetch, { Response } from "node-fetch";
+
 import {
     addDriver,
     getFromRideTable,
@@ -79,12 +81,41 @@ function renameCoordinates(obj: LocationData): coordinates {
 
 //     return data.routes.length > 0 ? data.routes[0] : null;
 // }
+
+// d
+
+const fetchWithTimeout = (url, timeout = 5000): Promise<Response> => {
+    return Promise.race([
+        fetch(url),
+        new Promise<Response>((_, reject) =>
+            setTimeout(() => reject(new Error("Request timeout")), timeout)
+        ),
+    ]);
+};
+
+interface Route {
+    duration: number;
+    distance: number;
+    geometry: {
+        type: string;
+        coordinates: number[][];
+    };
+}
+
+interface OSRMResponse {
+    routes: Route[];
+}
+
 async function getRoute(source, destination) {
     console.log(source);
     console.log(destination);
 
     try {
-        const response = await fetch(
+        // const response = await fetch(
+        //     `https://router.project-osrm.org/route/v1/driving/${source.y},${source.x};${destination.y},${destination.x}?overview=full&geometries=geojson`
+        // );
+
+        const response = await fetchWithTimeout(
             `https://router.project-osrm.org/route/v1/driving/${source.y},${source.x};${destination.y},${destination.x}?overview=full&geometries=geojson`
         );
 
@@ -92,9 +123,10 @@ async function getRoute(source, destination) {
 
         const data = await response.json();
 
-        return data.routes.length > 0 ? data.routes[0] : null;
+        const routes = (data as OSRMResponse)?.routes ?? [];
+        return routes.length > 0 ? routes[0] : null;
     } catch (error) {
-        console.error("Fetch error:", error);
+        console.error("Fetch error: eroor fetching route due to __", error);
         return null;
     }
 }

@@ -16,7 +16,7 @@ export default function useRideSocket({ rideDetails }) {
         return () => {
             socket.off("registerClient");
         };
-    }, []);
+    }, [rideDetails]);
 
     useEffect(() => {
         const handleRideAccepted = (driverDetails) => {
@@ -29,5 +29,5 @@ export default function useRideSocket({ rideDetails }) {
         return () => {
             socket.off("rideAccepted", handleRideAccepted);
         };
-    }, [rideDetails.id]);
+    }, [navigate, rideDetails.id]);
 }

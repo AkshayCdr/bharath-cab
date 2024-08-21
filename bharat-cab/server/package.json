@@ -6,10 +6,10 @@
   "scripts": {
     "test": "vitest",
     "build": "npm install && tsc --build && npm run copy-migration",
-    "build-dev":"tsc --build && npm run copy-migration ",
-    "copy-migration":"cp ./src/migrations/createTable.sql ./dist/migrations/createTable.sql",
-    "copy-env":"cp ./.env  dist/",
-    "start":"cd ./dist && node index.js",
+    "build-dev": "tsc --build && npm run copy-migration ",
+    "copy-migration": "cp ./src/migrations/createTable.sql ./dist/migrations/createTable.sql",
+    "copy-env": "cp ./.env  dist/",
+    "start": "cd ./dist && node index.js",
     "dev": "nodemon ./src/index.ts"
   },
   "author": "",
@@ -25,6 +25,7 @@
     "cross-env": "^7.0.3",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
+    "node-fetch": "^3.3.2",
     "pg": "^8.12.0",
     "socket.io": "^4.7.5"
   },
@@ -37,5 +38,4 @@
     "typescript": "^5.4.5",
     "vitest": "^2.0.1"
   }
-
 }

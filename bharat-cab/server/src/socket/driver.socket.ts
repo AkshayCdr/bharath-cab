@@ -1,4 +1,4 @@
-import { Ride } from "../dtos/ride.dto";
+import { Location, Ride } from "../dtos/ride.dto";
 import { User } from "../dtos/user.dto";
 import { getDriverId, getLocation, getUserId } from "../model/ride.model";
 import { driver } from "../services/driver.services";
@@ -7,6 +7,8 @@ import { DriverSocket } from "../types/driverSocket";
 import { clientSock } from "./client.socket";
 
 const driverSocket: DriverSocket = {};
+
+// const rideLoc: Location = {};
 
 function registerDriverSocket(socket: {
     on: (arg0: string, arg1: (driverID: string) => void) => void;
@@ -30,6 +32,7 @@ async function rideAccepted(socket: {
     on: (arg0: string, arg1: (rideData: any) => Promise<void>) => void;
 }) {
     socket.on("driverAccept", async (rideData) => {
+        console.log("inside ride accepted");
         const { driverId, rideId, userId } = rideData;
 
         const { status } = await rideServices.getStatus(rideId);
@@ -37,10 +40,15 @@ async function rideAccepted(socket: {
         const isCancelled = status === "cancelled";
         if (isCancelled) return;
 
+        console.log("ride is not cancelled");
+
         await rideServices.setDriver(rideId, driverId);
         await rideServices.updateStatus(rideId, "driver_accepted");
 
+        console.log("driver set and status updated");
         const driverDetails = await driver.get(driverId);
+
+        console.log("got driver details ");
         clientSock.rideAccepted(userId, driverDetails);
         lockRide(socket, driverId);
     });
@@ -64,13 +72,18 @@ async function updateLocation(socket: {
 
         await clientSock.sendLocation(user_id, latitude, longitude);
 
+        // if (Object.keys(rideLoc).length) {
+        // }
         let { source, destination } = await getLocation(rideId);
+
+        //store source and destination in cache dont call databse;
 
         const rideLocation = rideServices.renameCoordinates({
             longitude,
             latitude,
         });
 
+        //store rideLocation in cache , if it is same dont call distance again
         const rideDistanceFromSource = await rideServices.getDistance(
             rideLocation,
             source
