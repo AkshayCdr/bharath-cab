@@ -113,8 +113,8 @@ async function eventRideNearby(
 
     const isRideNearby =
         rideDistanceFromSource &&
-        rideDistanceFromSource < 2 &&
-        rideDistanceFromSource > 0.5;
+        rideDistanceFromSource < 1 &&
+        rideDistanceFromSource > 0.1;
     if (!isRideNearby) return;
 
     await rideNearby(user_id, rideId);
@@ -135,7 +135,7 @@ async function eventRideStart(
 
     const isRideStarted =
         (rideDistanceFromSource || rideDistanceFromSource === 0) &&
-        rideDistanceFromSource <= 0.5 &&
+        rideDistanceFromSource <= 0.1 &&
         rideDistanceFromSource >= 0;
 
     if (!isRideStarted) return;
@@ -156,7 +156,7 @@ async function eventRideEnd(
 
     const isRideEnded =
         (rideDistanceFromDestination || rideDistanceFromDestination === 0) &&
-        rideDistanceFromDestination <= 0.5 &&
+        rideDistanceFromDestination <= 0.3 &&
         rideDistanceFromDestination >= 0;
 
     if (!isRideEnded) return;
