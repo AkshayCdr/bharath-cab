@@ -106,9 +106,24 @@ interface OSRMResponse {
     routes: Route[];
 }
 
+function isValidCoordinates(coords: coordinates) {
+    if (typeof coords.x !== "number" || typeof coords.y !== "number") {
+        console.log("invalid coordinates : type is not number");
+        return false;
+    }
+
+    return coords.x >= -90 && coords.y >= -180 && coords.y <= 180;
+}
+
 async function getRoute(source, destination) {
     console.log(source);
     console.log(destination);
+
+    // console.log(isValidCoordinates)
+
+    if (!isValidCoordinates(source) || !isValidCoordinates(destination)) {
+        console.log("coordinates are not valid");
+    }
 
     try {
         // const response = await fetch(
