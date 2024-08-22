@@ -1,8 +1,12 @@
-import { Form, useActionData } from "@remix-run/react";
+import { Form, useActionData, useNavigation } from "@remix-run/react";
 import { Error } from "~/utils/validation.server";
 
 export default function UserSignUp() {
     const err: Error = useActionData();
+
+    const navigation = useNavigation();
+
+    const isSubmitting = navigation.state !== "idle";
 
     return (
         <Form
@@ -78,8 +82,9 @@ export default function UserSignUp() {
                 className="submit bg-blue-600 text-white py-2 px-5 rounded-md w-40 m-auto hover:bg-blue-800"
                 name="intent"
                 value="createUser"
+                disabled={isSubmitting}
             >
-                submit
+                {isSubmitting ? "submitting ..." : "submit"}
             </button>
         </Form>
     );
