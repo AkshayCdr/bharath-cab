@@ -16,13 +16,14 @@ export type LocationData = {
     latitude: number;
 };
 
-enum RideStatus {
+export enum RideStatus {
     Success = "success",
     OnRide = "onride",
     Pending = "pending",
     Requested = "requested",
     Accepted = "driver_accepted",
     Cancelled = "cancelled",
+    Started = "started",
 }
 
 export type Location = {

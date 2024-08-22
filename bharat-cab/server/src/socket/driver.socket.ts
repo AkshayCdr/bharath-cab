@@ -5,10 +5,8 @@ import { driver } from "../services/driver.services";
 import { rideServices } from "../services/ride.services";
 import { DriverSocket } from "../types/driverSocket";
 import { clientSock } from "./client.socket";
-
+import { RideStatus } from "../dtos/ride.dto";
 const driverSocket: DriverSocket = {};
-
-// const rideLoc: Location = {};
 
 function registerDriverSocket(socket: {
     on: (arg0: string, arg1: (driverID: string) => void) => void;
@@ -63,6 +61,22 @@ function lockRide(
     emitEventToAllDriver("lockRide", driverId);
 }
 
+const locationCache = new Map<string, Location>();
+
+async function getCachedLocation(rideId: string): Promise<Location> {
+    if (locationCache.has(rideId)) {
+        console.log("getting cached source and destination");
+
+        return locationCache.get(rideId);
+    }
+
+    const location = await getLocation(rideId);
+
+    locationCache.set(rideId, location);
+
+    return location;
+}
+
 async function updateLocation(socket: {
     on: (arg0: string, arg1: (data: any) => Promise<void>) => void;
 }) {
@@ -72,31 +86,43 @@ async function updateLocation(socket: {
 
         await clientSock.sendLocation(user_id, latitude, longitude);
 
-        // if (Object.keys(rideLoc).length) {
-        // }
-        let { source, destination } = await getLocation(rideId);
-
-        //store source and destination in cache dont call databse;
+        let { source, destination } = await getCachedLocation(rideId);
 
         const rideLocation = rideServices.renameCoordinates({
             longitude,
             latitude,
         });
 
-        //store rideLocation in cache , if it is same dont call distance again
-        const rideDistanceFromSource = await rideServices.getDistance(
-            rideLocation,
-            source
-        );
+        const { status } = await rideServices.getStatus(rideId);
 
-        const rideDistanceFromDestination = await rideServices.getDistance(
-            rideLocation,
-            destination
-        );
+        console.log(status);
 
-        eventRideNearby(rideDistanceFromSource, user_id, rideId);
-        eventRideStart(rideDistanceFromSource, user_id, rideId);
-        eventRideEnd(rideDistanceFromDestination, user_id, rideId);
+        if (status === RideStatus.Accepted) {
+            const rideDistanceFromSource = await rideServices.getDistance(
+                rideLocation,
+                source
+            );
+
+            eventRideNearby(rideDistanceFromSource, user_id, rideId);
+        }
+
+        if (status === RideStatus.Started || status === RideStatus.Accepted) {
+            const rideDistanceFromSource = await rideServices.getDistance(
+                rideLocation,
+                source
+            );
+
+            eventRideStart(rideDistanceFromSource, user_id, rideId);
+        }
+
+        if (status === RideStatus.OnRide) {
+            const rideDistanceFromDestination = await rideServices.getDistance(
+                rideLocation,
+                destination
+            );
+
+            eventRideEnd(rideDistanceFromDestination, user_id, rideId);
+        }
     });
 }
 
@@ -105,12 +131,6 @@ async function eventRideNearby(
     user_id: string,
     rideId: string
 ) {
-    const { status } = await rideServices.getStatus(rideId);
-    console.log(status);
-
-    const isDriverAccepted = status === "driver_accepted";
-    if (!isDriverAccepted) return;
-
     const isRideNearby =
         rideDistanceFromSource &&
         rideDistanceFromSource < 1 &&
@@ -125,14 +145,6 @@ async function eventRideStart(
     user_id: string,
     rideId: string
 ) {
-    const { status } = await rideServices.getStatus(rideId);
-    console.log(status);
-
-    const isDriverAceptedOrRideNearby =
-        status === "driver_accepted" || status === "started";
-
-    if (!isDriverAceptedOrRideNearby) return;
-
     const isRideStarted =
         (rideDistanceFromSource || rideDistanceFromSource === 0) &&
         rideDistanceFromSource <= 0.1 &&
@@ -147,16 +159,9 @@ async function eventRideEnd(
     user_id: string,
     rideId: string
 ) {
-    const { status } = await rideServices.getStatus(rideId);
-
-    console.log(status);
-    const isRideStarted = status === "onride";
-
-    if (!isRideStarted) return;
-
     const isRideEnded =
         (rideDistanceFromDestination || rideDistanceFromDestination === 0) &&
-        rideDistanceFromDestination <= 0.3 &&
+        rideDistanceFromDestination <= 0.1 &&
         rideDistanceFromDestination >= 0;
 
     if (!isRideEnded) return;
