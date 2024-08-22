@@ -1,4 +1,4 @@
-import { Form } from "@remix-run/react";
+import { Form, useNavigation } from "@remix-run/react";
 import { useEffect, useState } from "react";
 
 export default function RideDetails({
@@ -11,6 +11,10 @@ export default function RideDetails({
     const [defaultSource, setSource] = useState("");
     const [defaultDestination, setDestination] = useState("");
 
+    const navigation = useNavigation();
+
+    const isSubmitting = navigation.state !== "idle";
+
     useEffect(() => {
         if (rideDetails?.source && rideDetails?.destination) {
             setSource(`${rideDetails.source.y},${rideDetails.source.x}`);
@@ -19,6 +23,7 @@ export default function RideDetails({
             );
         }
     }, [rideDetails]);
+
     return (
         <div>
             <Form method="POST" id="ride-request-form" className="m-10 ">
@@ -101,6 +106,7 @@ export default function RideDetails({
                         type="submit"
                         name="intent"
                         value="request-for-ride"
+                        disabled={isSubmitting}
                         className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded w-56 "
                     >
                         Request for ride
@@ -110,6 +116,7 @@ export default function RideDetails({
                             type="submit"
                             name="intent"
                             value="update"
+                            disabled={isSubmitting}
                             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-28 "
                         >
                             Update
@@ -118,6 +125,7 @@ export default function RideDetails({
                             type="submit"
                             name="intent"
                             value="cancel"
+                            disabled={isSubmitting}
                             className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded w-28 "
                         >
                             Cancel

@@ -1,12 +1,17 @@
 // import React from 'react'
-import { Form, useActionData } from "@remix-run/react";
+import { Form, useActionData, useNavigation } from "@remix-run/react";
 import { action } from "~/routes/login";
 
 export default function LoginInput() {
     const actionData = useActionData<typeof action>();
 
+    const navigation = useNavigation();
+
+    const isSubmitting = navigation.state !== "idle";
+
     const usernameError = actionData?.errors?.username;
     const passwordError = actionData?.errors?.password;
+
     return (
         <Form
             method="POST"
@@ -40,8 +45,11 @@ export default function LoginInput() {
                 )}
             </p>
             <p className="login-button m-4">
-                <button className="submit bg-blue-600 text-white py-2 px-5 rounded-md">
-                    submit
+                <button
+                    className="submit bg-blue-600 text-white py-2 px-5 rounded-md"
+                    disabled={isSubmitting}
+                >
+                    {isSubmitting ? "submitting..." : "submit"}
                 </button>
             </p>
         </Form>
