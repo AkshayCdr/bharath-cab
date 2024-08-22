@@ -5,6 +5,21 @@ import { driver } from "~/apis/driver.server";
 import { user } from "~/apis/user.server";
 import DriverSignUp from "~/component/DriverSignUp";
 import UserSignUp from "~/component/UserSignUp";
+import { isValidDriver, isValidUser } from "~/utils/validation.server";
+
+interface Account {
+    name: string;
+    email: string;
+    phone: number;
+    username: string;
+    password: string;
+}
+interface User extends Account {}
+
+interface Driver extends Account {
+    cabType: string;
+    regNo: number;
+}
 
 export const action = async ({ request }: ActionFunctionArgs) => {
     const formData = await request.formData();
@@ -17,6 +32,12 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     const data = Object.fromEntries(formData);
 
     if (isDriver) {
+        const err = isValidDriver(data);
+
+        if (Object.keys(err).length > 0) {
+            return err;
+        }
+
         const response = await driver.create(data);
 
         if (!response) throw new Error("error setting data");
@@ -24,7 +45,14 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     }
 
     if (isUser) {
+        const err = isValidUser(data);
+
+        if (Object.keys(err).length > 0) {
+            return err;
+        }
+
         const response = await user.create(data);
+
         if (!response) throw new Error("error setting data");
         return redirect("/login");
     }

@@ -1,6 +1,8 @@
-import { Form } from "@remix-run/react";
+import { Form, useActionData } from "@remix-run/react";
+import { Error } from "~/utils/validation.server";
 
 export default function DriverSignUp() {
+    const err: Error = useActionData();
     return (
         <Form
             method="POST"
@@ -14,6 +16,9 @@ export default function DriverSignUp() {
                 placeholder="Name"
                 className="h-10 bg-gray-950 border-b-2  focus:outline-none text-2xl hover:border-b-4  focus:border-yellow-300"
             />
+            {err?.nameError && (
+                <div className="text-red-600">{err.nameError} </div>
+            )}
 
             <input
                 type="email"
@@ -22,6 +27,9 @@ export default function DriverSignUp() {
                 placeholder="Email"
                 className="h-10 bg-gray-950 border-b-2  focus:outline-none text-2xl hover:border-b-4  focus:border-yellow-300"
             />
+            {err?.emailError && (
+                <div className="text-red-600">{err.emailError}</div>
+            )}
 
             <input
                 type="number"
@@ -33,6 +41,9 @@ export default function DriverSignUp() {
                 placeholder="Phone"
                 className="h-10 bg-gray-950 border-b-2  focus:outline-none text-2xl hover:border-b-4  focus:border-yellow-300"
             />
+            {err?.phoneError && (
+                <div className="text-red-600 ">{err.phoneError}</div>
+            )}
 
             <input
                 type="text"
@@ -53,6 +64,10 @@ export default function DriverSignUp() {
                 className="h-10 bg-gray-950 border-b-2  focus:outline-none text-2xl hover:border-b-4  focus:border-yellow-300"
             />
 
+            {err?.regNoError && (
+                <div className="text-red-600">{err.regNoError}</div>
+            )}
+
             <input
                 type="text"
                 name="username"
@@ -62,6 +77,9 @@ export default function DriverSignUp() {
                 placeholder="Username"
                 className="h-10 bg-gray-950 border-b-2  focus:outline-none text-2xl hover:border-b-4  focus:border-yellow-300"
             />
+            {err?.usernameError && (
+                <div className="text-red-600">{err.usernameError}</div>
+            )}
 
             <input
                 type="password"
@@ -72,6 +90,9 @@ export default function DriverSignUp() {
                 className="h-10 bg-gray-950 border-b-2  focus:outline-none text-2xl hover:border-b-4  focus:border-yellow-300"
             />
 
+            {err?.passwordError && (
+                <div className="text-red-600">{err.passwordError}</div>
+            )}
             <button
                 className="submit bg-blue-600 text-white py-2 px-5 rounded-md w-40 m-auto hover:bg-blue-800"
                 name="intent"

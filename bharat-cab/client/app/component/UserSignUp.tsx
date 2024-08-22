@@ -1,6 +1,9 @@
-import { Form } from "@remix-run/react";
+import { Form, useActionData } from "@remix-run/react";
+import { Error } from "~/utils/validation.server";
 
 export default function UserSignUp() {
+    const err: Error = useActionData();
+
     return (
         <Form
             method="POST"
@@ -14,6 +17,9 @@ export default function UserSignUp() {
                 className="h-10 bg-gray-950 border-b-2  focus:outline-none text-2xl focus:border-b-4  focus:border-yellow-300 hover:border-b-4"
                 placeholder="Name"
             />
+            {err?.nameError && (
+                <div className="text-red-600">{err.nameError} </div>
+            )}
 
             <input
                 type="email"
@@ -22,6 +28,10 @@ export default function UserSignUp() {
                 className="h-10  bg-gray-950 border-b-2  focus:outline-none text-2xl focus:border-b-4  focus:border-yellow-300 hover:border-b-4"
                 placeholder="Email"
             />
+
+            {err?.emailError && (
+                <div className="text-red-600">{err.emailError}</div>
+            )}
 
             <input
                 type="number"
@@ -33,6 +43,9 @@ export default function UserSignUp() {
                 className="h-10 bg-gray-950 border-b-2  focus:outline-none text-2xl focus:border-b-4  focus:border-yellow-300 hover:border-b-4"
                 placeholder="Phone"
             />
+            {err?.phoneError && (
+                <div className="text-red-600 ">{err.phoneError}</div>
+            )}
 
             <input
                 type="text"
@@ -44,6 +57,10 @@ export default function UserSignUp() {
                 placeholder="Username"
             />
 
+            {err?.usernameError && (
+                <div className="text-red-600">{err.usernameError}</div>
+            )}
+
             <input
                 type="password"
                 name="password"
@@ -52,6 +69,10 @@ export default function UserSignUp() {
                 className="h-10  bg-gray-950 border-b-2  focus:outline-none text-2xl focus:border-b-4  focus:border-yellow-300 hover:border-b-4"
                 placeholder="Password"
             />
+
+            {err?.passwordError && (
+                <div className="text-red-600">{err.passwordError}</div>
+            )}
 
             <button
                 className="submit bg-blue-600 text-white py-2 px-5 rounded-md w-40 m-auto hover:bg-blue-800"
