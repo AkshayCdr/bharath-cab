@@ -74,7 +74,7 @@ export default function FinalPageDriver() {
             socket.off("cancelRide", handleCancelRide);
             socket.off("endRide", handleEndRide);
         };
-    }, []);
+    }, [navigate]);
 
     useEffect(() => {
         setIsMounted(true);

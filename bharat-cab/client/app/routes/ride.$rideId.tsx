@@ -17,7 +17,6 @@ import useRideSocket from "~/hooks/useRideSocket";
 import { formatSourceDestination } from "./user/route";
 
 import Mapcontainer from "~/component/Mapcontainer";
-import { parse } from "~/utils/auth.server";
 
 export interface Ride {
     id: string;

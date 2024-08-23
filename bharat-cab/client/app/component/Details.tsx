@@ -1,14 +1,20 @@
-import { Form } from "@remix-run/react";
+import { Form, useNavigation } from "@remix-run/react";
 
 export default function RideDetails({
     rideDetails,
     sourceName,
     destinationName,
     role,
+    isRideStarted,
 }) {
     console.log(rideDetails);
     const isDriver = role === "driver";
     const isUser = role === "user";
+
+    const navigation = useNavigation();
+
+    const isSubmitting = navigation.state !== "idle";
+
     return (
         <Form method="post" className="flex flex-col m-4 p-2 ">
             <input type="hidden" name="rideId" defaultValue={rideDetails.id} />
@@ -90,14 +96,18 @@ export default function RideDetails({
                         className="bg-gray-950 "
                     />
                 </div>
-                <button
-                    type="submit"
-                    name="intent"
-                    value="cancel"
-                    className="bg-red-700 w-32 h-9 m-auto rounded-md"
-                >
-                    Cancel
-                </button>
+
+                {!isRideStarted && (
+                    <button
+                        type="submit"
+                        name="intent"
+                        value="cancel"
+                        className="bg-red-700 w-32 h-9 m-auto rounded-md"
+                        disabled={isSubmitting}
+                    >
+                        {isSubmitting ? "cancelling... " : "cancel"}
+                    </button>
+                )}
             </p>
         </Form>
     );

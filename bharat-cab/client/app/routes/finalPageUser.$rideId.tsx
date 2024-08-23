@@ -120,6 +120,7 @@ export default function FinalPageUser() {
                 sourceName={sourceName}
                 destinationName={destinationName}
                 role={role}
+                isRideStarted={isRideStarted}
             />
 
             <Mapcontainer
@@ -129,7 +130,6 @@ export default function FinalPageUser() {
                 rideLocation={rideLocation}
             ></Mapcontainer>
 
-            {isRideStarted && <p>Ride is started change the location</p>}
             {isRideEnded && <Review rideId={rideDetails.id} />}
             {/* <Review rideId={rideDetails.id} /> */}
         </div>
