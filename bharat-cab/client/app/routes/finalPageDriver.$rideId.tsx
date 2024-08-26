@@ -45,10 +45,6 @@ export default function FinalPageDriver() {
         useRideDetails(rideDetails);
 
     const { currentLocation } = useLocation(rideDetails.id);
-    // const { distance: distanceFromDestination } = useRoute(
-    //     currentLocation,
-    //     destination
-    // );
 
     const [isRideStarted, setStartRide] = useState(false);
     const [isRideEnded, setEndRide] = useState(false);

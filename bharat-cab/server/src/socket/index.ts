@@ -47,6 +47,9 @@ export function createSocket(
 
         driverSock.updateLocation(socket);
 
+        driverSock.rideStartDriver(socket);
+        driverSock.rideEndDriver(socket);
+
         clientSock.cancelRide(socket);
 
         handleDisconnection(socket);
