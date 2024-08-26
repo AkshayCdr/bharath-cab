@@ -71,11 +71,13 @@ export default function Driver() {
 
             <button
                 onClick={goOnline}
-                className={`absolute bottom-10 right-1/2 z-10 w-20 h-24 rounded-3xl ${
-                    online ? "bg-blue-600" : "bg-red-500"
+                className={`absolute bottom-10 mx-auto left-0 right-0 z-10 w-36 h-36 rounded-full text-white font-extrabold ${
+                    online
+                        ? "bg-blue-600 hover:bg-blue-700"
+                        : "bg-red-500 hover:bg-red-700"
                 }`}
             >
-                {online ? "go-offline" : "go-online"}
+                {online ? "GO OFFLINE" : "GO ONLINE"}
             </button>
         </div>
     );

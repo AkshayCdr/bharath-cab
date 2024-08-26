@@ -57,51 +57,6 @@ export default function Map({
         return null;
     }
 
-    function Locate() {
-        const map = useMap();
-
-        const handleLocate = (e) => {
-            e.stopPropagating();
-            console.log("locate clicked");
-            if (!navigator.geolocation) return;
-
-            navigator.geolocation.getCurrentPosition(
-                (pos) => {
-                    const { latitude, longitude } = pos.coords;
-
-                    console.log("setting user location");
-                    setUserLocation([latitude, longitude]);
-
-                    map.setView([latitude, longitude], 14);
-                },
-                (err) => {
-                    console.log("eroor getting pos");
-                    console.error(err.message);
-                }
-            );
-        };
-
-        return (
-            <button
-                onClick={handleLocate}
-                style={{
-                    position: "absolute",
-                    top: "10px",
-                    right: "10px",
-                    zIndex: 1000,
-                    padding: "8px 12px",
-                    backgroundColor: "black",
-                    border: "none",
-                    borderRadius: "4px",
-                    cursor: "pointer",
-                }}
-            >
-                {" "}
-                location
-            </button>
-        );
-    }
-
     useEffect(() => {
         if (rideLocation) {
             setCenter(rideLocation);
@@ -144,13 +99,12 @@ export default function Map({
             <ClickHandler />
             <MapCenterHandler />
 
-            <Locate />
-
             {userLocation && (
                 <Marker position={userLocation} icon={Icon.source}>
                     <Popup>Location</Popup>
                 </Marker>
             )}
+
             {source && (
                 <Marker position={source} icon={Icon.source}>
                     <Popup>source</Popup>

@@ -1,4 +1,12 @@
 import { Form, useNavigation } from "@remix-run/react";
+import { socket } from "~/socket/websocket";
+
+function handleRideStart(rideId) {
+    socket.emit("rideStartDriver", rideId);
+}
+function handleRideEnd(rideId) {
+    socket.emit("rideEndDriver", rideId);
+}
 
 export default function RideDetails({
     rideDetails,
@@ -6,6 +14,7 @@ export default function RideDetails({
     destinationName,
     role,
     isRideStarted,
+    isRideEnded,
 }) {
     console.log(rideDetails);
     const isDriver = role === "driver";
@@ -96,6 +105,23 @@ export default function RideDetails({
                         className="bg-gray-950 "
                     />
                 </div>
+
+                {isRideStarted && (
+                    <button
+                        onClick={() => handleRideStart(rideDetails.id)}
+                        className="bg-green-600 w-32 h-9 m-auto rounded-md"
+                    >
+                        Start Ride
+                    </button>
+                )}
+                {isRideEnded && (
+                    <button
+                        onClick={() => handleRideEnd(rideDetails.id)}
+                        className="bg-green-600 w-32 h-9 m-auto rounded-md"
+                    >
+                        End Ride
+                    </button>
+                )}
 
                 {!isRideStarted && (
                     <button

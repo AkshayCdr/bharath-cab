@@ -172,16 +172,24 @@ async function eventRideEnd(
 async function rideNearby(userId: string, rideId: string) {
     await rideServices.updateStatus(rideId, "started");
     clientSock.rideNearby(userId, rideId);
+
+    const { driverId } = await getDriverId(rideId);
+
+    emitEventToDriver("rideNearby", driverId, "");
 }
 
 async function startRide(userId: string, rideId: string) {
     await rideServices.updateStatus(rideId, "onride");
-    clientSock.startRide(userId, rideId);
+    // clientSock.startRide(userId, rideId);
+
+    const { driverId } = await getDriverId(rideId);
+
+    emitEventToDriver("startRide", driverId, "");
 }
 
 async function endRide(userId: string, rideId: string) {
     await rideServices.updateStatus(userId, "ride_ended");
-    clientSock.endRide(userId, rideId);
+    // clientSock.endRide(userId, rideId);
 
     const { driverId } = await getDriverId(rideId);
 
@@ -202,6 +210,20 @@ async function cancelRide(rideId: string) {
     if (!driverId) return emitEventToAllDriver("cancelRide", rideId);
 
     emitEventToDriver("cancelRide", driverId, "");
+}
+
+async function rideStartDriver(socket) {
+    socket.on("rideStartDriver", async (rideId) => {
+        const { user_id } = await rideServices.read(rideId);
+        clientSock.startRide(user_id, rideId);
+    });
+}
+
+async function rideEndDriver(socket) {
+    socket.on("rideEndDriver", async (rideId) => {
+        const { user_id } = await rideServices.read(rideId);
+        clientSock.endRide(user_id, rideId);
+    });
 }
 
 function emitEventToAllDriver(eventName: string, data: any) {
@@ -239,4 +261,6 @@ export const driverSock = {
     cancelRide,
     isDriverExist,
     deleteClient,
+    rideStartDriver,
+    rideEndDriver,
 };

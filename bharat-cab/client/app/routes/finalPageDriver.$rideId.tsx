@@ -20,11 +20,6 @@ import useRideEvents from "~/hooks/useRideEvents";
 import { socket } from "~/socket/websocket";
 import style from "~/styles/finalPageDriver.css?url";
 
-function handleEndRide(navigate) {
-    console.log("ride endd...");
-    navigate("/");
-}
-
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
     const cookies = request.headers.get("cookie");
     const { rideId } = params;
@@ -68,11 +63,13 @@ export default function FinalPageDriver() {
             navigate("/");
         }
 
-        socket.on("endRide", () => handleEndRide(navigate));
+        socket.on("startRide", () => setStartRide(true));
+        socket.on("endRide", () => setEndRide(true));
         socket.on("cancelRide", handleCancelRide);
         return () => {
+            socket.off("startRide");
             socket.off("cancelRide", handleCancelRide);
-            socket.off("endRide", handleEndRide);
+            socket.off("endRide");
         };
     }, [navigate]);
 
@@ -94,6 +91,8 @@ export default function FinalPageDriver() {
                 sourceName={sourceName}
                 destinationName={destinationName}
                 role={role}
+                isRideStarted={isRideStarted}
+                isRideEnded={isRideEnded}
             />
             <Mapcontainer
                 source={source}
