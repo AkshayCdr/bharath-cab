@@ -6,6 +6,7 @@ import { User } from "../dtos/user.dto";
 
 import {
     addDriver,
+    addPin,
     getFromRideTable,
     getRideAndDriverFromTable,
     getRideAndUserFromTable,
@@ -164,6 +165,18 @@ async function findDistance(
     return 0;
 }
 
+function generatePin(): number {
+    return Math.floor(1000 + Math.random() * 9000);
+}
+
+async function setPin(rideId: string, pin: number) {
+    try {
+        await addPin(rideId, pin);
+    } catch (e) {
+        console.error("error setting pin");
+    }
+}
+
 export const rideServices = {
     create,
     read,
@@ -178,4 +191,6 @@ export const rideServices = {
     getStatus,
     getDistance,
     renameCoordinates,
+    generatePin,
+    setPin,
 };

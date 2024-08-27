@@ -83,7 +83,7 @@ CREATE TABLE IF NOT EXISTS RIDE(
     status ride_status DEFAULT 'pending',
     source POINT,
     destination POINT,
-    eta INT CHECK (eta > 0),
+    pin INT CHECK (pin >=1000 AND pin <= 9999),
     price INT CHECK (price > 0),
     rating SMALLINT CHECK (rating >= 0 AND rating <= 5),
     review TEXT,

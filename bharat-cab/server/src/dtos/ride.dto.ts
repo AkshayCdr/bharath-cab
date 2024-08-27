@@ -9,6 +9,7 @@ export interface Ride {
     price: number;
     rating: number;
     review: string;
+    pin?: number;
 }
 
 export type LocationData = {

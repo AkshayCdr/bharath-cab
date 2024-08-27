@@ -117,6 +117,22 @@ export default function RideDetails({
                     />
                 </div>
 
+                {isUser && (
+                    <div className="flex flex-col">
+                        <label htmlFor="pin" className="text-2xl font-bold">
+                            Pin
+                        </label>
+                        <input
+                            type="text"
+                            name="pin"
+                            id=""
+                            value={rideDetails.pin}
+                            readOnly
+                            className="bg-gray-950 "
+                        />
+                    </div>
+                )}
+
                 {isRideStarted && isDriver && (
                     <button
                         onClick={(e) => handleRideStart(e, rideDetails.id)}

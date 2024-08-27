@@ -72,7 +72,7 @@ export async function getRideAndUserFromTable(
     id: string
 ): Promise<Ride & User> {
     try {
-        const query = `SELECT r.id, r.source, r.destination, r.price, r.user_id, u.name, u.phone ,u,email
+        const query = `SELECT r.id, r.source, r.destination, r.price, r.user_id,r.pin, u.name, u.phone ,u.email
                   FROM RIDE as r 
                   INNER JOIN "USER" as u 
                   ON r.user_id = u.account_id WHERE r.id = $1`;
@@ -90,15 +90,20 @@ export async function getRideAndUserFromTable(
 export async function getRideAndDriverFromTable(
     id: string
 ): Promise<Ride & Driver> {
-    const query = `SELECT r.id, r.source, r.destination, r.price, r.driver_id, d.name, d.phone ,d,email
+    try {
+        const query = `SELECT r.id, r.source, r.destination, r.price, r.driver_id,r.pin, d.name, d.phone ,d.email
   FROM RIDE as r 
   INNER JOIN DRIVER as d
   ON r.driver_id = d.account_id WHERE r.id = $1`;
-    const values = [id];
-    const result: QueryResult<Ride & Driver> = await (
-        await client
-    ).query(query, values);
-    return result.rows[0];
+        const values = [id];
+        const result: QueryResult<Ride & Driver> = await (
+            await client
+        ).query(query, values);
+        return result.rows[0];
+    } catch (error) {
+        console.error(error);
+        throw new Error("Error getting data");
+    }
 }
 
 export async function addDriver(id: string, driverId: string): Promise<void> {
@@ -197,5 +202,16 @@ export async function getUserId(rideId: string) {
     } catch (error) {
         console.error(error);
         throw new Error("Error getting location");
+    }
+}
+
+export async function addPin(id: string, pin: number): Promise<void> {
+    try {
+        const query = `UPDATE ride SET pin = $2  WHERE id = $1`;
+        const values = [id, pin];
+        const data = await (await client).query(query, values);
+    } catch (error) {
+        console.error(error);
+        throw new Error("Error getting data from ride");
     }
 }

@@ -43,11 +43,17 @@ async function rideAccepted(socket: {
         await rideServices.setDriver(rideId, driverId);
         await rideServices.updateStatus(rideId, "driver_accepted");
 
+        //set pin
+        const pin = rideServices.generatePin();
+        await rideServices.setPin(rideId, pin);
+
         console.log("driver set and status updated");
         const driverDetails = await driver.get(driverId);
 
+        const driverDetailsAndPin = { ...driverDetails, pin };
+
         console.log("got driver details ");
-        clientSock.rideAccepted(userId, driverDetails);
+        clientSock.rideAccepted(userId, driverDetailsAndPin);
         lockRide(socket, driverId);
     });
 }

@@ -1,5 +1,11 @@
 import { aW } from "vitest/dist/reporters-BU_vXAUX";
-import { getDriverId, getLocation, getUserId } from "../model/ride.model";
+import {
+    getDriverId,
+    getLocation,
+    getRideAndDriverFromTable,
+    getRideAndUserFromTable,
+    getUserId,
+} from "../model/ride.model";
 import { rideServices } from "../services/ride.services";
 import { test, assert } from "vitest";
 
@@ -49,29 +55,39 @@ import { test, assert } from "vitest";
 // (77.62023665368513,12.919436561781483)
 // })
 
-test("getting distance from api", async () => {
-    const source = {
-        x: 12.948540850865397,
-        y: 77.57318609587904,
-    };
-    const destination = {
-        x: 12.919436561781483,
-        y: 77.62023665368513,
-    };
+// test("getting distance from api", async () => {
+//     const source = {
+//         x: 12.948540850865397,
+//         y: 77.57318609587904,
+//     };
+//     const destination = {
+//         x: 12.919436561781483,
+//         y: 77.62023665368513,
+//     };
 
-    const distance = await rideServices.getDistance(source, destination);
+//     const distance = await rideServices.getDistance(source, destination);
 
-    console.log(distance);
-});
+//     console.log(distance);
+// });
 
-test("getting driver id from ride ID", async () => {
-    const rideId = "0632dc4b-0c35-4e38-9057-122ccdb173df";
-    const id = await getDriverId(rideId);
-    console.log(id);
-});
+// test("getting driver id from ride ID", async () => {
+//     const rideId = "0632dc4b-0c35-4e38-9057-122ccdb173df";
+//     const id = await getDriverId(rideId);
+//     console.log(id);
+// });
 
-test("getting userId from ride ID", async () => {
-    const rideId = "0632dc4b-0c35-4e38-9057-122ccdb173df";
-    const id = await getUserId(rideId);
-    console.log(id);
+// test("getting userId from ride ID", async () => {
+//     const rideId = "0632dc4b-0c35-4e38-9057-122ccdb173df";
+//     const id = await getUserId(rideId);
+//     console.log(id);
+// });
+
+test("checking whather pin is working ", async () => {
+    const rideId = "058d2bf8-bdc5-4ec9-a402-03a8b7f1a744";
+
+    const driverData = await getRideAndDriverFromTable(rideId);
+    // const userData = await getRideAndUserFromTable(rideId);
+
+    console.log(driverData);
+    // console.log(userData);
 });
