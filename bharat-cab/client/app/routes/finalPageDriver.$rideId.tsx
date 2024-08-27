@@ -69,8 +69,9 @@ export default function FinalPageDriver() {
 
         socket.on("startRide", () => setRideState("started"));
         socket.on("endRide", () => setRideState("ended"));
-
+        socket.on("rideNearby", () => alert("passenger nearby"));
         socket.on("cancelRide", handleCancelRide);
+
         return () => {
             socket.off("startRide");
             socket.off("cancelRide", handleCancelRide);
