@@ -20,28 +20,6 @@ import useRideEvents from "~/hooks/useRideEvents";
 import { socket } from "~/socket/websocket";
 import style from "~/styles/finalPageDriver.css?url";
 
-// const actionTypes = {
-//     RIDE_NEARBY: "rideNearby",
-//     RIDE_START: "rideStart",
-//     RIDE_END: "rideEnd",
-// };
-
-// const reducer = (state, action) => {
-//     switch (action.type) {
-//         case actionTypes.RIDE_NEARBY:
-//             return { rideStatus: "rideNearby" };
-//         case actionTypes.RIDE_START:
-//             return { rideStatus: "rideStart" };
-//         case actionTypes.RIDE_END:
-//             return { rideStatus: "rideEnd" };
-//     }
-// };
-
-// type initialState = { rideStatus: string };
-// const initialState = {
-//     rideStatus: null,
-// };
-
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
     const cookies = request.headers.get("cookie");
     const { rideId } = params;
@@ -89,8 +67,8 @@ export default function FinalPageDriver() {
         // socket.on("startRide", () => setStartRide(true));
         // socket.on("endRide", () => setEndRide(true));
 
-        socket.on("startRide", () => setRideState("rideStarted"));
-        socket.on("endRide", () => setRideState("rideEnded"));
+        socket.on("startRide", () => setRideState("started"));
+        socket.on("endRide", () => setRideState("ended"));
 
         socket.on("cancelRide", handleCancelRide);
         return () => {
@@ -119,6 +97,7 @@ export default function FinalPageDriver() {
                 destinationName={destinationName}
                 role={role}
                 rideState={rideState}
+                setRideState={setRideState}
             />
             <Mapcontainer
                 source={source}

@@ -1,14 +1,5 @@
-import { Form, useNavigation } from "@remix-run/react";
+import { Form, useNavigate, useNavigation } from "@remix-run/react";
 import { socket } from "~/socket/websocket";
-
-function handleRideStart(e, rideId) {
-    e.preventDefault();
-    socket.emit("rideStartDriver", rideId);
-}
-function handleRideEnd(e, rideId) {
-    e.preventDefault();
-    socket.emit("rideEndDriver", rideId);
-}
 
 export default function RideDetails({
     rideDetails,
@@ -16,17 +7,33 @@ export default function RideDetails({
     destinationName,
     role,
     rideState,
+    setRideState,
 }) {
-    const isRideStarted = rideState === "rideStarted";
-    const isRideEnded = rideState === "rideEnded";
+    const isRideStarted = rideState === "started";
+    const isRideEnded = rideState === "ended";
+    const isOnRide = rideState === "onride";
 
     console.log(rideDetails);
+
     const isDriver = role === "driver";
     const isUser = role === "user";
 
     const navigation = useNavigation();
+    const navigate = useNavigate();
 
     const isSubmitting = navigation.state !== "idle";
+
+    function handleRideStart(e, rideId) {
+        e.preventDefault();
+        setRideState("onride");
+        socket.emit("rideStartDriver", rideId);
+    }
+
+    function handleRideEnd(e, rideId) {
+        e.preventDefault();
+        socket.emit("rideEndDriver", rideId);
+        return navigate("/");
+    }
 
     return (
         <Form method="post" className="flex flex-col m-4 p-2 ">
@@ -110,7 +117,7 @@ export default function RideDetails({
                     />
                 </div>
 
-                {isRideStarted && (
+                {isRideStarted && isDriver && (
                     <button
                         onClick={(e) => handleRideStart(e, rideDetails.id)}
                         className="bg-green-600 w-32 h-9 m-auto rounded-md"
@@ -118,7 +125,7 @@ export default function RideDetails({
                         Start Ride
                     </button>
                 )}
-                {isRideEnded && (
+                {isOnRide && isDriver && (
                     <button
                         onClick={(e) => handleRideEnd(e, rideDetails.id)}
                         className="bg-green-600 w-32 h-9 m-auto rounded-md"
@@ -127,7 +134,7 @@ export default function RideDetails({
                     </button>
                 )}
 
-                {!isRideStarted && (
+                {!isRideStarted && !isOnRide && !isRideEnded && (
                     <button
                         type="submit"
                         name="intent"

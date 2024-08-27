@@ -120,7 +120,7 @@ export default function FinalPageUser() {
                 sourceName={sourceName}
                 destinationName={destinationName}
                 role={role}
-                isRideStarted={isRideStarted}
+                rideState={rideStatus}
             />
 
             <Mapcontainer
