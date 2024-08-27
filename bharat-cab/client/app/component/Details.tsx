@@ -1,4 +1,5 @@
 import { Form, useNavigate, useNavigation } from "@remix-run/react";
+import { useEffect, useState } from "react";
 import { socket } from "~/socket/websocket";
 
 export default function RideDetails({
@@ -9,6 +10,11 @@ export default function RideDetails({
     rideState,
     setRideState,
 }) {
+    const [isOtpValLoading, setOtpValLoading] = useState(false);
+    const [otp, setOtp] = useState(null);
+    const [isOtpValidated, setOtpValidated] = useState(false);
+    const [otpErrMssg, setOtpErrMssg] = useState(null);
+
     const isRideStarted = rideState === "started";
     const isRideEnded = rideState === "ended";
     const isOnRide = rideState === "onride";
@@ -25,8 +31,39 @@ export default function RideDetails({
 
     function handleRideStart(e, rideId) {
         e.preventDefault();
-        setRideState("onride");
+
         socket.emit("rideStartDriver", rideId);
+        setRideState("onride");
+    }
+
+    useEffect(() => {
+        function handleOtpValSucc() {
+            setOtpValidated(true);
+            setOtpValLoading(false);
+
+            setOtpErrMssg(false);
+        }
+
+        function handleOtpValFail() {
+            setOtpValLoading(false);
+            setOtpErrMssg("otp error");
+        }
+
+        socket.on("otpValSuccess", handleOtpValSucc);
+        socket.on("otpValFailure", handleOtpValFail);
+
+        return () => {
+            socket.off("otpValSuccess");
+        };
+    }, []);
+
+    function handleValidateOtp(e, rideId) {
+        e.preventDefault();
+
+        if (!otp) return;
+
+        setOtpValLoading(true);
+        socket.emit("otpValidate", { otp, rideId });
     }
 
     function handleRideEnd(e, rideId) {
@@ -117,6 +154,36 @@ export default function RideDetails({
                     />
                 </div>
 
+                {isDriver && isRideStarted && !isOtpValidated && (
+                    <div className="flex flex-col gap-4">
+                        <input
+                            type="number"
+                            name="otp"
+                            min={1000}
+                            max={9999}
+                            placeholder="Enter 4 digit pin"
+                            onChange={(e) => setOtp(e.target.value)}
+                            className="text-black"
+                            required
+                        />
+
+                        <button
+                            onClick={(e) =>
+                                handleValidateOtp(e, rideDetails.id)
+                            }
+                            className="bg-green-600 w-32 h-9 m-auto rounded-md"
+                        >
+                            {isOtpValLoading
+                                ? "Validating ..."
+                                : "Validate otp"}
+                        </button>
+                        {otpErrMssg && (
+                            <div className="text-red-500">{otpErrMssg}</div>
+                        )}
+                        {isOtpValLoading && <div>Loading...</div>}
+                    </div>
+                )}
+
                 {isUser && (
                     <div className="flex flex-col">
                         <label htmlFor="pin" className="text-2xl font-bold">
@@ -133,14 +200,15 @@ export default function RideDetails({
                     </div>
                 )}
 
-                {isRideStarted && isDriver && (
+                {isDriver && isOtpValidated && !isOnRide && (
                     <button
-                        onClick={(e) => handleRideStart(e, rideDetails.id)}
                         className="bg-green-600 w-32 h-9 m-auto rounded-md"
+                        onClick={(e) => handleRideStart(e, rideDetails.id)}
                     >
                         Start Ride
                     </button>
                 )}
+
                 {isOnRide && isDriver && (
                     <button
                         onClick={(e) => handleRideEnd(e, rideDetails.id)}

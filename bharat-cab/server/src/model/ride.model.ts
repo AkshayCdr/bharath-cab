@@ -215,3 +215,28 @@ export async function addPin(id: string, pin: number): Promise<void> {
         throw new Error("Error getting data from ride");
     }
 }
+
+export async function isPinExist(id: string) {
+    try {
+        const query = `SELECT pin from ride WHERE id = $1`;
+        const values = [id];
+        const result = await (await client).query(query, values);
+        return result.rowCount;
+    } catch (error) {
+        console.error(error);
+        return null;
+    }
+}
+
+export async function getPin(id: string) {
+    try {
+        const query = `SELECT pin from ride WHERE id = $1`;
+        const values = [id];
+        const result = await (await client).query(query, values);
+        if (!result.rows.length) return null;
+        return result.rows[0];
+    } catch (error) {
+        console.error(error);
+        return null;
+    }
+}

@@ -1,6 +1,12 @@
 import { Location, Ride } from "../dtos/ride.dto";
 import { User } from "../dtos/user.dto";
-import { getDriverId, getLocation, getUserId } from "../model/ride.model";
+import {
+    getDriverId,
+    getLocation,
+    getPin,
+    getUserId,
+    isPinExist,
+} from "../model/ride.model";
 import { driver } from "../services/driver.services";
 import { rideServices } from "../services/ride.services";
 import { DriverSocket } from "../types/driverSocket";
@@ -258,6 +264,35 @@ function deleteClient(socket: any) {
     }
 }
 
+async function otpValidate(socket: {
+    on: (
+        arg0: string,
+        arg1: ({ otp, rideId }: { otp: any; rideId: any }) => Promise<void>
+    ) => void;
+}) {
+    socket.on("otpValidate", async ({ otp, rideId }) => {
+        console.log("inside otp validate");
+        const { pin } = await getPin(rideId);
+
+        console.log(otp);
+        console.log(pin);
+        console.log(typeof otp);
+        console.log(typeof pin);
+
+        const isPinValid = pin === parseInt(otp);
+        console.log("is pin validated");
+        console.log(isPinValid);
+
+        const { driverId } = await getDriverId(rideId);
+        console.log("sending to driver id");
+
+        if (!isPinValid)
+            return emitEventToDriver("otpValFailure", driverId, "");
+
+        emitEventToDriver("otpValSuccess", driverId, "");
+    });
+}
+
 export const driverSock = {
     registerDriverSocket,
     setOffline,
@@ -269,4 +304,5 @@ export const driverSock = {
     deleteClient,
     rideStartDriver,
     rideEndDriver,
+    otpValidate,
 };

@@ -5,6 +5,7 @@ import HTTPServer from "http";
 
 import { parse } from "cookie";
 import { isSessionExist } from "../model/session.model";
+import { driver } from "../services/driver.services";
 
 export function createSocket(
     httpServer: HTTPServer.Server<
@@ -46,6 +47,8 @@ export function createSocket(
         driverSock.rideAccepted(socket);
 
         driverSock.updateLocation(socket);
+
+        driverSock.otpValidate(socket);
 
         driverSock.rideStartDriver(socket);
         driverSock.rideEndDriver(socket);
