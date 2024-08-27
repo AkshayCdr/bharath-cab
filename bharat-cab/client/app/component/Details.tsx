@@ -15,9 +15,11 @@ export default function RideDetails({
     sourceName,
     destinationName,
     role,
-    isRideStarted,
-    isRideEnded,
+    rideState,
 }) {
+    const isRideStarted = rideState === "rideStarted";
+    const isRideEnded = rideState === "rideEnded";
+
     console.log(rideDetails);
     const isDriver = role === "driver";
     const isUser = role === "user";

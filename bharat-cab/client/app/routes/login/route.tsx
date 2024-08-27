@@ -21,18 +21,24 @@ export async function action({ request }: ActionFunctionArgs) {
     const username = String(formData.get("username"));
     const password = String(formData.get("password"));
 
-    const error: { username?: string; password?: string } = {};
+    const error: {
+        username?: string;
+        password?: string;
+        invalidCredentials?: boolean;
+    } = {};
 
     const errors = validate(error, username, password);
 
-    if (errors) {
+    if (Object.keys(errors).length) {
         return { errors };
     }
 
     const response = await account.login(userDetails);
 
     if (!response) {
-        throw new Error("Invalid response from server");
+        error.invalidCredentials = true;
+
+        return { errors };
     }
 
     const cookieHeader = response.headers.get("set-cookie");

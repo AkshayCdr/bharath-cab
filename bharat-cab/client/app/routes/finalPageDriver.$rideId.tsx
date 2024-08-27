@@ -7,7 +7,7 @@ import {
 import { useLoaderData, useNavigate } from "@remix-run/react";
 
 import { ride } from "~/apis/ride.server";
-import { useEffect, useState } from "react";
+import { useEffect, useReducer, useState } from "react";
 import useLocation from "~/hooks/useLocation";
 import useRideDetails, { RideDetails } from "~/hooks/useRideDetails";
 import Details from "../component/Details";
@@ -19,6 +19,28 @@ import useRideEvents from "~/hooks/useRideEvents";
 
 import { socket } from "~/socket/websocket";
 import style from "~/styles/finalPageDriver.css?url";
+
+// const actionTypes = {
+//     RIDE_NEARBY: "rideNearby",
+//     RIDE_START: "rideStart",
+//     RIDE_END: "rideEnd",
+// };
+
+// const reducer = (state, action) => {
+//     switch (action.type) {
+//         case actionTypes.RIDE_NEARBY:
+//             return { rideStatus: "rideNearby" };
+//         case actionTypes.RIDE_START:
+//             return { rideStatus: "rideStart" };
+//         case actionTypes.RIDE_END:
+//             return { rideStatus: "rideEnd" };
+//     }
+// };
+
+// type initialState = { rideStatus: string };
+// const initialState = {
+//     rideStatus: null,
+// };
 
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
     const cookies = request.headers.get("cookie");
@@ -46,8 +68,13 @@ export default function FinalPageDriver() {
 
     const { currentLocation } = useLocation(rideDetails.id);
 
-    const [isRideStarted, setStartRide] = useState(false);
-    const [isRideEnded, setEndRide] = useState(false);
+    // const [state, dispatch] = useReducer(reducer, initialState);
+
+    const [rideState, setRideState] = useState(null);
+
+    // const [isRideStarted, setStartRide] = useState(false);
+    // const [isRideEnded, setEndRide] = useState(false);
+
     const [isEditable, setIsEditable] = useState(false);
     const [isMounted, setIsMounted] = useState(false);
 
@@ -59,8 +86,12 @@ export default function FinalPageDriver() {
             navigate("/");
         }
 
-        socket.on("startRide", () => setStartRide(true));
-        socket.on("endRide", () => setEndRide(true));
+        // socket.on("startRide", () => setStartRide(true));
+        // socket.on("endRide", () => setEndRide(true));
+
+        socket.on("startRide", () => setRideState("rideStarted"));
+        socket.on("endRide", () => setRideState("rideEnded"));
+
         socket.on("cancelRide", handleCancelRide);
         return () => {
             socket.off("startRide");
@@ -87,8 +118,7 @@ export default function FinalPageDriver() {
                 sourceName={sourceName}
                 destinationName={destinationName}
                 role={role}
-                isRideStarted={isRideStarted}
-                isRideEnded={isRideEnded}
+                rideState={rideState}
             />
             <Mapcontainer
                 source={source}

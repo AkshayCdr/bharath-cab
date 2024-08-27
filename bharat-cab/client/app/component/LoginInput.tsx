@@ -11,6 +11,9 @@ export default function LoginInput() {
 
     const usernameError = actionData?.errors?.username;
     const passwordError = actionData?.errors?.password;
+    const isCrendetialsInValid = actionData?.errors?.invalidCredentials;
+
+    console.log(isCrendetialsInValid);
 
     return (
         <Form
@@ -52,6 +55,9 @@ export default function LoginInput() {
                     {isSubmitting ? "submitting..." : "submit"}
                 </button>
             </p>
+            {isCrendetialsInValid && (
+                <span className="text-red-600">Invalid credentials</span>
+            )}
         </Form>
     );
 }
