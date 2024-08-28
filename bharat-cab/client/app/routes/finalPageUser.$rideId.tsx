@@ -114,7 +114,7 @@ export default function FinalPageUser() {
     }
 
     return (
-        <div className="flex flex-col lg:flex-row p-3 bg-gray-950 text-white min-h-screen">
+        <div className="flex flex-col lg:flex-row p-3 bg-gray-950 text-white min-h-screen justify-center">
             <Details
                 rideDetails={rideDetails}
                 sourceName={sourceName}
@@ -123,12 +123,14 @@ export default function FinalPageUser() {
                 rideState={rideStatus}
             />
 
-            <Mapcontainer
-                source={source}
-                destination={destination}
-                isEditable={isEditable}
-                rideLocation={rideLocation}
-            ></Mapcontainer>
+            <div className="mt-10">
+                <Mapcontainer
+                    source={source}
+                    destination={destination}
+                    isEditable={isEditable}
+                    rideLocation={rideLocation}
+                ></Mapcontainer>
+            </div>
 
             {isRideEnded && <Review rideId={rideDetails.id} />}
             {/* <Review rideId={rideDetails.id} /> */}

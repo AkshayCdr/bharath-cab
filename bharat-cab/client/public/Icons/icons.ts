@@ -46,10 +46,20 @@ const distance = new L.Icon({
     iconSize: new L.Point(60, 75),
 });
 
+const currLocation = new L.Icon({
+    iconUrl: "/currLoc.svg",
+
+    shadowUrl: null,
+    shadowSize: null,
+    shadowAnchor: null,
+    iconSize: new L.Point(35, 35),
+});
+
 export const Icon = {
     square,
     car,
     source,
     destination,
     distance,
+    currLocation,
 };

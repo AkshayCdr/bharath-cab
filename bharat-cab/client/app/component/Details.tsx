@@ -164,7 +164,7 @@ export default function RideDetails({
                             placeholder="Enter 4 digit pin"
                             // onChange={(e) => setOtp(e.target.value)}
                             ref={otp}
-                            value={otp.current.value}
+                            // value={otp.current.value}
                             className="bg-gray-950"
                             required
                         />

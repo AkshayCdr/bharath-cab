@@ -1,0 +1,12 @@
+{
+    "configurations": [
+
+        
+        {
+            "type": "chrome",
+            "name": "http://localhost:5173/finalPageDriver/593d670d-59d3-4379-b91c-dc9882a5827a",
+            "request": "launch",
+            "url": "http://localhost:5173/"
+        }
+    ]
+}

@@ -4,7 +4,7 @@
 
 .leaflet-container{
 
-    max-width:  1060px;
+    max-width:  1350px;
     height:80vh ;
     padding: 10px;
     margin: 5px auto;
@@ -14,7 +14,7 @@
 
 @media(max-width:767px){
     .leaflet-container{
-        width: 90vw;
+        /* width: 90vw; */
         /* max-width: 1060px; */
         
     }

@@ -142,7 +142,7 @@ export default function User() {
     }
 
     return (
-        <div className="flex flex-col lg:flex-row  bg-gray-950 text-white min-h-screen">
+        <div className="flex flex-col lg:flex-row  bg-gray-950 text-white min-h-screen justify-center ">
             <LocationInput
                 userId={userData.account_id}
                 sourceName={sourceName}
@@ -150,7 +150,7 @@ export default function User() {
                 source={source}
                 destination={destination}
             />
-            <div className=" ">
+            <div className="mt-10">
                 <Mapcontainer
                     source={source}
                     destination={destination}

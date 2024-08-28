@@ -134,7 +134,7 @@ export default function Ride() {
     }
 
     return (
-        <div className="flex flex-col lg:flex-row bg-gray-950 text-white min-h-screen">
+        <div className="flex flex-col lg:flex-row bg-gray-950 text-white min-h-screen justify-center">
             <div className="flex flex-col">
                 <RideDetails
                     rideDetails={rideDetails}
@@ -146,15 +146,17 @@ export default function Ride() {
                 {message && <p className="text-green-800">{message.message}</p>}
             </div>
 
-            <Mapcontainer
-                source={source}
-                destination={destination}
-                setSource={setSource}
-                setDestination={setDestination}
-                setSourceName={setSourceName}
-                setDestinationName={setDestinationName}
-                isEditable={isEditable}
-            />
+            <div className="mt-10">
+                <Mapcontainer
+                    source={source}
+                    destination={destination}
+                    setSource={setSource}
+                    setDestination={setDestination}
+                    setSourceName={setSourceName}
+                    setDestinationName={setDestinationName}
+                    isEditable={isEditable}
+                />
+            </div>
         </div>
     );
 }

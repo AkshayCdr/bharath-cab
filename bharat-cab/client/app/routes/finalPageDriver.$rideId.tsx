@@ -7,7 +7,7 @@ import {
 import { useLoaderData, useNavigate } from "@remix-run/react";
 
 import { ride } from "~/apis/ride.server";
-import { useEffect, useReducer, useState } from "react";
+import { useCallback, useEffect, useMemo, useReducer, useState } from "react";
 import useLocation from "~/hooks/useLocation";
 import useRideDetails, { RideDetails } from "~/hooks/useRideDetails";
 import Details from "../component/Details";
@@ -91,7 +91,7 @@ export default function FinalPageDriver() {
     // useRideEvents({ distanceFromDestination, distanceFromSource, rideDetails });
 
     return (
-        <div className="flex flex-col lg:flex-row  p-3 bg-gray-950 text-white min-h-screen">
+        <div className="flex flex-col lg:flex-row  p-3 bg-gray-950 text-white min-h-screen justify-center">
             <Details
                 rideDetails={rideDetails}
                 sourceName={sourceName}
@@ -100,12 +100,14 @@ export default function FinalPageDriver() {
                 rideState={rideState}
                 setRideState={setRideState}
             />
-            <Mapcontainer
-                source={source}
-                destination={destination}
-                isEditable={isEditable}
-                rideLocation={currentLocation}
-            ></Mapcontainer>
+            <div className="mt-10">
+                <Mapcontainer
+                    source={source}
+                    destination={destination}
+                    isEditable={isEditable}
+                    rideLocation={currentLocation}
+                />
+            </div>
 
             {/* {isRideStarted && <p>ride started</p>}
       {isRideEnded && <p>ride ended</p>} */}

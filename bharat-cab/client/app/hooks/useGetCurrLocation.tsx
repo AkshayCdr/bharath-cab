@@ -1,20 +1,13 @@
-import { useEffect, useRef, useState } from "react";
-import { socket } from "~/socket/websocket";
+import { useEffect, useState } from "react";
 
-export default function useLocation(rideId) {
-    const rideIdRef = useRef(rideId);
-
+export default function useCurrLoc() {
     const [currentLocation, setCurrentLocation] = useState(null);
+
     useEffect(() => {
         const watchId = navigator.geolocation.watchPosition(
             (pos) => {
                 const { latitude, longitude } = pos.coords;
                 setCurrentLocation([latitude, longitude]);
-                socket.emit("updateLocation", {
-                    rideId: rideIdRef.current,
-                    latitude,
-                    longitude,
-                });
             },
             (error) => {
                 console.log("Error getting location", error);

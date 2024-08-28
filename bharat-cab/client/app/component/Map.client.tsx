@@ -11,8 +11,10 @@ import { useEffect, useState } from "react";
 import useRoute from "~/hooks/useRoute";
 import useMapClickHandler from "~/hooks/useMapClickHandler";
 import L from "leaflet";
+import { FaLocationCrosshairs } from "react-icons/fa6";
 
 import { Icon } from "public/Icons/icons";
+import useCurrLoc from "~/hooks/useGetCurrLocation";
 
 export default function Map({
     source,
@@ -29,6 +31,8 @@ export default function Map({
     const { route, distance, midpoint } = useRoute(source, destination);
 
     const [userLocation, setUserLocation] = useState(null);
+
+    const { currentLocation } = useCurrLoc();
 
     const [center, setCenter] = useState([12.971, 77.594]);
 
@@ -71,10 +75,12 @@ export default function Map({
             setCenter(source);
         } else if (destination) {
             setCenter(destination);
+        } else if (userLocation) {
+            setCenter(userLocation);
         } else {
             return;
         }
-    }, [destination, source, rideLocation]);
+    }, [destination, source, rideLocation, userLocation]);
 
     const bounds = L.latLngBounds(
         [12.7343, 77.3662], // Southwest coordinates (lat, lng)
@@ -82,49 +88,57 @@ export default function Map({
     );
 
     return (
-        <MapContainer
-            center={center}
-            zoom={13}
-            scrollWheelZoom={false}
-            className="z-0 "
-            bounds={bounds}
-            maxBounds={bounds}
-            maxBoundsViscosity={1.0}
-            minZoom={12}
-        >
-            <TileLayer
-                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            />
-            <ClickHandler />
-            <MapCenterHandler />
+        <div className="relative h-fit ">
+            <MapContainer
+                center={center}
+                zoom={13}
+                scrollWheelZoom={false}
+                className="z-0 "
+                bounds={bounds}
+                maxBounds={bounds}
+                maxBoundsViscosity={1.0}
+                minZoom={12}
+            >
+                <TileLayer
+                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                />
+                <ClickHandler />
+                <MapCenterHandler />
 
-            {userLocation && (
-                <Marker position={userLocation} icon={Icon.source}>
-                    <Popup>Location</Popup>
-                </Marker>
-            )}
+                {userLocation && (
+                    <Marker position={userLocation} icon={Icon.currLocation}>
+                        <Popup>Location</Popup>
+                    </Marker>
+                )}
 
-            {source && (
-                <Marker position={source} icon={Icon.source}>
-                    <Popup>source</Popup>
-                </Marker>
-            )}
-            {destination && (
-                <Marker position={destination} icon={Icon.destination}>
-                    <Popup>destination</Popup>
-                </Marker>
-            )}
-            {rideLocation && (
-                <Marker position={rideLocation} icon={Icon.car}>
-                    <Popup>Driver Location</Popup>
-                </Marker>
-            )}
-            {route.length > 0 && (
-                <>
-                    <Polyline positions={route} color="blue" weight={5} />
-                </>
-            )}
-        </MapContainer>
+                {source && (
+                    <Marker position={source} icon={Icon.source}>
+                        <Popup>source</Popup>
+                    </Marker>
+                )}
+                {destination && (
+                    <Marker position={destination} icon={Icon.destination}>
+                        <Popup>destination</Popup>
+                    </Marker>
+                )}
+                {rideLocation && (
+                    <Marker position={rideLocation} icon={Icon.car}>
+                        <Popup>Driver Location</Popup>
+                    </Marker>
+                )}
+                {route.length > 0 && (
+                    <>
+                        <Polyline positions={route} color="blue" weight={5} />
+                    </>
+                )}
+            </MapContainer>
+            <button
+                className="text-4xl absolute z-[1000] bottom-7 right-7 text-black bg-white rounded-lg p-2"
+                onClick={() => setUserLocation(currentLocation)}
+            >
+                <FaLocationCrosshairs />
+            </button>
+        </div>
     );
 }

@@ -115,6 +115,9 @@ async function updateLocation(socket: {
                 source
             );
 
+            console.log("inside rideNEartby ");
+            console.log(rideDistanceFromSource);
+
             eventRideNearby(rideDistanceFromSource, user_id, rideId);
         }
 
@@ -124,6 +127,9 @@ async function updateLocation(socket: {
                 source
             );
 
+            console.log("inside ride start");
+            console.log(rideDistanceFromSource);
+
             eventRideStart(rideDistanceFromSource, user_id, rideId);
         }
 
@@ -132,6 +138,9 @@ async function updateLocation(socket: {
                 rideLocation,
                 destination
             );
+
+            console.log("inside onride ");
+            console.log(rideDistanceFromDestination);
 
             eventRideEnd(rideDistanceFromDestination, user_id, rideId);
         }
