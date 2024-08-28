@@ -1,6 +1,50 @@
 import { Form, useNavigate, useNavigation } from "@remix-run/react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useReducer, useRef, useState } from "react";
 import { socket } from "~/socket/websocket";
+
+function handleRideStart(e, rideId, setRideState) {
+    e.preventDefault();
+    socket.emit("rideStartDriver", rideId);
+    setRideState("onride");
+}
+
+function handleRideEnd(e, rideId, navigate) {
+    e.preventDefault();
+    socket.emit("rideEndDriver", rideId);
+    return navigate("/");
+}
+
+const initialState = {
+    status: "not validated",
+    error: null,
+};
+
+enum otpStates {
+    NOT_VALIDATED = "not validated",
+    VALIDATING = "validating",
+    VALIDATED = "validated",
+    ERROR = "err",
+}
+
+enum rideStates {
+    STARTED = "started",
+    ENDED = "ended",
+    ONRIDE = "onride",
+    NEARBY = "nearby",
+}
+
+function otpReducer(state, action) {
+    switch (action.type) {
+        case otpStates.VALIDATING:
+            return { ...state, status: "validating", error: null };
+        case otpStates.VALIDATED:
+            return { ...state, status: "validated", error: null };
+        case otpStates.ERROR:
+            return { ...state, status: "err", error: action.payload };
+        default:
+            return state;
+    }
+}
 
 export default function RideDetails({
     rideDetails,
@@ -10,14 +54,20 @@ export default function RideDetails({
     rideState,
     setRideState,
 }) {
-    const [isOtpValLoading, setOtpValLoading] = useState(false);
-    const otp = useRef(null);
-    const [isOtpValidated, setOtpValidated] = useState(false);
-    const [otpErrMssg, setOtpErrMssg] = useState(null);
+    const [state, dispatch] = useReducer(otpReducer, initialState);
 
-    const isRideStarted = rideState === "started";
-    const isRideEnded = rideState === "ended";
-    const isOnRide = rideState === "onride";
+    const isOtpLoading = state.status === otpStates.VALIDATING;
+    const isOtpVal = state.status === otpStates.VALIDATED;
+    const otpErr = state.status === otpStates.ERROR;
+
+    const isOtpNotValidated =
+        state.status === otpStates.ERROR || otpStates.NOT_VALIDATED;
+
+    const otp = useRef(null);
+
+    const isRideStarted = rideState === rideStates.STARTED;
+    const isRideEnded = rideState === rideStates.ENDED;
+    const isOnRide = rideState === rideStates.ONRIDE;
 
     console.log(rideDetails);
 
@@ -29,24 +79,13 @@ export default function RideDetails({
 
     const isSubmitting = navigation.state !== "idle";
 
-    function handleRideStart(e, rideId) {
-        e.preventDefault();
-
-        socket.emit("rideStartDriver", rideId);
-        setRideState("onride");
-    }
-
     useEffect(() => {
         function handleOtpValSucc() {
-            setOtpValidated(true);
-            setOtpValLoading(false);
-
-            setOtpErrMssg(false);
+            dispatch({ type: otpStates.VALIDATED });
         }
 
         function handleOtpValFail() {
-            setOtpValLoading(false);
-            setOtpErrMssg("otp error");
+            dispatch({ type: otpStates.ERROR, payload: "otp eroor" });
         }
 
         socket.on("otpValSuccess", handleOtpValSucc);
@@ -54,22 +93,15 @@ export default function RideDetails({
 
         return () => {
             socket.off("otpValSuccess");
+            socket.off("otpValFailure");
         };
     }, []);
 
     function handleValidateOtp(e, rideId) {
         e.preventDefault();
-
         if (!otp.current.value) return;
-
-        setOtpValLoading(true);
+        dispatch({ type: otpStates.VALIDATING });
         socket.emit("otpValidate", { otp: otp.current.value, rideId });
-    }
-
-    function handleRideEnd(e, rideId) {
-        e.preventDefault();
-        socket.emit("rideEndDriver", rideId);
-        return navigate("/");
     }
 
     return (
@@ -154,36 +186,48 @@ export default function RideDetails({
                     />
                 </div>
 
-                {isDriver && isRideStarted && !isOtpValidated && (
-                    <div className="flex flex-col gap-4">
-                        <input
-                            type="number"
-                            name="otp"
-                            min={1000}
-                            max={9999}
-                            placeholder="Enter 4 digit pin"
-                            // onChange={(e) => setOtp(e.target.value)}
-                            ref={otp}
-                            // value={otp.current.value}
-                            className="bg-gray-950"
-                            required
-                        />
+                {isDriver &&
+                    isRideStarted &&
+                    isOtpNotValidated &&
+                    !isOtpVal && (
+                        <div className="flex flex-col gap-4">
+                            <input
+                                type="number"
+                                name="otp"
+                                min={1000}
+                                max={9999}
+                                placeholder="Enter 4 digit pin"
+                                ref={otp}
+                                className="bg-gray-950"
+                                required
+                            />
 
-                        <button
-                            onClick={(e) =>
-                                handleValidateOtp(e, rideDetails.id)
-                            }
-                            className="bg-green-600 w-32 h-9 m-auto rounded-md"
-                        >
-                            {isOtpValLoading
-                                ? "Validating ..."
-                                : "Validate otp"}
-                        </button>
-                        {otpErrMssg && (
-                            <div className="text-red-500">{otpErrMssg}</div>
-                        )}
-                        {isOtpValLoading && <div>Loading...</div>}
-                    </div>
+                            <button
+                                onClick={(e) =>
+                                    handleValidateOtp(e, rideDetails.id)
+                                }
+                                className="bg-green-600 w-32 h-9 m-auto rounded-md"
+                            >
+                                {isOtpLoading
+                                    ? "Validating ..."
+                                    : "Validate otp"}
+                            </button>
+                            {otpErr && (
+                                <div className="text-red-500">Invalid otp</div>
+                            )}
+                            {isOtpLoading && <div>Loading...</div>}
+                        </div>
+                    )}
+
+                {isDriver && isOtpVal && !isOnRide && (
+                    <button
+                        className="bg-green-600 w-32 h-9 m-auto rounded-md"
+                        onClick={(e) =>
+                            handleRideStart(e, rideDetails.id, setRideState)
+                        }
+                    >
+                        Start Ride
+                    </button>
                 )}
 
                 {isUser && (
@@ -202,18 +246,11 @@ export default function RideDetails({
                     </div>
                 )}
 
-                {isDriver && isOtpValidated && !isOnRide && (
-                    <button
-                        className="bg-green-600 w-32 h-9 m-auto rounded-md"
-                        onClick={(e) => handleRideStart(e, rideDetails.id)}
-                    >
-                        Start Ride
-                    </button>
-                )}
-
                 {isOnRide && isDriver && (
                     <button
-                        onClick={(e) => handleRideEnd(e, rideDetails.id)}
+                        onClick={(e) =>
+                            handleRideEnd(e, rideDetails.id, navigate)
+                        }
                         className="bg-green-600 w-32 h-9 m-auto rounded-md"
                     >
                         End Ride

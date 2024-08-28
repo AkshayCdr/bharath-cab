@@ -46,12 +46,7 @@ export default function FinalPageDriver() {
 
     const { currentLocation } = useLocation(rideDetails.id);
 
-    // const [state, dispatch] = useReducer(reducer, initialState);
-
     const [rideState, setRideState] = useState(null);
-
-    // const [isRideStarted, setStartRide] = useState(false);
-    // const [isRideEnded, setEndRide] = useState(false);
 
     const [isEditable, setIsEditable] = useState(false);
     const [isMounted, setIsMounted] = useState(false);
@@ -64,12 +59,9 @@ export default function FinalPageDriver() {
             navigate("/");
         }
 
-        // socket.on("startRide", () => setStartRide(true));
-        // socket.on("endRide", () => setEndRide(true));
-
         socket.on("startRide", () => setRideState("started"));
         socket.on("endRide", () => setRideState("ended"));
-        socket.on("rideNearby", () => alert("passenger nearby"));
+        socket.on("rideNearby", () => setRideState("nearby"));
         socket.on("cancelRide", handleCancelRide);
 
         return () => {
@@ -86,9 +78,6 @@ export default function FinalPageDriver() {
     if (!isMounted) {
         return <h1>Loading ....</h1>;
     }
-    // const { distance: distanceFromSource } = useRoute(currentLocation, source);
-
-    // useRideEvents({ distanceFromDestination, distanceFromSource, rideDetails });
 
     return (
         <div className="flex flex-col lg:flex-row  p-3 bg-gray-950 text-white min-h-screen justify-center">
@@ -108,9 +97,6 @@ export default function FinalPageDriver() {
                     rideLocation={currentLocation}
                 />
             </div>
-
-            {/* {isRideStarted && <p>ride started</p>}
-      {isRideEnded && <p>ride ended</p>} */}
         </div>
     );
 }
