@@ -1,5 +1,5 @@
 import { Form, useNavigate, useNavigation } from "@remix-run/react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { socket } from "~/socket/websocket";
 
 export default function RideDetails({
@@ -11,7 +11,7 @@ export default function RideDetails({
     setRideState,
 }) {
     const [isOtpValLoading, setOtpValLoading] = useState(false);
-    const [otp, setOtp] = useState(null);
+    const otp = useRef(null);
     const [isOtpValidated, setOtpValidated] = useState(false);
     const [otpErrMssg, setOtpErrMssg] = useState(null);
 
@@ -60,10 +60,10 @@ export default function RideDetails({
     function handleValidateOtp(e, rideId) {
         e.preventDefault();
 
-        if (!otp) return;
+        if (!otp.current.value) return;
 
         setOtpValLoading(true);
-        socket.emit("otpValidate", { otp, rideId });
+        socket.emit("otpValidate", { otp: otp.current.value, rideId });
     }
 
     function handleRideEnd(e, rideId) {
@@ -162,8 +162,10 @@ export default function RideDetails({
                             min={1000}
                             max={9999}
                             placeholder="Enter 4 digit pin"
-                            onChange={(e) => setOtp(e.target.value)}
-                            className="text-black"
+                            // onChange={(e) => setOtp(e.target.value)}
+                            ref={otp}
+                            value={otp.current.value}
+                            className="bg-gray-950"
                             required
                         />
 
