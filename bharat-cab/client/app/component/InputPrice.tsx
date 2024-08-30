@@ -15,9 +15,16 @@ export default function InputPrice() {
 
     const navigation = useNavigation();
 
-    const isSubmitting = navigation.state === "submitting";
+    const isSubmitting = navigation.state !== "idle";
 
     const { distance, price } = fetcher.data || [];
+
+    console.log(price);
+    useEffect(() => {
+        if (price || distance) {
+            setModalVisible(true);
+        }
+    }, [price, distance]);
 
     const [source, setSource] = useState("");
     const [destination, setDestination] = useState("");
@@ -126,7 +133,7 @@ export default function InputPrice() {
                 handleClick={handleClickDestination}
             />
 
-            <fetcher.Form method="post">
+            <fetcher.Form method="post" onSubmit={() => setModalVisible(true)}>
                 <input
                     type="hidden"
                     name="source-coords"
@@ -144,15 +151,14 @@ export default function InputPrice() {
                     See prices
                 </button>
             </fetcher.Form>
-            <div className="fixed inset-0 h-full w-full bg-gray-950 bg-opacity-80">
-                <div className="fixed  left-1/2 top-1/2  transform -translate-x-1/2 -translate-y-1/2 ">
-                    <Modal
-                        price={price}
-                        distance={distance}
-                        isSubmitting={isSubmitting}
-                    />
-                </div>
-            </div>
+            {isModalVisible && (
+                <Modal
+                    price={price}
+                    distance={distance}
+                    isSubmitting={isSubmitting}
+                    setModalVisible={setModalVisible}
+                />
+            )}
         </div>
     );
 }
@@ -177,41 +183,55 @@ function Dropdown({ autoCompleteData, isAutoComplete, handleClick }) {
     );
 }
 
-function Modal({ price, distance, isSubmitting }) {
+function Modal({ price, distance, isSubmitting, setModalVisible }) {
     console.log(price);
     // if (isSubmitting) return <div className="text-white">Loading...</div>;
     return (
-        <div className="flex flex-col gap-2 bg-yellow-50 justify-center items-center rounded-lg h-[500px] w-[750px] ">
-            <div className="flex flex-col gap-4 items-center border-2 border-black p-20 rounded-lg">
-                <div className="flex gap-4 items-center">
-                    <span className="text-6xl font-extrabold">Distance </span>
+        <div
+            className="fixed inset-0 h-full w-full bg-gray-950 bg-opacity-90"
+            onClick={() => setModalVisible(false)}
+        >
+            <div className="fixed  left-1/2 top-1/2  transform -translate-x-1/2 -translate-y-1/2 ">
+                <div className="flex flex-col gap-2 bg-yellow-50 justify-center items-center rounded-lg h-[500px] w-[750px] ">
+                    <div className="flex flex-col gap-4 items-center border-2 border-black p-20 rounded-lg">
+                        <div className="flex gap-4 items-center">
+                            <span className="text-6xl font-extrabold">
+                                Distance{" "}
+                            </span>
 
-                    {isSubmitting ? (
-                        <Svg />
-                    ) : distance ? (
-                        <span className="text-4xl font-bold text-blue-700 border-b-2 border-b-gray-400">
-                            {distance}
-                        </span>
-                    ) : (
-                        "NA"
-                    )}
-                </div>
-                <div className="flex gap-4 items-center">
-                    <span className="text-6xl font-extrabold border-b-2 border-b-gray-400 text-blue-700">
-                        ₹
-                    </span>
-                    {isSubmitting ? (
-                        <Svg />
-                    ) : price ? (
-                        <span className="text-4xl font-bold">{price}</span>
-                    ) : (
-                        "NA"
-                    )}
+                            {isSubmitting ? (
+                                <Svg />
+                            ) : distance ? (
+                                <span className="text-4xl font-bold text-blue-700 border-b-2 border-b-gray-400">
+                                    {distance}
+                                </span>
+                            ) : (
+                                "NA"
+                            )}
+                        </div>
+                        <div className="flex gap-4 items-center">
+                            <span className="text-6xl font-extrabold border-b-2 border-b-gray-400 text-blue-700">
+                                ₹
+                            </span>
+                            {isSubmitting ? (
+                                <Svg />
+                            ) : price ? (
+                                <span className="text-4xl font-bold">
+                                    {price}
+                                </span>
+                            ) : (
+                                "NA"
+                            )}
+                        </div>
+                    </div>
+                    <button
+                        className="absolute bottom-8 border-2 border-black px-6 py-1 rounded-lg hover:text-white hover:bg-black font-bold"
+                        onClick={() => setModalVisible(false)}
+                    >
+                        Close
+                    </button>
                 </div>
             </div>
-            <button className="absolute bottom-8 border-2 border-black px-6 py-1 rounded-lg hover:text-white hover:bg-black font-bold">
-                Close
-            </button>
         </div>
     );
 }
