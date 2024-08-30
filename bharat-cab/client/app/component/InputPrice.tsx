@@ -32,6 +32,8 @@ export default function InputPrice() {
     const [isAutoCompleteDestination, setIsAutoCompleteDestination] =
         useState(false);
 
+    const [isModalVisible, setModalVisible] = useState(false);
+
     const handleClickSource = (locData) => {
         setSource(locData.name);
         setSourceCoords([locData.lat, locData.lon]);
@@ -142,12 +144,14 @@ export default function InputPrice() {
                     See prices
                 </button>
             </fetcher.Form>
-            <div className="fixed  left-1/2 top-1/2  transform -translate-x-1/2 -translate-y-1/2 ">
-                <Modal
-                    price={price}
-                    distance={distance}
-                    isSubmitting={isSubmitting}
-                />
+            <div className="fixed inset-0 h-full w-full bg-gray-950 bg-opacity-80">
+                <div className="fixed  left-1/2 top-1/2  transform -translate-x-1/2 -translate-y-1/2 ">
+                    <Modal
+                        price={price}
+                        distance={distance}
+                        isSubmitting={isSubmitting}
+                    />
+                </div>
             </div>
         </div>
     );
@@ -175,15 +179,22 @@ function Dropdown({ autoCompleteData, isAutoComplete, handleClick }) {
 
 function Modal({ price, distance, isSubmitting }) {
     console.log(price);
-    if (isSubmitting) return <div className="text-white">Loading...</div>;
+    // if (isSubmitting) return <div className="text-white">Loading...</div>;
     return (
         <div className="flex flex-col gap-2 bg-yellow-50 justify-center items-center rounded-lg h-[500px] w-[750px] ">
             <div className="flex flex-col gap-4 items-center border-2 border-black p-20 rounded-lg">
                 <div className="flex gap-4 items-center">
                     <span className="text-6xl font-extrabold">Distance </span>
-                    <span className="text-4xl font-bold text-blue-700 border-b-2 border-b-gray-400">
-                        734
-                    </span>
+
+                    {isSubmitting ? (
+                        <Svg />
+                    ) : distance ? (
+                        <span className="text-4xl font-bold text-blue-700 border-b-2 border-b-gray-400">
+                            {distance}
+                        </span>
+                    ) : (
+                        "NA"
+                    )}
                 </div>
                 <div className="flex gap-4 items-center">
                     <span className="text-6xl font-extrabold border-b-2 border-b-gray-400 text-blue-700">
