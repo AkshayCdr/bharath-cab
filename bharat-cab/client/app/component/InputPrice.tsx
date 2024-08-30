@@ -199,28 +199,25 @@ function Modal({ price, distance, isSubmitting, setModalVisible }) {
                                 Distance{" "}
                             </span>
 
-                            {isSubmitting ? (
-                                <Svg />
-                            ) : distance ? (
+                            {distance ? (
                                 <span className="text-4xl font-bold text-blue-700 border-b-2 border-b-gray-400">
                                     {distance}
                                 </span>
                             ) : (
-                                "NA"
+                                <Svg />
                             )}
                         </div>
                         <div className="flex gap-4 items-center">
                             <span className="text-6xl font-extrabold border-b-2 border-b-gray-400 text-blue-700">
                                 ₹
                             </span>
-                            {isSubmitting ? (
-                                <Svg />
-                            ) : price ? (
+
+                            {price ? (
                                 <span className="text-4xl font-bold">
                                     {price}
                                 </span>
                             ) : (
-                                "NA"
+                                <Svg />
                             )}
                         </div>
                     </div>
