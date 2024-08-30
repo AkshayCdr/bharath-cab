@@ -155,6 +155,23 @@ async function setReview(rideDetails, cookies) {
     return message;
 }
 
+async function getDistance(source, destination) {
+    const response = await fetch(`${API_KEY}/${RIDE}/calculate-distance`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ source, destination }),
+    });
+
+    if (!response.ok) {
+        console.error("failed to review", response.status, response.statusText);
+        return null;
+    }
+
+    return response.json();
+}
+
 export const ride = {
     setLocation,
     getRideDetails,
@@ -164,4 +181,5 @@ export const ride = {
     getRideAndUser,
     requestForRide,
     setReview,
+    getDistance,
 };

@@ -1,4 +1,8 @@
+import { useActionData, useLoaderData } from "@remix-run/react";
 import { useEffect, useState } from "react";
+import { DiAndroid } from "react-icons/di";
+
+import { useFetcher } from "react-router-dom";
 
 const getAutoCompleteData = async (input) => {
     const data = await fetch(
@@ -9,6 +13,10 @@ const getAutoCompleteData = async (input) => {
 };
 
 export default function InputPrice() {
+    const fetcher = useFetcher();
+
+    const { distance, price } = fetcher.data || [];
+
     const [source, setSource] = useState("");
     const [destination, setDestination] = useState("");
 
@@ -66,10 +74,25 @@ export default function InputPrice() {
             .catch(console.error);
     }, [destination]);
 
-    const handleSeePrices = () => {
-        console.log(sourceCoords);
-        console.log(destCoods);
-    };
+    // const priceSubmitHandler = (e) => {
+    //     e.preventDefault();
+    //     const formData = new FormData(e.currentTarget);
+    //     const source = formData
+    //         .get("source-coords")
+    //         ?.toString()
+    //         .split(",")
+    //         .map((ele) => parseFloat(ele));
+
+    //     const destination = formData
+    //         .get("destination-coords")
+    //         ?.toString()
+    //         .split(",")
+    //         .map((ele) => parseFloat(ele));
+
+    //     getDistance(source, destination)
+    //         .then((res) => console.log(res))
+    //         .catch((err) => console.error(err));
+    // };
 
     return (
         <div className="text-black flex flex-col max-w-[380px] mt-14 gap-3 ">
@@ -78,7 +101,7 @@ export default function InputPrice() {
                 name="source"
                 onFocus={() => setIsAutoCompleteSource(true)}
                 onBlur={() =>
-                    setTimeout(() => setIsAutoCompleteSource(false), 100)
+                    setTimeout(() => setIsAutoCompleteSource(false), 1000)
                 }
                 onChange={(e) => {
                     setSource(e.target.value);
@@ -100,7 +123,7 @@ export default function InputPrice() {
                 name="destination"
                 onFocus={() => setIsAutoCompleteDestination(true)}
                 onBlur={() =>
-                    setTimeout(() => setIsAutoCompleteDestination(false), 100)
+                    setTimeout(() => setIsAutoCompleteDestination(false), 1000)
                 }
                 onChange={(e) => {
                     setDestination(e.target.value);
@@ -116,14 +139,26 @@ export default function InputPrice() {
                 isAutoComplete={isAutoCompleteDestination}
                 handleClick={handleClickDestination}
             />
+            {price && <Modal price={price} distance={distance} />}
 
-            <div className="dropdown"></div>
-            <button
-                onClick={handleSeePrices}
-                className="text-black bg-white w-32 py-2 px-3 rounded-lg mt-4 hover:bg-slate-300 font-bold cursor-not-allowed"
-            >
-                See prices
-            </button>
+            <fetcher.Form method="post">
+                <input
+                    type="hidden"
+                    name="source-coords"
+                    value={sourceCoords}
+                />
+                <input
+                    type="hidden"
+                    name="destination-coords"
+                    value={destCoods}
+                />
+                <button
+                    type="submit"
+                    className="text-black bg-white w-32 py-2 px-3 rounded-lg mt-4 hover:bg-slate-300 font-bold "
+                >
+                    See prices
+                </button>
+            </fetcher.Form>
         </div>
     );
 }
@@ -144,6 +179,15 @@ function Dropdown({ autoCompleteData, isAutoComplete, handleClick }) {
                     </ul>
                 </div>
             )}
+        </div>
+    );
+}
+
+function Modal({ price, distance }) {
+    console.log(price);
+    return (
+        <div className="text-white">
+            Price is {price} distance is {distance}
         </div>
     );
 }

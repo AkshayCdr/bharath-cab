@@ -53,13 +53,53 @@ async function getStatus(id: string): Promise<{ status: string }> {
     return getStatusFromRide(id);
 }
 
-async function del(): Promise<void> {}
+// type PriceMap = { [key: number]: number };
 
-async function findPrice(source: number, destination: number): Promise<number> {
-    const minFee = 10;
-    const distance = await findDistance(source, destination);
-    const distanceToPrice = {};
-    return minFee + 0;
+// const priceMap: PriceMap = {
+//     5: 30,
+//     10: 120,
+//     15: 210,
+//     20: 300,
+//     25: 400,
+//     30: 470,
+//     50: 600,
+//     100: 1000,
+//     250: 3000,
+// };
+
+// function findPrice(distance:number){
+//    if(!distance) return null;
+//    for(let price in priceMap){
+//     if(distance <= price){
+
+//     }
+//    }
+// }
+
+type PriceMap = Map<number, number>;
+
+const priceMap: PriceMap = new Map([
+    [5, 30],
+    [10, 120],
+    [15, 210],
+    [20, 300],
+    [25, 400],
+    [30, 470],
+    [50, 600],
+    [100, 1000],
+    [250, 3000],
+    [300, 4000],
+    [500, 6000],
+]);
+
+function findPrice(distance: number) {
+    if (!distance) return null;
+    console.log(distance);
+    for (let [dist, price] of priceMap) {
+        console.log(price, distance);
+        if (distance <= dist) return price;
+    }
+    return 10000;
 }
 
 function renameCoordinates(obj: LocationData): coordinates {
@@ -120,17 +160,11 @@ async function getRoute(source, destination) {
     console.log(source);
     console.log(destination);
 
-    // console.log(isValidCoordinates)
-
     if (!isValidCoordinates(source) || !isValidCoordinates(destination)) {
         console.log("coordinates are not valid");
     }
 
     try {
-        // const response = await fetch(
-        //     `https://router.project-osrm.org/route/v1/driving/${source.y},${source.x};${destination.y},${destination.x}?overview=full&geometries=geojson`
-        // );
-
         const response = await fetchWithTimeout(
             `https://router.project-osrm.org/route/v1/driving/${source.y},${source.x};${destination.y},${destination.x}?overview=full&geometries=geojson`
         );
@@ -182,7 +216,6 @@ export const rideServices = {
     read,
     update,
     setDriver,
-    del,
     findPrice,
     getRideAndUser,
     getRideAndDriver,

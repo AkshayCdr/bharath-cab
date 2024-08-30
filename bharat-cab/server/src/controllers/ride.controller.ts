@@ -132,9 +132,29 @@ export async function addReview(req: Request<Id, {}, Ride>, res: Response) {
         await rideServices.addReview({ id, review, rating });
         return res.status(201).send({ message: "set review" });
     } catch (error) {
+        console.error(error);
         res.status(500).send({
             message: "could not able to set review",
-            error,
         });
+    }
+}
+
+export async function calculateDistance(req: Request, res: Response) {
+    try {
+        console.log("inside calculate distance ");
+
+        const { source, destination } = req.body;
+
+        const distance = await rideServices.getDistance(
+            rideServices.renameCoordinates(source),
+            rideServices.renameCoordinates(destination)
+        );
+
+        const price = rideServices.findPrice(parseFloat(distance.toFixed(2)));
+
+        res.status(200).send({ distance, price });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send({ message: "calculate data failed" });
     }
 }

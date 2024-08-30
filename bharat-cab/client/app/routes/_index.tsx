@@ -1,9 +1,14 @@
-import type { LinksFunction, MetaFunction } from "@remix-run/node";
+import type {
+    ActionFunctionArgs,
+    LinksFunction,
+    MetaFunction,
+} from "@remix-run/node";
 
 import styles from "../styles/index.css?url";
 
-import InputPrice from "~/component/InputPrice";
 import { authLoader } from "~/utils/auth.server";
+import InputPrice from "~/component/InputPrice";
+import { ride } from "~/apis/ride.server";
 
 export const meta: MetaFunction = () => {
     return [
@@ -12,7 +17,37 @@ export const meta: MetaFunction = () => {
     ];
 };
 
-export const loader = authLoader;
+const getCoordinates = (name, formData) =>
+    formData
+        .get(name)
+        ?.toString()
+        .split(",")
+        .map((ele) => parseFloat(ele))
+        .reduce(
+            (acc, ele, ind) =>
+                ind === 0
+                    ? { ...acc, latitude: ele }
+                    : { ...acc, longitude: ele },
+            {}
+        );
+
+export async function action({ request }: ActionFunctionArgs) {
+    const formData = await request.formData();
+    const source = getCoordinates("source-coords", formData);
+
+    console.log(source);
+
+    const destination = getCoordinates("destination-coords", formData);
+
+    console.log(destination);
+
+    if (!source || !destination) return null;
+
+    const data = await ride.getDistance(source, destination);
+
+    if (!data) return null;
+    return data;
+}
 
 export default function Index() {
     return (

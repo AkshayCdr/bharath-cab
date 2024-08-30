@@ -1,17 +1,20 @@
 import { Router } from "express";
 import {
-  getRide,
-  insertIntoRide,
-  updateRide,
-  requestForRide,
-  addReview,
-  getRideAndDriver,
-  cancelRide,
-  getRideAndUser,
+    getRide,
+    insertIntoRide,
+    updateRide,
+    requestForRide,
+    addReview,
+    getRideAndDriver,
+    cancelRide,
+    getRideAndUser,
+    calculateDistance,
 } from "../controllers/ride.controller";
 import { validateSession } from "../utils/account.auth";
 
 const route = Router();
+
+route.post("/calculate-distance", calculateDistance);
 
 route.use(validateSession);
 
