@@ -33,6 +33,11 @@ const getCoordinates = (name, formData) =>
 
 export async function action({ request }: ActionFunctionArgs) {
     const formData = await request.formData();
+
+    if (!formData.get("source-coords") || !formData.get("destination-coords")) {
+        return null;
+    }
+
     const source = getCoordinates("source-coords", formData);
 
     const destination = getCoordinates("destination-coords", formData);

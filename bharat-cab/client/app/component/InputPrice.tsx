@@ -85,6 +85,11 @@ export default function InputPrice() {
             .catch(console.error);
     }, [destination]);
 
+    const handleSubmit = () => {
+        if (!sourceCoords.length || !destCoods.length) return;
+        setModalVisible(true);
+    };
+
     return (
         <div className="text-black flex flex-col max-w-[380px] mt-14 gap-3 ">
             <input
@@ -133,7 +138,7 @@ export default function InputPrice() {
                 handleClick={handleClickDestination}
             />
 
-            <fetcher.Form method="post" onSubmit={() => setModalVisible(true)}>
+            <fetcher.Form method="post" onSubmit={handleSubmit}>
                 <input
                     type="hidden"
                     name="source-coords"
@@ -184,8 +189,6 @@ function Dropdown({ autoCompleteData, isAutoComplete, handleClick }) {
 }
 
 function Modal({ price, distance, isSubmitting, setModalVisible }) {
-    console.log(price);
-    // if (isSubmitting) return <div className="text-white">Loading...</div>;
     return (
         <div
             className="fixed inset-0 h-full w-full bg-gray-950 bg-opacity-90"
