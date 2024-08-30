@@ -17,6 +17,7 @@ import useRideSocket from "~/hooks/useRideSocket";
 import { formatSourceDestination } from "./user/route";
 
 import Mapcontainer from "~/component/Mapcontainer";
+import BlueLoading from "~/component/BlueLoading";
 
 export interface Ride {
     id: string;
@@ -107,7 +108,21 @@ export default function Ride() {
     const [isRideCancelled, setRideCancelled] = useState(false);
     const [isMounted, setMounted] = useState(false);
 
+    const [isLoading, setIsLoading] = useState(false);
+
     const message = useActionData<typeof action>();
+    console.log(message);
+
+    useEffect(() => {
+        if (message) {
+            setIsLoading(true);
+        }
+        const timeoutId = setTimeout(() => {
+            setIsLoading(false);
+        }, 10000);
+
+        return () => clearTimeout(timeoutId);
+    }, [message]);
 
     const { rideDetails } = useLoaderData<typeof loader>();
     const {
@@ -143,7 +158,15 @@ export default function Ride() {
                     source={source}
                     destination={destination}
                 />
-                {message && <p className="text-green-800">{message.message}</p>}
+
+                <div className="w-32 h-20 mx-auto font-extrabold text-2xl">
+                    {isLoading && (
+                        <div className="flex flex-col">
+                            <h1>Requesting for ride</h1>
+                            <BlueLoading />
+                        </div>
+                    )}
+                </div>
             </div>
 
             <div className="mt-10">

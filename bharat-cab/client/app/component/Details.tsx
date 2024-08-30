@@ -11,7 +11,7 @@ function handleRideStart(e, rideId, setRideState) {
 function handleRideEnd(e, rideId, navigate) {
     e.preventDefault();
     socket.emit("rideEndDriver", rideId);
-    return navigate("/");
+    return navigate("/login");
 }
 
 const initialState = {
@@ -219,7 +219,7 @@ export default function RideDetails({
                         </div>
                     )}
 
-                {isDriver && isOtpVal && !isOnRide && (
+                {isDriver && isOtpVal && !isOnRide && !isRideEnded && (
                     <button
                         className="bg-green-600 w-32 h-9 m-auto rounded-md"
                         onClick={(e) =>
@@ -246,7 +246,7 @@ export default function RideDetails({
                     </div>
                 )}
 
-                {isOnRide && isDriver && (
+                {isDriver && isRideEnded && (
                     <button
                         onClick={(e) =>
                             handleRideEnd(e, rideDetails.id, navigate)

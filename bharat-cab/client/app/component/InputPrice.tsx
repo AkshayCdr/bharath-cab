@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import { useNavigation } from "@remix-run/react";
 import { useFetcher } from "react-router-dom";
+import { config } from "~/utils/config";
+import Svg from "~/component/Svg";
 
 const getAutoCompleteData = async (input) => {
     const data = await fetch(
-        `https://api.geoapify.com/v1/geocode/autocomplete?text=${input}&filter=countrycode:auto&apiKey=55b3a098f2a1408d8d10675b02843f50`
+        `https://api.geoapify.com/v1/geocode/autocomplete?text=${input}&filter=countrycode:auto&apiKey=${config.GEOFI_API_KEY}`
     );
 
     return data.json();
@@ -233,74 +235,5 @@ function Modal({ price, distance, isSubmitting, setModalVisible }) {
                 </div>
             </div>
         </div>
-    );
-}
-
-function Svg() {
-    return (
-        <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 200 200"
-            width={100}
-            height={100}
-        >
-            <rect
-                fill="#21030E"
-                stroke="#21030E"
-                strokeWidth="15"
-                width="30"
-                height="30"
-                x="25"
-                y="85"
-            >
-                <animate
-                    attributeName="opacity"
-                    calcMode="spline"
-                    dur="2"
-                    values="1;0;1;"
-                    keySplines=".5 0 .5 1;.5 0 .5 1"
-                    repeatCount="indefinite"
-                    begin="-.4"
-                ></animate>
-            </rect>
-            <rect
-                fill="#21030E"
-                stroke="#21030E"
-                strokeWidth="15"
-                width="30"
-                height="30"
-                x="85"
-                y="85"
-            >
-                <animate
-                    attributeName="opacity"
-                    calcMode="spline"
-                    dur="2"
-                    values="1;0;1;"
-                    keySplines=".5 0 .5 1;.5 0 .5 1"
-                    repeatCount="indefinite"
-                    begin="-.2"
-                ></animate>
-            </rect>
-            <rect
-                fill="#21030E"
-                stroke="#21030E"
-                strokeWidth="15"
-                width="30"
-                height="30"
-                x="145"
-                y="85"
-            >
-                <animate
-                    attributeName="opacity"
-                    calcMode="spline"
-                    dur="2"
-                    values="1;0;1;"
-                    keySplines=".5 0 .5 1;.5 0 .5 1"
-                    repeatCount="indefinite"
-                    begin="0"
-                ></animate>
-            </rect>
-        </svg>
     );
 }

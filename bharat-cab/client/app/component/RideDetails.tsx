@@ -13,7 +13,7 @@ export default function RideDetails({
 
     const navigation = useNavigation();
 
-    const isSubmitting = navigation.state !== "idle";
+    const isSubmitting = navigation.state === "submitting";
 
     useEffect(() => {
         if (rideDetails?.source && rideDetails?.destination) {

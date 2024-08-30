@@ -56,7 +56,7 @@ export default function FinalPageDriver() {
     useEffect(() => {
         function handleCancelRide() {
             alert("ride cancelled by user...");
-            navigate("/");
+            navigate("/login");
         }
 
         socket.on("startRide", () => setRideState("started"));

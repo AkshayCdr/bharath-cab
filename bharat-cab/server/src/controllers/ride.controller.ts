@@ -12,9 +12,14 @@ export async function insertIntoRide(
     try {
         const { userId, source, destination } = req.body;
 
-        const distance = 10;
+        const distance = await rideServices.getDistance(
+            rideServices.renameCoordinates(source),
+            rideServices.renameCoordinates(destination)
+        );
 
-        const price = 10;
+        const fixedDistance = parseFloat(distance.toFixed(2));
+
+        const price = rideServices.findPrice(fixedDistance) || 100;
 
         const newRide = {
             userId,
@@ -48,7 +53,14 @@ export async function updateRide(req: Request<Id, {}, Ride>, res: Response) {
         const { id } = req.params;
         const { source, destination } = req.body;
 
-        const price = 10;
+        const distance = await rideServices.getDistance(
+            rideServices.renameCoordinates(source),
+            rideServices.renameCoordinates(destination)
+        );
+
+        const fixedDistance = parseFloat(distance.toFixed(2));
+
+        const price = rideServices.findPrice(fixedDistance) || 100;
 
         const updatedRide = {
             id,

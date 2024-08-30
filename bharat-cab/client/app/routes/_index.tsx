@@ -31,6 +31,8 @@ const getCoordinates = (name, formData) =>
             {}
         );
 
+export const loader = authLoader;
+
 export async function action({ request }: ActionFunctionArgs) {
     const formData = await request.formData();
 
