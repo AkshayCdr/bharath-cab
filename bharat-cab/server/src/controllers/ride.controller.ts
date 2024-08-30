@@ -150,9 +150,11 @@ export async function calculateDistance(req: Request, res: Response) {
             rideServices.renameCoordinates(destination)
         );
 
-        const price = rideServices.findPrice(parseFloat(distance.toFixed(2)));
+        const fixedDistance = parseFloat(distance.toFixed(2));
 
-        res.status(200).send({ distance, price });
+        const price = rideServices.findPrice(fixedDistance);
+
+        res.status(200).send({ distance: fixedDistance, price });
     } catch (error) {
         console.error(error);
         res.status(500).send({ message: "calculate data failed" });

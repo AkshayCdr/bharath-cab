@@ -1,7 +1,5 @@
-import { useActionData, useLoaderData } from "@remix-run/react";
 import { useEffect, useState } from "react";
-import { DiAndroid } from "react-icons/di";
-
+import { useNavigation } from "@remix-run/react";
 import { useFetcher } from "react-router-dom";
 
 const getAutoCompleteData = async (input) => {
@@ -14,6 +12,10 @@ const getAutoCompleteData = async (input) => {
 
 export default function InputPrice() {
     const fetcher = useFetcher();
+
+    const navigation = useNavigation();
+
+    const isSubmitting = navigation.state === "submitting";
 
     const { distance, price } = fetcher.data || [];
 
@@ -74,26 +76,6 @@ export default function InputPrice() {
             .catch(console.error);
     }, [destination]);
 
-    // const priceSubmitHandler = (e) => {
-    //     e.preventDefault();
-    //     const formData = new FormData(e.currentTarget);
-    //     const source = formData
-    //         .get("source-coords")
-    //         ?.toString()
-    //         .split(",")
-    //         .map((ele) => parseFloat(ele));
-
-    //     const destination = formData
-    //         .get("destination-coords")
-    //         ?.toString()
-    //         .split(",")
-    //         .map((ele) => parseFloat(ele));
-
-    //     getDistance(source, destination)
-    //         .then((res) => console.log(res))
-    //         .catch((err) => console.error(err));
-    // };
-
     return (
         <div className="text-black flex flex-col max-w-[380px] mt-14 gap-3 ">
             <input
@@ -109,6 +91,7 @@ export default function InputPrice() {
                 }}
                 className="h-12 rounded-lg text-left px-4"
                 placeholder="Enter location"
+                autoComplete="off"
                 value={source}
             />
 
@@ -131,6 +114,7 @@ export default function InputPrice() {
                 }}
                 className="h-12 rounded-lg text-left px-4"
                 placeholder="Enter destination"
+                autoComplete="off"
                 value={destination}
             />
 
@@ -139,7 +123,6 @@ export default function InputPrice() {
                 isAutoComplete={isAutoCompleteDestination}
                 handleClick={handleClickDestination}
             />
-            {price && <Modal price={price} distance={distance} />}
 
             <fetcher.Form method="post">
                 <input
@@ -159,6 +142,13 @@ export default function InputPrice() {
                     See prices
                 </button>
             </fetcher.Form>
+            <div className="fixed  left-1/2 top-1/2  transform -translate-x-1/2 -translate-y-1/2 ">
+                <Modal
+                    price={price}
+                    distance={distance}
+                    isSubmitting={isSubmitting}
+                />
+            </div>
         </div>
     );
 }
@@ -183,11 +173,103 @@ function Dropdown({ autoCompleteData, isAutoComplete, handleClick }) {
     );
 }
 
-function Modal({ price, distance }) {
+function Modal({ price, distance, isSubmitting }) {
     console.log(price);
+    if (isSubmitting) return <div className="text-white">Loading...</div>;
     return (
-        <div className="text-white">
-            Price is {price} distance is {distance}
+        <div className="flex flex-col gap-2 bg-yellow-50 justify-center items-center rounded-lg h-[500px] w-[750px] ">
+            <div className="flex flex-col gap-4 items-center border-2 border-black p-20 rounded-lg">
+                <div className="flex gap-4 items-center">
+                    <span className="text-6xl font-extrabold">Distance </span>
+                    <span className="text-4xl font-bold text-blue-700 border-b-2 border-b-gray-400">
+                        734
+                    </span>
+                </div>
+                <div className="flex gap-4 items-center">
+                    <span className="text-6xl font-extrabold border-b-2 border-b-gray-400 text-blue-700">
+                        ₹
+                    </span>
+                    {isSubmitting ? (
+                        <Svg />
+                    ) : price ? (
+                        <span className="text-4xl font-bold">{price}</span>
+                    ) : (
+                        "NA"
+                    )}
+                </div>
+            </div>
+            <button className="absolute bottom-8 border-2 border-black px-6 py-1 rounded-lg hover:text-white hover:bg-black font-bold">
+                Close
+            </button>
         </div>
+    );
+}
+
+function Svg() {
+    return (
+        <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 200 200"
+            width={100}
+            height={100}
+        >
+            <rect
+                fill="#21030E"
+                stroke="#21030E"
+                strokeWidth="15"
+                width="30"
+                height="30"
+                x="25"
+                y="85"
+            >
+                <animate
+                    attributeName="opacity"
+                    calcMode="spline"
+                    dur="2"
+                    values="1;0;1;"
+                    keySplines=".5 0 .5 1;.5 0 .5 1"
+                    repeatCount="indefinite"
+                    begin="-.4"
+                ></animate>
+            </rect>
+            <rect
+                fill="#21030E"
+                stroke="#21030E"
+                strokeWidth="15"
+                width="30"
+                height="30"
+                x="85"
+                y="85"
+            >
+                <animate
+                    attributeName="opacity"
+                    calcMode="spline"
+                    dur="2"
+                    values="1;0;1;"
+                    keySplines=".5 0 .5 1;.5 0 .5 1"
+                    repeatCount="indefinite"
+                    begin="-.2"
+                ></animate>
+            </rect>
+            <rect
+                fill="#21030E"
+                stroke="#21030E"
+                strokeWidth="15"
+                width="30"
+                height="30"
+                x="145"
+                y="85"
+            >
+                <animate
+                    attributeName="opacity"
+                    calcMode="spline"
+                    dur="2"
+                    values="1;0;1;"
+                    keySplines=".5 0 .5 1;.5 0 .5 1"
+                    repeatCount="indefinite"
+                    begin="0"
+                ></animate>
+            </rect>
+        </svg>
     );
 }

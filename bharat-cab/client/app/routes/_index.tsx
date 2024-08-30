@@ -35,11 +35,7 @@ export async function action({ request }: ActionFunctionArgs) {
     const formData = await request.formData();
     const source = getCoordinates("source-coords", formData);
 
-    console.log(source);
-
     const destination = getCoordinates("destination-coords", formData);
-
-    console.log(destination);
 
     if (!source || !destination) return null;
 
