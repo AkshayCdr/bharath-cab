@@ -94,51 +94,58 @@ export default function InputPrice() {
 
     return (
         <div className="text-black flex flex-col max-w-[380px] mt-14 gap-3 ">
-            <input
-                type="text"
-                name="source"
-                onFocus={() => setIsAutoCompleteSource(true)}
-                onBlur={() =>
-                    setTimeout(() => setIsAutoCompleteSource(false), 1000)
-                }
-                onChange={(e) => {
-                    setSource(e.target.value);
-                    setIsAutoCompleteSource(true);
-                }}
-                className="h-12 rounded-lg text-left px-4"
-                placeholder="Enter location"
-                autoComplete="off"
-                value={source}
-            />
+            <div className="">
+                <input
+                    type="text"
+                    name="source"
+                    onFocus={() => setIsAutoCompleteSource(true)}
+                    onBlur={() =>
+                        setTimeout(() => setIsAutoCompleteSource(false), 1000)
+                    }
+                    onChange={(e) => {
+                        setSource(e.target.value);
+                        setIsAutoCompleteSource(true);
+                    }}
+                    className="h-12 rounded-lg text-left px-4 w-80"
+                    placeholder="Enter location"
+                    autoComplete="off"
+                    value={source}
+                />
 
-            <Dropdown
-                autoCompleteData={autoCompleteSourceData}
-                isAutoComplete={isAutoCompleteSource}
-                handleClick={handleClickSource}
-            />
+                <Dropdown
+                    autoCompleteData={autoCompleteSourceData}
+                    isAutoComplete={isAutoCompleteSource}
+                    handleClick={handleClickSource}
+                />
+            </div>
 
-            <input
-                type="text"
-                name="destination"
-                onFocus={() => setIsAutoCompleteDestination(true)}
-                onBlur={() =>
-                    setTimeout(() => setIsAutoCompleteDestination(false), 1000)
-                }
-                onChange={(e) => {
-                    setDestination(e.target.value);
-                    setIsAutoCompleteDestination(true);
-                }}
-                className="h-12 rounded-lg text-left px-4"
-                placeholder="Enter destination"
-                autoComplete="off"
-                value={destination}
-            />
+            <div>
+                <input
+                    type="text"
+                    name="destination"
+                    onFocus={() => setIsAutoCompleteDestination(true)}
+                    onBlur={() =>
+                        setTimeout(
+                            () => setIsAutoCompleteDestination(false),
+                            1000
+                        )
+                    }
+                    onChange={(e) => {
+                        setDestination(e.target.value);
+                        setIsAutoCompleteDestination(true);
+                    }}
+                    className="h-12 rounded-lg text-left px-4 w-80"
+                    placeholder="Enter destination"
+                    autoComplete="off"
+                    value={destination}
+                />
 
-            <Dropdown
-                autoCompleteData={autoCompleteDestData}
-                isAutoComplete={isAutoCompleteDestination}
-                handleClick={handleClickDestination}
-            />
+                <Dropdown
+                    autoCompleteData={autoCompleteDestData}
+                    isAutoComplete={isAutoCompleteDestination}
+                    handleClick={handleClickDestination}
+                />
+            </div>
 
             <fetcher.Form method="post" onSubmit={handleSubmit}>
                 <input
@@ -174,11 +181,14 @@ function Dropdown({ autoCompleteData, isAutoComplete, handleClick }) {
     return (
         <div>
             {isAutoComplete && autoCompleteData.length > 0 && (
-                <div className="dropdown">
+                <div className="dropdown rounded-lg border-2 w-80 p-2">
                     <ul>
                         {autoCompleteData.map((loc, ind) => (
-                            <li className="dropdown-list" key={ind}>
-                                <button onClick={() => handleClick(loc)}>
+                            <li className="dropdown-list " key={ind}>
+                                <button
+                                    className="text-lg text-left truncate  w-full overflow-hidden border-b-2"
+                                    onClick={() => handleClick(loc)}
+                                >
                                     {loc.name}
                                 </button>
                             </li>
