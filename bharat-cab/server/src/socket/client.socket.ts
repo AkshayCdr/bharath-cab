@@ -1,4 +1,5 @@
 import { Ride } from "../dtos/ride.dto";
+import { getUserId } from "../model/ride.model";
 import { rideServices } from "../services/ride.services";
 import { ClientSocket } from "../types/clientSocket";
 import { driverSock } from "./driver.socket";
@@ -58,6 +59,13 @@ async function cancelRide(socket: {
     });
 }
 
+async function cancel(rideId: string) {
+    const { userId } = await getUserId(rideId);
+
+    if (!userId) return;
+    emitEventToClient("cancel", userId, "");
+}
+
 function isClientExist(socket: any) {
     return Object.values(clientSocket).includes(socket);
 }
@@ -82,4 +90,5 @@ export const clientSock = {
     cancelRide,
     isClientExist,
     deleteClient,
+    cancel,
 };

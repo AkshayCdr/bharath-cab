@@ -54,6 +54,7 @@ export function createSocket(
         driverSock.rideEndDriver(socket);
 
         clientSock.cancelRide(socket);
+        driverSock.cancelRideDriver(socket);
 
         handleDisconnection(socket);
     });

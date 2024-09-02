@@ -1,3 +1,4 @@
+import { useNavigate } from "@remix-run/react";
 import { useEffect, useReducer } from "react";
 import { socket } from "~/socket/websocket";
 
@@ -49,6 +50,8 @@ export function handleCancelRide(rideId) {
 export default function useRideLocation() {
     const [state, dispatch] = useReducer(reducer, initialState);
 
+    const navigate = useNavigate();
+
     useEffect(() => {
         const handleUpdateLocation = (locationData) => {
             const [latitude, longitude] = locationData;
@@ -75,18 +78,25 @@ export default function useRideLocation() {
             dispatch({ type: actionTypes.START_RIDE, payload: rideId });
         };
 
+        const handleRideCancel = () => {
+            console.log("ride cancelled");
+            navigate("/login");
+        };
+
+        socket.on("cancel", handleRideCancel);
         socket.on("updateLocation", handleUpdateLocation);
         socket.on("rideNearby", handleRideNearby);
         socket.on("endRide", handleEndRide);
         socket.on("startRide", handleStartRide);
 
         return () => {
+            socket.off("cancel", handleRideCancel);
             socket.off("updateLocation", handleUpdateLocation);
             socket.off("rideNearby", handleRideNearby);
             socket.off("endRide", handleEndRide);
             socket.off("startRide", handleStartRide);
         };
-    }, []);
+    }, [navigate]);
 
     return {
         rideLocation: state.rideLocation,

@@ -84,7 +84,7 @@ export default function RideDetails({
 
                     <div className="flex flex-row">
                         <label htmlFor="price" className="text-4xl mr-1">
-                            $
+                            ₹
                         </label>
                         <div>
                             {rideDetails?.price && (

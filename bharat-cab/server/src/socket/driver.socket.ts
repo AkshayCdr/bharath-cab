@@ -225,12 +225,16 @@ async function requestForRide(rideDetails: Ride & User) {
 async function cancelRide(rideId: string) {
     const { driverId } = await getDriverId(rideId);
 
-    console.log("driver id inside cancel ride ");
-    console.log(driverId);
-
     if (!driverId) return emitEventToAllDriver("cancelRide", rideId);
 
     emitEventToDriver("cancelRide", driverId, "");
+}
+
+async function cancelRideDriver(socket) {
+    socket.on("cancelRideDriver", async (rideId) => {
+        await rideServices.updateStatus(rideId, "cancelled");
+        await clientSock.cancel(rideId);
+    });
 }
 
 async function rideStartDriver(socket) {
@@ -314,4 +318,5 @@ export const driverSock = {
     rideStartDriver,
     rideEndDriver,
     otpValidate,
+    cancelRideDriver,
 };

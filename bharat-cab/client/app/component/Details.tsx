@@ -14,6 +14,12 @@ function handleRideEnd(e, rideId, navigate) {
     return navigate("/login");
 }
 
+function handleCancelRide(e, rideId, navigate) {
+    e.preventDefault();
+    socket.emit("cancelRideDriver", rideId);
+    return navigate("/login");
+}
+
 const initialState = {
     status: "not validated",
     error: null,
@@ -266,6 +272,9 @@ export default function RideDetails({
                         value="cancel"
                         className="bg-red-700 w-32 h-9 m-auto rounded-md"
                         disabled={isSubmitting}
+                        onClick={(e) =>
+                            handleCancelRide(e, rideDetails.id, navigate)
+                        }
                     >
                         {isSubmitting ? "cancelling... " : "cancel"}
                     </button>

@@ -94,9 +94,8 @@ const priceMap: PriceMap = new Map([
 
 function findPrice(distance: number) {
     if (!distance) return null;
-    console.log(distance);
+
     for (let [dist, price] of priceMap) {
-        console.log(price, distance);
         if (distance <= dist) return price;
     }
     return 10000;

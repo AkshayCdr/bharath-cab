@@ -4,6 +4,7 @@ import { rideServices } from "../services/ride.services";
 import { Id } from "../types/id";
 import { user } from "../services/user.services";
 import { driverSock } from "../socket/driver.socket";
+import { clientSock } from "../socket/client.socket";
 
 export async function insertIntoRide(
     req: Request<{}, {}, Ride>,
@@ -83,9 +84,10 @@ export async function cancelRide(req: Request<Id>, res: Response) {
 
         await rideServices.updateStatus(id, "cancelled");
 
-        driverSock.cancelRide(id);
+        await driverSock.cancelRide(id);
+        await clientSock.cancel(id);
 
-        res.status(200).send({ message: "ride cancellled" });
+        res.status(200).send({ message: "ride cancelled" });
     } catch (error) {
         res.status(500).send({ message: "cannot ride error ", error });
     }
