@@ -72,7 +72,7 @@ export async function getRideAndUserFromTable(
     id: string
 ): Promise<Ride & User> {
     try {
-        const query = `SELECT r.id, r.source, r.destination, r.price, r.user_id,r.pin, u.name, u.phone ,u.email
+        const query = `SELECT r.id, r.source, r.destination, r.price, r.user_id,r.pin,r.status, u.name, u.phone ,u.email
                   FROM RIDE as r 
                   INNER JOIN "USER" as u 
                   ON r.user_id = u.account_id WHERE r.id = $1`;

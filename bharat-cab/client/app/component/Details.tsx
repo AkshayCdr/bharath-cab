@@ -76,6 +76,7 @@ export default function RideDetails({
     const isRideEnded = rideState === rideStates.ENDED;
     const isOnRide = rideState === rideStates.ONRIDE;
     const isRideIdle = rideState === rideStates.IDLE;
+    const isNearby = rideState === rideStates.NEARBY;
 
     console.log(rideDetails);
     console.log(rideState);
@@ -267,7 +268,7 @@ export default function RideDetails({
                     </button>
                 )}
 
-                {isRideIdle && (
+                {(isRideIdle || isNearby) && (
                     <button
                         type="submit"
                         name="intent"
