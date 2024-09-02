@@ -1,5 +1,6 @@
 import { Form, useNavigation } from "@remix-run/react";
 import { useEffect, useState } from "react";
+import { FaSpinner } from "react-icons/fa6";
 
 export default function RideDetails({
     rideDetails,
@@ -7,6 +8,7 @@ export default function RideDetails({
     destinationName,
     source,
     destination,
+    isLoading,
 }) {
     const [defaultSource, setSource] = useState("");
     const [defaultDestination, setDestination] = useState("");
@@ -106,10 +108,18 @@ export default function RideDetails({
                         type="submit"
                         name="intent"
                         value="request-for-ride"
-                        disabled={isSubmitting}
-                        className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded w-56 "
+                        disabled={isSubmitting || isLoading}
+                        className={`bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded w-56 ${
+                            isLoading || isSubmitting
+                                ? "cursor-not-allowed opacity-500 flex justify-end"
+                                : ""
+                        }`}
                     >
-                        Request for ride
+                        {isSubmitting || isLoading ? (
+                            <FaSpinner className="animate-spin text" />
+                        ) : (
+                            "Request for ride"
+                        )}
                     </button>
                     <div>
                         <button

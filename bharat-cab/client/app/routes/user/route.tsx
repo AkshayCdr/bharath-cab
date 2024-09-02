@@ -143,14 +143,16 @@ export default function User() {
 
     return (
         <div className="flex flex-col lg:flex-row  bg-gray-950 text-white min-h-screen justify-center ">
-            <LocationInput
-                userId={userData.account_id}
-                sourceName={sourceName}
-                destinationName={destinationName}
-                source={source}
-                destination={destination}
-            />
-            <div className="mt-10">
+            <div className="lg:w-1/4 w-full p-5">
+                <LocationInput
+                    userId={userData.account_id}
+                    sourceName={sourceName}
+                    destinationName={destinationName}
+                    source={source}
+                    destination={destination}
+                />
+            </div>
+            <div className="mt-10 lg:w-3/4 w-full p-5">
                 <Mapcontainer
                     source={source}
                     destination={destination}

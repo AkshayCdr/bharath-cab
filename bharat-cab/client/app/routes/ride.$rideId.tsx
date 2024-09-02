@@ -132,7 +132,7 @@ export default function Ride() {
         }, 10000);
 
         return () => clearTimeout(timeoutId);
-    }, [isRequestingForRide]);
+    }, [isRequestingForRide, data]);
 
     const { rideDetails } = useLoaderData<typeof loader>();
     const {
@@ -160,16 +160,17 @@ export default function Ride() {
 
     return (
         <div className="flex flex-col lg:flex-row bg-gray-950 text-white min-h-screen justify-center">
-            <div className="flex flex-col">
+            <div className="flex flex-col lg:w-1/4 w-full ">
                 <RideDetails
                     rideDetails={rideDetails}
                     sourceName={sourceName}
                     destinationName={destinationName}
                     source={source}
                     destination={destination}
+                    isLoading={isLoading}
                 />
 
-                <div className="w-32 h-20 mx-auto font-extrabold text-2xl">
+                <div className="w-32 mx-auto font-extrabold text-2xl">
                     <div className="flex flex-col">
                         {data && (isUpdated || isError) && (
                             <h1>{data.message}</h1>
@@ -184,7 +185,7 @@ export default function Ride() {
                 </div>
             </div>
 
-            <div className="mt-10">
+            <div className="mt-10 lg:w-3/4 w-full p-5">
                 <Mapcontainer
                     source={source}
                     destination={destination}

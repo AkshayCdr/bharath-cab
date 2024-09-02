@@ -14,8 +14,8 @@ export default function LocationInput({
     const isSubmitting = navigation.state !== "idle";
 
     return (
-        <Form method="POST" id="location-form" className="m-10 text-black">
-            <div className="">
+        <Form method="POST" id="location-form">
+            <div className="text-black m-10">
                 <input type="hidden" name="userId" value={userId} />
                 <input type="text" name="source" id="" value={source} hidden />
                 <input

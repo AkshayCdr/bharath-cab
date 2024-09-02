@@ -200,7 +200,7 @@ export default function RideDetails({
                                 max={9999}
                                 placeholder="Enter 4 digit pin"
                                 ref={otp}
-                                className="bg-gray-950"
+                                className="bg-gray-950 border-b-2"
                                 required
                             />
 
@@ -253,7 +253,7 @@ export default function RideDetails({
                         onClick={(e) =>
                             handleRideEnd(e, rideDetails.id, navigate)
                         }
-                        className="bg-green-600 w-32 h-9 m-auto rounded-md"
+                        className="bg-red-500 w-32 h-9 m-auto rounded-md"
                     >
                         End Ride
                     </button>
