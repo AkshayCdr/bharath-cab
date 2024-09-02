@@ -88,7 +88,7 @@ export default function Map({
     );
 
     return (
-        <div className="relative h-fit ">
+        <div className="">
             <MapContainer
                 center={center}
                 zoom={13}

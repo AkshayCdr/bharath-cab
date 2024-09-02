@@ -81,15 +81,17 @@ export default function FinalPageDriver() {
 
     return (
         <div className="flex flex-col lg:flex-row  p-3 bg-gray-950 text-white min-h-screen justify-center">
-            <Details
-                rideDetails={rideDetails}
-                sourceName={sourceName}
-                destinationName={destinationName}
-                role={role}
-                rideState={rideState}
-                setRideState={setRideState}
-            />
-            <div className="mt-10">
+            <div className="flex flex-col m-4 p-2 lg:w-1/4 w-full">
+                <Details
+                    rideDetails={rideDetails}
+                    sourceName={sourceName}
+                    destinationName={destinationName}
+                    role={role}
+                    rideState={rideState}
+                    setRideState={setRideState}
+                />
+            </div>
+            <div className="mt-10 lg:w-3/4 w-full p-5">
                 <Mapcontainer
                     source={source}
                     destination={destination}

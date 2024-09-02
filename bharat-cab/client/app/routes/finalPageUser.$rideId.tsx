@@ -115,15 +115,17 @@ export default function FinalPageUser() {
 
     return (
         <div className="flex flex-col lg:flex-row p-3 bg-gray-950 text-white min-h-screen justify-center">
-            <Details
-                rideDetails={rideDetails}
-                sourceName={sourceName}
-                destinationName={destinationName}
-                role={role}
-                rideState={rideStatus}
-            />
+            <div className="flex flex-col m-4 p-2 lg:w-1/4 w-full">
+                <Details
+                    rideDetails={rideDetails}
+                    sourceName={sourceName}
+                    destinationName={destinationName}
+                    role={role}
+                    rideState={rideStatus}
+                />
+            </div>
 
-            <div className="mt-10">
+            <div className="mt-10 flex-grow lg:w-3/4 w-full p-5">
                 <Mapcontainer
                     source={source}
                     destination={destination}
