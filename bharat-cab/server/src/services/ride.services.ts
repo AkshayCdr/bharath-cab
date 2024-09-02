@@ -155,41 +155,87 @@ function isValidCoordinates(coords: coordinates) {
     return coords.x >= -90 && coords.y >= -180 && coords.y <= 180;
 }
 
-async function getRoute(source, destination) {
-    console.log(source);
-    console.log(destination);
+// async function getRoute(source, destination) {
+//     console.log(source);
+//     console.log(destination);
 
-    if (!isValidCoordinates(source) || !isValidCoordinates(destination)) {
-        console.log("coordinates are not valid");
+//     if (!isValidCoordinates(source) || !isValidCoordinates(destination)) {
+//         console.log("coordinates are not valid");
+//     }
+
+//     try {
+//         const response = await fetchWithTimeout(
+//             `https://router.project-osrm.org/route/v1/driving/${source.y},${source.x};${destination.y},${destination.x}?overview=full&geometries=geojson`
+//         );
+
+//         if (!response.ok) return null;
+
+//         const data = await response.json();
+
+//         const routes = (data as OSRMResponse)?.routes ?? [];
+//         return routes.length > 0 ? routes[0] : null;
+//     } catch (error) {
+//         console.error("Fetch error: eroor fetching route due to __", error);
+//         return null;
+//     }
+// }
+
+const distanceCache = {};
+
+const precesion = (input) => parseFloat(input.toFixed(5));
+
+const toSixFloat = (obj) => {
+    return {
+        x: precesion(obj.x),
+        y: precesion(obj.y),
+    };
+};
+
+async function getDistance(source, destination) {
+    const distance = await calculateDistance(source, destination);
+    console.log("distance is : ");
+    console.log(distance);
+    if (distance === null) return null;
+    if (distance === 0) return 0;
+    return distance / 1000;
+}
+
+async function calculateDistance(sourceObj, destinationObj) {
+    const source = toSixFloat(sourceObj);
+
+    const destination = toSixFloat(destinationObj);
+
+    const cacheKey = `${source.x},${source.y}-${destination.x},${destination.y}`;
+
+    if (distanceCache[cacheKey]) {
+        return distanceCache[cacheKey];
     }
 
     try {
-        const response = await fetchWithTimeout(
-            `https://router.project-osrm.org/route/v1/driving/${source.y},${source.x};${destination.y},${destination.x}?overview=full&geometries=geojson`
+        const response = await fetch(
+            `https://api.geoapify.com/v1/routing?waypoints=${source.x},${source.y}|${destination.x},${destination.y}&mode=drive&apiKey=55b3a098f2a1408d8d10675b02843f50`
         );
 
-        if (!response.ok) return null;
-
         const data = await response.json();
-
-        const routes = (data as OSRMResponse)?.routes ?? [];
-        return routes.length > 0 ? routes[0] : null;
-    } catch (error) {
-        console.error("Fetch error: eroor fetching route due to __", error);
+        distanceCache[cacheKey] = data.features[0].properties.distance;
+    } catch (err) {
+        console.log(err);
         return null;
     }
+
+    return distanceCache[cacheKey];
 }
 
 //@return distance in kms
-async function getDistance(source: coordinates, destination: coordinates) {
-    if (!source || !destination) return null;
+// async function getDistance(source: coordinates, destination: coordinates) {
+//     if (!source || !destination) return null;
 
-    const route = await getRoute(source, destination);
+//     const route = await getRoute(source, destination);
 
-    if (!route) return null;
+//     if (!route) return null;
 
-    return route && route.distance / 1000;
-}
+//     return route && route.distance / 1000;
+// }
 
 async function findDistance(
     source: number,
