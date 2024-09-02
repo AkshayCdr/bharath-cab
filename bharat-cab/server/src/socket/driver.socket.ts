@@ -170,7 +170,7 @@ async function eventRideStart(
         (rideDistanceFromSource || rideDistanceFromSource === 0) &&
         rideDistanceFromSource <= 0.1 &&
         rideDistanceFromSource >= 0;
-
+    console.log(isRideStarted);
     if (!isRideStarted) return;
     await startRide(user_id, rideId);
 }
@@ -200,18 +200,12 @@ async function rideNearby(userId: string, rideId: string) {
 }
 
 async function startRide(userId: string, rideId: string) {
-    await rideServices.updateStatus(rideId, "onride");
-    // clientSock.startRide(userId, rideId);
-
     const { driverId } = await getDriverId(rideId);
-
+    console.log("sending start ride ");
     emitEventToDriver("startRide", driverId, "");
 }
 
 async function endRide(userId: string, rideId: string) {
-    await rideServices.updateStatus(userId, "ride_ended");
-    // clientSock.endRide(userId, rideId);
-
     const { driverId } = await getDriverId(rideId);
 
     emitEventToDriver("endRide", driverId, "");
@@ -240,6 +234,7 @@ async function cancelRideDriver(socket) {
 async function rideStartDriver(socket) {
     socket.on("rideStartDriver", async (rideId) => {
         const { user_id } = await rideServices.read(rideId);
+        await rideServices.updateStatus(rideId, "onride");
         clientSock.startRide(user_id, rideId);
     });
 }
@@ -247,6 +242,7 @@ async function rideStartDriver(socket) {
 async function rideEndDriver(socket) {
     socket.on("rideEndDriver", async (rideId) => {
         const { user_id } = await rideServices.read(rideId);
+        await rideServices.updateStatus(user_id, "ride_ended");
         clientSock.endRide(user_id, rideId);
     });
 }

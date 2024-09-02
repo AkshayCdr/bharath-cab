@@ -180,7 +180,7 @@ function isValidCoordinates(coords: coordinates) {
 //     }
 // }
 
-const distanceCache = {};
+// const distanceCache = {};
 
 const precesion = (input) => parseFloat(input.toFixed(5));
 
@@ -200,16 +200,16 @@ async function getDistance(source, destination) {
     return distance / 1000;
 }
 
-async function calculateDistance(sourceObj, destinationObj) {
-    const source = toSixFloat(sourceObj);
+async function calculateDistance(source, destination) {
+    // const source = toSixFloat(sourceObj);
 
-    const destination = toSixFloat(destinationObj);
+    // const destination = toSixFloat(destinationObj);
 
-    const cacheKey = `${source.x},${source.y}-${destination.x},${destination.y}`;
+    // const cacheKey = `${source.x},${source.y}-${destination.x},${destination.y}`;
 
-    if (distanceCache[cacheKey]) {
-        return distanceCache[cacheKey];
-    }
+    // if (distanceCache[cacheKey]) {
+    //     return distanceCache[cacheKey];
+    // }
 
     try {
         const response = await fetch(
@@ -217,13 +217,13 @@ async function calculateDistance(sourceObj, destinationObj) {
         );
 
         const data = await response.json();
-        distanceCache[cacheKey] = data.features[0].properties.distance;
+        return data.features[0].properties.distance;
     } catch (err) {
         console.log(err);
         return null;
     }
 
-    return distanceCache[cacheKey];
+    // return distanceCache[cacheKey];
 }
 
 //@return distance in kms

@@ -78,6 +78,8 @@ export default function RideDetails({
     const isRideIdle = rideState === rideStates.IDLE;
 
     console.log(rideDetails);
+    console.log(rideState);
+    console.log(state.status);
 
     const isDriver = role === "driver";
     const isUser = role === "user";
@@ -254,7 +256,7 @@ export default function RideDetails({
                     </div>
                 )}
 
-                {isDriver && isRideEnded && (
+                {isDriver && isRideEnded && isOtpVal && (
                     <button
                         onClick={(e) =>
                             handleRideEnd(e, rideDetails.id, navigate)
