@@ -31,6 +31,7 @@ enum rideStates {
     ENDED = "ended",
     ONRIDE = "onride",
     NEARBY = "nearby",
+    IDLE = "idle",
 }
 
 function otpReducer(state, action) {
@@ -68,6 +69,7 @@ export default function RideDetails({
     const isRideStarted = rideState === rideStates.STARTED;
     const isRideEnded = rideState === rideStates.ENDED;
     const isOnRide = rideState === rideStates.ONRIDE;
+    const isRideIdle = rideState === rideStates.IDLE;
 
     console.log(rideDetails);
 
@@ -138,7 +140,7 @@ export default function RideDetails({
                 </div>
                 <div className="flex gap-2">
                     <label htmlFor="price" className="text-4xl">
-                        $
+                        ₹
                     </label>
                     <input
                         type="text"
@@ -146,7 +148,7 @@ export default function RideDetails({
                         id=""
                         value={rideDetails.price}
                         readOnly
-                        className="bg-gray-950 font-extrabold text-4xl w-10"
+                        className="bg-gray-950 font-extrabold text-4xl w-28"
                     />
                 </div>
 
@@ -219,7 +221,7 @@ export default function RideDetails({
                         </div>
                     )}
 
-                {isDriver && isOtpVal && !isOnRide && !isRideEnded && (
+                {isDriver && isOtpVal && isRideStarted && (
                     <button
                         className="bg-green-600 w-32 h-9 m-auto rounded-md"
                         onClick={(e) =>
@@ -257,7 +259,7 @@ export default function RideDetails({
                     </button>
                 )}
 
-                {!isRideStarted && !isOnRide && !isRideEnded && (
+                {isRideIdle && (
                     <button
                         type="submit"
                         name="intent"

@@ -46,7 +46,7 @@ export default function FinalPageDriver() {
 
     const { currentLocation } = useLocation(rideDetails.id);
 
-    const [rideState, setRideState] = useState(null);
+    const [rideState, setRideState] = useState("idle");
 
     const [isEditable, setIsEditable] = useState(false);
     const [isMounted, setIsMounted] = useState(false);

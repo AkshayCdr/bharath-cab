@@ -18,6 +18,7 @@ import { formatSourceDestination } from "./user/route";
 
 import Mapcontainer from "~/component/Mapcontainer";
 import BlueLoading from "~/component/BlueLoading";
+import { divIcon } from "leaflet";
 
 export interface Ride {
     id: string;
@@ -64,7 +65,7 @@ export async function action({ request }: ActionFunctionArgs) {
             request.headers.get("cookie")
         );
 
-        return json({ message });
+        return json({ message: "requesting" });
     }
 
     if (isUpdate) {
@@ -76,7 +77,7 @@ export async function action({ request }: ActionFunctionArgs) {
         console.log(data);
 
         if (!data) {
-            return { message: "select source/destination" };
+            return { message: "invalid" };
         }
 
         const { source, destination } = data;
@@ -89,7 +90,7 @@ export async function action({ request }: ActionFunctionArgs) {
             },
             request.headers.get("cookie")
         );
-        return json({ message });
+        return json({ message: "updated" });
     }
 
     if (isCancel) {
@@ -103,6 +104,12 @@ export async function action({ request }: ActionFunctionArgs) {
     return json({ message: "error" });
 }
 
+enum Status {
+    INVALID = "invalid",
+    UPDATED = "updated",
+    REQUESTING = "requesting",
+}
+
 export default function Ride() {
     const [isEditable, setIsEditable] = useState(true);
     const [isRideCancelled, setRideCancelled] = useState(false);
@@ -110,11 +117,14 @@ export default function Ride() {
 
     const [isLoading, setIsLoading] = useState(false);
 
-    const message = useActionData<typeof action>();
-    console.log(message);
+    const data = useActionData<typeof action>();
+
+    const isRequestingForRide = data?.message === Status.REQUESTING;
+    const isUpdated = data?.message === Status.UPDATED;
+    const isError = data?.message === Status.INVALID;
 
     useEffect(() => {
-        if (message) {
+        if (isRequestingForRide) {
             setIsLoading(true);
         }
         const timeoutId = setTimeout(() => {
@@ -122,7 +132,7 @@ export default function Ride() {
         }, 10000);
 
         return () => clearTimeout(timeoutId);
-    }, [message]);
+    }, [isRequestingForRide]);
 
     const { rideDetails } = useLoaderData<typeof loader>();
     const {
@@ -160,12 +170,17 @@ export default function Ride() {
                 />
 
                 <div className="w-32 h-20 mx-auto font-extrabold text-2xl">
-                    {isLoading && (
-                        <div className="flex flex-col">
-                            <h1>Requesting for ride</h1>
-                            <BlueLoading />
-                        </div>
-                    )}
+                    <div className="flex flex-col">
+                        {data && (isUpdated || isError) && (
+                            <h1>{data.message}</h1>
+                        )}
+                        {isLoading && (
+                            <div>
+                                <h1>Requesting for ride ...</h1>
+                                <BlueLoading />
+                            </div>
+                        )}
+                    </div>
                 </div>
             </div>
 
