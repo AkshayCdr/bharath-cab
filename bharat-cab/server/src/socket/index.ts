@@ -31,7 +31,7 @@ export function createSocket(
 
     io.use(async (socket, next) => {
         const cookiesHeader = socket.handshake.headers.cookie;
-
+        console.log(cookiesHeader);
         if (!cookiesHeader) {
             console.log("no cookies found returningn.....");
             return next(new Error("No cookies found"));
