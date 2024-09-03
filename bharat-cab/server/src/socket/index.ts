@@ -25,12 +25,14 @@ export function createSocket(
             origin: "https://bharat-cab-client.onrender.com",
             // origin: "http://localhost:3000",
             // origin: "http://localhost:5000",
+            methods: ["GET", "POST"],
             credentials: true,
         },
     });
 
     io.use(async (socket, next) => {
         const cookiesHeader = socket.handshake.headers.cookie;
+        console.log(socket.handshake);
         console.log(cookiesHeader);
         if (!cookiesHeader) {
             console.log("no cookies found returningn.....");
