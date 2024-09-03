@@ -29,32 +29,38 @@ export function createSocket(
         },
     });
 
-    io.use(async (socket, next) => {
-        const cookiesHeader = socket.handshake.headers.cookie;
-        console.log(socket.handshake);
-        console.log(cookiesHeader);
-        if (!cookiesHeader) {
-            console.log("no cookies found returningn.....");
-            return next(new Error("No cookies found"));
-        }
+    // io.use(async (socket, next) => {
+    //     const cookiesHeader = socket.handshake.headers.cookie;
+    //     console.log(socket.handshake);
+    //     console.log(cookiesHeader);
+    //     if (!cookiesHeader) {
+    //         console.log("no cookies found returningn.....");
+    //         return next(new Error("No cookies found"));
+    //     }
 
-        const cookies = parse(cookiesHeader);
-        const sessionId = cookies.sessionId;
+    //     const cookies = parse(cookiesHeader);
+    //     const sessionId = cookies.sessionId;
 
-        const isAuthenticated = sessionId && (await isSessionExist(sessionId));
+    //     const isAuthenticated = sessionId && (await isSessionExist(sessionId));
 
-        if (!isAuthenticated) {
-            console.log("not authenticated returnning ....");
-            return next(new Error("Invalid"));
-        }
+    //     if (!isAuthenticated) {
+    //         console.log("not authenticated returnning ....");
+    //         return next(new Error("Invalid"));
+    //     }
 
-        console.log(sessionId);
-        registerSocket(socket, sessionId);
-        next();
-    });
+    //     console.log(sessionId);
+    //     registerSocket(socket, sessionId);
+    //     next();
+    // });
 
     io.on("connect", (socket) => {
         console.log("connected");
+
+        if (socket.recovered) {
+            console.log("restored the socket ids");
+        } else {
+            console.log("could not recover");
+        }
 
         driverSock.registerDriverSocket(socket);
         driverSock.setOffline(socket);
@@ -73,7 +79,7 @@ export function createSocket(
         clientSock.cancelRide(socket);
         driverSock.cancelRideDriver(socket);
 
-        handleDisconnection(socket);
+        // handleDisconnection(socket);
     });
 
     return io;

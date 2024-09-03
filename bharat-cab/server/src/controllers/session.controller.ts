@@ -34,8 +34,8 @@ export async function insertIntoSession(
 
         const options: CookieOptions = {
             httpOnly: true,
-            secure: true,
-            sameSite: "none",
+            secure: false,
+            sameSite: "lax",
         };
 
         res.cookie("sessionId", sessionId, options);
