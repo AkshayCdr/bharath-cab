@@ -20,7 +20,6 @@ export function createSocket(
     >
 ): Server {
     const io = new Server(httpServer, {
-        cookie: true,
         cors: {
             origin: "https://bharat-cab-client.onrender.com",
             // origin: "http://localhost:3000",
