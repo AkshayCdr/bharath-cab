@@ -184,7 +184,7 @@ async function eventRideEnd(
         (rideDistanceFromDestination || rideDistanceFromDestination === 0) &&
         rideDistanceFromDestination <= 0.1 &&
         rideDistanceFromDestination >= 0;
-
+    console.log(isRideEnded);
     if (!isRideEnded) return;
 
     await endRide(user_id, rideId);
@@ -207,7 +207,7 @@ async function startRide(userId: string, rideId: string) {
 
 async function endRide(userId: string, rideId: string) {
     const { driverId } = await getDriverId(rideId);
-
+    console.log("sending end ride ");
     emitEventToDriver("endRide", driverId, "");
 }
 
