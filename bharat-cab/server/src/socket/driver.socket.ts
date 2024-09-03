@@ -19,8 +19,12 @@ function registerDriverSocket(socket: {
 }) {
     socket.on("registerDriver", (driverID) => {
         console.log("driver reg with id:", driverID);
-        driverSocket[driverID] = socket;
+        registerDriver(driverID, socket);
     });
+}
+
+function registerDriver(driverId, socket) {
+    driverSocket[driverId] = socket;
 }
 
 function setOffline(socket: {
@@ -304,6 +308,7 @@ async function otpValidate(socket: {
 
 export const driverSock = {
     registerDriverSocket,
+    registerDriver,
     setOffline,
     rideAccepted,
     updateLocation,

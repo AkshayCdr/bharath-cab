@@ -12,7 +12,12 @@ async function registerClientSocket(socket: {
     socket.on("registerClient", (clientID: string) => {
         console.log("client reg with id:", clientID);
         clientSocket[clientID] = socket;
+        registerClient(clientID, socket);
     });
+}
+
+function registerClient(clientId, socket) {
+    clientSocket[clientId] = socket;
 }
 
 async function rideAccepted(clientId: string, driverDetails: any) {
@@ -82,6 +87,7 @@ function deleteClient(socket: any) {
 
 export const clientSock = {
     registerClientSocket,
+    registerClient,
     rideAccepted,
     sendLocation,
     rideNearby,
