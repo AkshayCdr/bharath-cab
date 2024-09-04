@@ -18,7 +18,8 @@ import useRoute from "~/hooks/useRoute";
 import Mapcontainer from "~/component/Mapcontainer";
 import useRideEvents from "~/hooks/useRideEvents";
 
-import { socket } from "~/socket/websocket";
+// import socket from "~/socket/socket.client";
+import socketIntance from "~/socket/socketInstance.client";
 import style from "~/styles/finalPageDriver.css?url";
 
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
@@ -55,6 +56,7 @@ export default function FinalPageDriver() {
     const navigate = useNavigate();
 
     useEffect(() => {
+        const socket = socketIntance.getInstance();
         function handleCancelRide() {
             alert("ride cancelled by user...");
             navigate("/login");

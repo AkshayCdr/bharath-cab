@@ -1,6 +1,7 @@
 import { useNavigate } from "@remix-run/react";
 import { useEffect, useReducer } from "react";
-import { socket } from "~/socket/websocket";
+// import { socket } from "~/socket/websocket.client";
+import socketIntance from "~/socket/socketInstance.client";
 
 const actionTypes = {
     UPDATE_LOCATION: "update_location",
@@ -43,6 +44,7 @@ const reducer = (state, action) => {
 };
 
 export function handleCancelRide(rideId) {
+    const socket = socketIntance.getInstance();
     console.log("cancelling ride");
     socket.emit("cancelRide", rideId);
 }
@@ -53,6 +55,7 @@ export default function useRideLocation() {
     const navigate = useNavigate();
 
     useEffect(() => {
+        const socket = socketIntance.getInstance();
         const handleUpdateLocation = (locationData) => {
             const [latitude, longitude] = locationData;
 

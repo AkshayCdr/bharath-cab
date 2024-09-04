@@ -115,6 +115,7 @@ export default function User() {
     const { dispatch } = useAuth();
 
     useEffect(() => {
+        localStorage.setItem("auth", userData.account_id);
         dispatch({
             type: "account/login",
             payload: {

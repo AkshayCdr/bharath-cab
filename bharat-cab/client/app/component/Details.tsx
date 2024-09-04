@@ -1,20 +1,25 @@
 import { Form, useNavigate, useNavigation } from "@remix-run/react";
 import { useEffect, useReducer, useRef, useState } from "react";
-import { socket } from "~/socket/websocket";
+// import { socket } from "~/socket/websocket.client";
+// import socket from "~/socket/socket.client";
+import socketIntance from "~/socket/socketInstance.client";
 
 function handleRideStart(e, rideId, setRideState) {
+    const socket = socketIntance.getInstance();
     e.preventDefault();
     socket.emit("rideStartDriver", rideId);
     setRideState("onride");
 }
 
 function handleRideEnd(e, rideId, navigate) {
+    const socket = socketIntance.getInstance();
     e.preventDefault();
     socket.emit("rideEndDriver", rideId);
     return navigate("/login");
 }
 
 function handleCancelRide(e, rideId, navigate) {
+    const socket = socketIntance.getInstance();
     e.preventDefault();
     socket.emit("cancelRideDriver", rideId);
     return navigate("/login");
@@ -91,6 +96,7 @@ export default function RideDetails({
     const isSubmitting = navigation.state !== "idle";
 
     useEffect(() => {
+        const socket = socketIntance.getInstance();
         function handleOtpValSucc() {
             dispatch({ type: otpStates.VALIDATED });
         }
@@ -109,6 +115,7 @@ export default function RideDetails({
     }, []);
 
     function handleValidateOtp(e, rideId) {
+        const socket = socketIntance.getInstance();
         e.preventDefault();
         if (!otp.current.value) return;
         dispatch({ type: otpStates.VALIDATING });

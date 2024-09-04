@@ -15,6 +15,7 @@ import useDriverSocket from "~/hooks/useDriverSocket";
 
 import Mapcontainer from "~/component/Mapcontainer";
 import { account } from "~/apis/account.server";
+import { useState } from "react";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
     const cookies = request.headers.get("cookie");
@@ -34,23 +35,16 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 };
 
 export default function Driver() {
-    const { driverData, userDetails, setUserDetails, online, toggleOnline } =
-        useDriver();
+    const [isOnline, setIsOnline] = useState(false);
 
-    const { registerDriver, setOffline, driverAccept } = useDriverSocket(
+    const { driverData, userDetails, setUserDetails } = useDriver();
+
+    const { driverAccept } = useDriverSocket(
         driverData.account_id,
         setUserDetails,
-        userDetails
+        userDetails,
+        isOnline
     );
-
-    const goOnline = () => {
-        toggleOnline();
-        if (online) {
-            setOffline();
-        } else {
-            registerDriver();
-        }
-    };
 
     const acceptRide = (e) => {
         e.preventDefault();
@@ -70,14 +64,14 @@ export default function Driver() {
             )}
 
             <button
-                onClick={goOnline}
+                onClick={() => setIsOnline(!isOnline)}
                 className={`absolute bottom-10 mx-auto left-0 right-0 z-10 w-36 h-36 rounded-full text-white font-extrabold ${
-                    online
+                    isOnline
                         ? "bg-blue-600 hover:bg-blue-700"
                         : "bg-red-500 hover:bg-red-700"
                 }`}
             >
-                {online ? "GO OFFLINE" : "GO ONLINE"}
+                {isOnline ? "GO OFFLINE" : "GO ONLINE"}
             </button>
         </div>
     );

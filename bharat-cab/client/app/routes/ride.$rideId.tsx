@@ -18,7 +18,6 @@ import { formatSourceDestination } from "./user/route";
 
 import Mapcontainer from "~/component/Mapcontainer";
 import BlueLoading from "~/component/BlueLoading";
-import { divIcon } from "leaflet";
 
 export interface Ride {
     id: string;

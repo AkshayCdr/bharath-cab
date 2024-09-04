@@ -41,6 +41,19 @@ export async function checkAccountExist(username: string): Promise<boolean> {
     }
 }
 
+export async function isAccoutIdExist(id: string): Promise<boolean> {
+    try {
+        const query = `SELECT 1 FROM ACCOUNT WHERE id = $1;`;
+        const values = [id];
+        const result = await (await client).query(query, values);
+        return result.rows.length > 0;
+    } catch (error) {
+        console.log(error);
+        // throw new Error("username check failed");
+        return null;
+    }
+}
+
 export async function getPasswordFromTable(username: string): Promise<string> {
     try {
         const query = `SELECT password FROM ACCOUNT WHERE username = $1;`;

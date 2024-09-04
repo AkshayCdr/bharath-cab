@@ -1,33 +1,30 @@
 import { useLoaderData } from "@remix-run/react";
 import { useEffect, useState } from "react";
+
 import { useAuth } from "~/context/authContext";
 import { loader } from "~/routes/driver/driver";
 
 export default function useDriver() {
-  const { driverData } = useLoaderData<typeof loader>();
-  const { dispatch } = useAuth();
+    const { driverData } = useLoaderData<typeof loader>();
+    const { dispatch } = useAuth();
 
-  useEffect(() => {
-    dispatch({
-      type: "account/login",
-      payload: {
-        accountId: driverData.account_id,
-        accountName: driverData.name,
-      },
-    });
-  }, [dispatch, driverData.account_id, driverData.name]);
+    useEffect(() => {
+        localStorage.setItem("auth", driverData.account_id);
 
-  const [userDetails, setUserDetails] = useState(null);
-  const [online, setOnline] = useState(false);
+        dispatch({
+            type: "account/login",
+            payload: {
+                accountId: driverData.account_id,
+                accountName: driverData.name,
+            },
+        });
+    }, [dispatch, driverData.account_id, driverData.name]);
 
-  const toggleOnline = () => {
-    setOnline(!online);
-  };
-  return {
-    driverData,
-    userDetails,
-    setUserDetails,
-    online,
-    toggleOnline,
-  };
+    const [userDetails, setUserDetails] = useState(null);
+
+    return {
+        driverData,
+        userDetails,
+        setUserDetails,
+    };
 }
