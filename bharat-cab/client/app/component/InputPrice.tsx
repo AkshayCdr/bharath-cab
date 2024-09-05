@@ -199,27 +199,36 @@ function Dropdown({ autoCompleteData, isAutoComplete, handleClick }) {
         </div>
     );
 }
+//if isSubmitting ? -> svg -> distance && distance
 
 function Modal({ price, distance, isSubmitting, setModalVisible }) {
     return (
+        // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
         <div
             className="fixed inset-0 h-full w-full bg-gray-950 bg-opacity-90"
             onClick={() => setModalVisible(false)}
         >
             <div className="fixed  left-1/2 top-1/2  transform -translate-x-1/2 -translate-y-1/2 ">
-                <div className="flex flex-col gap-2 bg-yellow-50 justify-center items-center rounded-lg h-[500px] w-[750px] ">
-                    <div className="flex flex-col gap-4 items-center border-2 border-black p-20 rounded-lg">
-                        <div className="flex gap-4 items-center">
+                <div className="relative flex flex-col bg-yellow-50 justify-center items-center rounded-lg h-[500px] w-[750px] ">
+                    <div className="flex flex-col gap-4 items-center border-2 border-black p-20 rounded-lg h-[300px] justify-center">
+                        <div className="flex gap-4 items-center ">
                             <span className="text-6xl font-extrabold">
                                 Distance{" "}
                             </span>
 
                             {distance ? (
-                                <span className="text-4xl font-bold text-blue-700 border-b-2 border-b-gray-400">
-                                    {distance}
-                                </span>
+                                <div className="flex flex-row gap-2 items-end">
+                                    <span className="text-5xl font-bold text-blue-700 border-b-2 border-b-gray-400 ">
+                                        {distance}
+                                    </span>
+                                    <span className="font-bold text-base ">
+                                        Km
+                                    </span>
+                                </div>
                             ) : (
-                                <Svg />
+                                <div className="flex w-28 h-28 justify-center items-center">
+                                    <Svg />
+                                </div>
                             )}
                         </div>
                         <div className="flex gap-4 items-center">
@@ -228,11 +237,13 @@ function Modal({ price, distance, isSubmitting, setModalVisible }) {
                             </span>
 
                             {price ? (
-                                <span className="text-4xl font-bold">
+                                <span className="text-5xl font-bold">
                                     {price}
                                 </span>
                             ) : (
-                                <Svg />
+                                <div className="flex w-28 h-28 justify-center items-center">
+                                    <Svg />
+                                </div>
                             )}
                         </div>
                     </div>

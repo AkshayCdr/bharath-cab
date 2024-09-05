@@ -3,15 +3,6 @@ import { driverSock } from "./driver.socket";
 import { clientSock } from "./client.socket";
 import HTTPServer from "http";
 
-import { parse } from "cookie";
-import {
-    getAccountIdTable,
-    getAccountTypeTable,
-    isSessionExist,
-} from "../model/session.model";
-import { driver } from "../services/driver.services";
-import { account } from "../services/account.services";
-import cookieParser from "cookie-parser";
 import { getAccountType, isAccoutIdExist } from "../model/account.model";
 
 async function authenticate(socket, next) {
@@ -54,28 +45,8 @@ export function createSocket(
     });
 
     io.use(async (socket, next) => {
-        // const cookiesHeader = socket.handshake.headers.cookie;
-
         await authenticate(socket, next);
-        // console.log(socket.handshake.headers);
-        // console.log(cookiesHeader);
-        // if (!cookiesHeader) {
-        //     console.log("no cookies found returningn.....");
-        //     return next(new Error("No cookies found"));
-        // }
 
-        // const cookies = parse(cookiesHeader);
-        // const sessionId = cookies.sessionId;
-
-        // const isAuthenticated = sessionId && (await isSessionExist(sessionId));
-
-        // if (!isAuthenticated) {
-        //     console.log("not authenticated returnning ....");
-        //     return next(new Error("Invalid"));
-        // }
-
-        // console.log(sessionId);
-        // registerSocket(socket, sessionId);
         next();
     });
 

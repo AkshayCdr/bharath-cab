@@ -81,8 +81,6 @@ const locationCache = new Map<string, Location>();
 
 async function getCachedLocation(rideId: string): Promise<Location> {
     if (locationCache.has(rideId)) {
-        console.log("getting cached source and destination");
-
         return locationCache.get(rideId);
     }
 
