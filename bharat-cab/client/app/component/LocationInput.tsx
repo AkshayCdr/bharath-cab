@@ -1,4 +1,7 @@
 import { Form, useActionData, useNavigation } from "@remix-run/react";
+import { useEffect, useState } from "react";
+import { getAutoCompleteData } from "~/utils/autoComplete";
+import Dropdown from "./Dropdown";
 
 export default function LocationInput({
     userId,
@@ -6,7 +9,62 @@ export default function LocationInput({
     destinationName,
     source,
     destination,
+    setSourceName,
+    setDestinationName,
+    setSource,
+    setDestination,
 }) {
+    const [autoCompleteSourceData, setAutoComSource] = useState([]);
+    const [isAutoCompleteSource, setIsAutoCompleteSource] = useState(false);
+
+    useEffect(() => {
+        if (!sourceName) return;
+        getAutoCompleteData(sourceName)
+            .then(
+                (result) =>
+                    result?.features?.map(({ properties }) => ({
+                        name: properties.formatted,
+                        lon: properties.lon,
+                        lat: properties.lat,
+                    })) || []
+            )
+            .then(setAutoComSource)
+            .catch(console.error);
+    }, [sourceName]);
+
+    const handleClickSource = (locData) => {
+        setSourceName(locData.name);
+        setSource([locData.lat, locData.lon]);
+        setAutoComSource([]);
+        setIsAutoCompleteSource(false);
+    };
+
+    const [autoCompleteDestData, setAutoCompleteDestData] = useState([]);
+    const [isAutoCompleteDestination, setIsAutoCompleteDestination] =
+        useState(false);
+
+    useEffect(() => {
+        if (!destinationName) return;
+        getAutoCompleteData(destinationName)
+            .then(
+                (result) =>
+                    result?.features?.map(({ properties }) => ({
+                        name: properties.formatted,
+                        lon: properties.lon,
+                        lat: properties.lat,
+                    })) || []
+            )
+            .then(setAutoCompleteDestData)
+            .catch(console.error);
+    }, [destinationName]);
+
+    const handleClickDestination = (locData) => {
+        setDestinationName(locData.name);
+        setDestination([locData.lat, locData.lon]);
+        setAutoCompleteDestData([]);
+        setIsAutoCompleteDestination(false);
+    };
+
     const data = useActionData();
 
     const navigation = useNavigation();
@@ -30,21 +88,36 @@ export default function LocationInput({
                         type="text"
                         name="sourceName"
                         value={sourceName}
-                        readOnly
+                        onChange={(e) => {
+                            setSourceName(e.target.value);
+                            setIsAutoCompleteSource(true);
+                        }}
                         className="h-12 rounded-lg text-left px-4"
                         placeholder="Enter pickup location"
                         required
                     />
-
+                    <Dropdown
+                        autoCompleteData={autoCompleteSourceData}
+                        isAutoComplete={isAutoCompleteSource}
+                        handleClick={handleClickSource}
+                    />
                     <input
                         type="text"
                         name="destinationName"
                         id=""
                         value={destinationName}
-                        readOnly
+                        onChange={(e) => {
+                            setDestinationName(e.target.value);
+                            setIsAutoCompleteDestination(true);
+                        }}
                         className="h-12 rounded-lg text-left px-4"
                         placeholder="Where to?"
                         required
+                    />
+                    <Dropdown
+                        autoCompleteData={autoCompleteDestData}
+                        isAutoComplete={isAutoCompleteDestination}
+                        handleClick={handleClickDestination}
                     />
                 </div>
             </div>

@@ -3,14 +3,8 @@ import { useNavigation } from "@remix-run/react";
 import { useFetcher } from "react-router-dom";
 import { config } from "~/utils/config";
 import Svg from "~/component/Svg";
-
-const getAutoCompleteData = async (input) => {
-    const data = await fetch(
-        `https://api.geoapify.com/v1/geocode/autocomplete?text=${input}&filter=countrycode:auto&apiKey=${config.GEOFI_API_KEY}`
-    );
-
-    return data.json();
-};
+import { getAutoCompleteData } from "~/utils/autoComplete";
+import Dropdown from "./Dropdown";
 
 export default function InputPrice() {
     const fetcher = useFetcher();
@@ -94,7 +88,7 @@ export default function InputPrice() {
 
     return (
         <div className="text-black flex flex-col max-w-[380px] mt-14 gap-3 ">
-            <div className="">
+            <div className="text-white">
                 <input
                     type="text"
                     name="source"
@@ -106,7 +100,7 @@ export default function InputPrice() {
                         setSource(e.target.value);
                         setIsAutoCompleteSource(true);
                     }}
-                    className="h-12 rounded-lg text-left px-4 w-80"
+                    className="h-12 rounded-lg text-left px-4 w-80 text-black"
                     placeholder="Enter location"
                     autoComplete="off"
                     value={source}
@@ -177,28 +171,6 @@ export default function InputPrice() {
     );
 }
 
-function Dropdown({ autoCompleteData, isAutoComplete, handleClick }) {
-    return (
-        <div>
-            {isAutoComplete && autoCompleteData.length > 0 && (
-                <div className="dropdown rounded-lg border-2 w-80 p-2">
-                    <ul>
-                        {autoCompleteData.map((loc, ind) => (
-                            <li className="dropdown-list " key={ind}>
-                                <button
-                                    className="text-lg text-left truncate  w-full overflow-hidden border-b-2"
-                                    onClick={() => handleClick(loc)}
-                                >
-                                    {loc.name}
-                                </button>
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-            )}
-        </div>
-    );
-}
 //if isSubmitting ? -> svg -> distance && distance
 
 function Modal({ price, distance, isSubmitting, setModalVisible }) {

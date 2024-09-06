@@ -151,6 +151,10 @@ export default function User() {
                     destinationName={destinationName}
                     source={source}
                     destination={destination}
+                    setSourceName={setSourceName}
+                    setDestinationName={setDestinationName}
+                    setSource={setSource}
+                    setDestination={setDestination}
                 />
             </div>
             <div className="mt-10 lg:w-3/4 w-full p-5">
