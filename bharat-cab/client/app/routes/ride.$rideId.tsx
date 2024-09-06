@@ -167,6 +167,10 @@ export default function Ride() {
                     source={source}
                     destination={destination}
                     isLoading={isLoading}
+                    setSourceName={setSourceName}
+                    setDestinationName={setDestinationName}
+                    setSource={setSource}
+                    setDestination={setDestination}
                 />
 
                 <div className="w-32 mx-auto font-extrabold text-2xl">

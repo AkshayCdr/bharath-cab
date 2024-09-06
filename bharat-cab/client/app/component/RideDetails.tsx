@@ -1,6 +1,8 @@
 import { Form, useNavigation } from "@remix-run/react";
 import { useEffect, useState } from "react";
 import { FaSpinner } from "react-icons/fa6";
+import Dropdown from "./Dropdown";
+import { getAutoCompleteData } from "~/utils/autoComplete";
 
 export default function RideDetails({
     rideDetails,
@@ -9,9 +11,64 @@ export default function RideDetails({
     source,
     destination,
     isLoading,
+    setSourceName,
+    setDestinationName,
+    setSource,
+    setDestination,
 }) {
-    const [defaultSource, setSource] = useState("");
-    const [defaultDestination, setDestination] = useState("");
+    const [autoCompleteSourceData, setAutoComSource] = useState([]);
+    const [isAutoCompleteSource, setIsAutoCompleteSource] = useState(false);
+
+    useEffect(() => {
+        if (!sourceName) return;
+        getAutoCompleteData(sourceName)
+            .then(
+                (result) =>
+                    result?.features?.map(({ properties }) => ({
+                        name: properties.formatted,
+                        lon: properties.lon,
+                        lat: properties.lat,
+                    })) || []
+            )
+            .then(setAutoComSource)
+            .catch(console.error);
+    }, [sourceName]);
+
+    const handleClickSource = (locData) => {
+        setSourceName(locData.name);
+        setSource([locData.lat, locData.lon]);
+        setAutoComSource([]);
+        setIsAutoCompleteSource(false);
+    };
+
+    const [autoCompleteDestData, setAutoCompleteDestData] = useState([]);
+    const [isAutoCompleteDestination, setIsAutoCompleteDestination] =
+        useState(false);
+
+    useEffect(() => {
+        if (!destinationName) return;
+        getAutoCompleteData(destinationName)
+            .then(
+                (result) =>
+                    result?.features?.map(({ properties }) => ({
+                        name: properties.formatted,
+                        lon: properties.lon,
+                        lat: properties.lat,
+                    })) || []
+            )
+            .then(setAutoCompleteDestData)
+            .catch(console.error);
+    }, [destinationName]);
+
+    const handleClickDestination = (locData) => {
+        setDestinationName(locData.name);
+        setDestination([locData.lat, locData.lon]);
+        setAutoCompleteDestData([]);
+        setIsAutoCompleteDestination(false);
+    };
+
+    const [defaultSource, setDefaultSource] = useState("");
+    const [defaultDestination, setDefaultDestination] = useState("");
 
     const navigation = useNavigation();
 
@@ -19,8 +76,8 @@ export default function RideDetails({
 
     useEffect(() => {
         if (rideDetails?.source && rideDetails?.destination) {
-            setSource(`${rideDetails.source.y},${rideDetails.source.x}`);
-            setDestination(
+            setDefaultSource(`${rideDetails.source.y},${rideDetails.source.x}`);
+            setDefaultDestination(
                 `${rideDetails.destination.y},${rideDetails.destination.x}`
             );
         }
@@ -64,8 +121,17 @@ export default function RideDetails({
                             type="text"
                             name="sourceName"
                             value={sourceName}
-                            readOnly
                             className="h-12 rounded-lg text-left px-4 text-black max-w-96"
+                            onChange={(e) => {
+                                setSourceName(e.target.value);
+                                setIsAutoCompleteSource(true);
+                            }}
+                        />
+
+                        <Dropdown
+                            autoCompleteData={autoCompleteSourceData}
+                            isAutoComplete={isAutoCompleteSource}
+                            handleClick={handleClickSource}
                         />
                     </div>
                     <div className="flex flex-col">
@@ -77,8 +143,17 @@ export default function RideDetails({
                             name="destinationName"
                             id=""
                             value={destinationName}
-                            readOnly
                             className="h-12 rounded-lg text-left px-4 text-black max-w-96"
+                            onChange={(e) => {
+                                setDestinationName(e.target.value);
+                                setIsAutoCompleteDestination(true);
+                            }}
+                        />
+
+                        <Dropdown
+                            autoCompleteData={autoCompleteDestData}
+                            isAutoComplete={isAutoCompleteDestination}
+                            handleClick={handleClickDestination}
                         />
                     </div>
 
