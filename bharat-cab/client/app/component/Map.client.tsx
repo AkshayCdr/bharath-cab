@@ -25,10 +25,13 @@ export default function Map({
     setDestinationName,
     isEditable,
     rideLocation,
+    isRideStarted,
 }) {
     const [isSourceSet, setIsSourceSet] = useState(false);
 
     const { route, distance, midpoint } = useRoute(source, destination);
+
+    const { route: rideRoute } = useRoute(rideLocation, destination);
 
     const [userLocation, setUserLocation] = useState(null);
 
@@ -127,10 +130,12 @@ export default function Map({
                         <Popup>Driver Location</Popup>
                     </Marker>
                 )}
-                {route.length > 0 && (
-                    <>
-                        <Polyline positions={route} color="blue" weight={5} />
-                    </>
+                {!isRideStarted && route.length > 0 && (
+                    <Polyline positions={route} color="blue" weight={5} />
+                )}
+
+                {isRideStarted && rideRoute.length > 0 && (
+                    <Polyline positions={rideRoute} color="red" weight={5} />
                 )}
             </MapContainer>
             <button
