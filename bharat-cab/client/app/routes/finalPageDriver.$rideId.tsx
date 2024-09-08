@@ -53,6 +53,8 @@ export default function FinalPageDriver() {
     const [isEditable, setIsEditable] = useState(false);
     const [isMounted, setIsMounted] = useState(false);
 
+    const [isRideStarted, setRideStarted] = useState(false);
+
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -62,7 +64,10 @@ export default function FinalPageDriver() {
             navigate("/login");
         }
 
-        socket.on("startRide", () => setRideState("started"));
+        socket.on("startRide", () => {
+            setRideStarted(true);
+            setRideState("started");
+        });
         socket.on("endRide", () => setRideState("ended"));
         socket.on("rideNearby", () => setRideState("nearby"));
         socket.on("cancelRide", handleCancelRide);
@@ -100,6 +105,7 @@ export default function FinalPageDriver() {
                     destination={destination}
                     isEditable={isEditable}
                     rideLocation={currentLocation}
+                    isRideStarted={isRideStarted}
                 />
             </div>
         </div>

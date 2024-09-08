@@ -168,14 +168,6 @@ export default function RideDetails({
                                 </div>
                             )}
                         </div>
-                        {/* <input
-              type="text"
-              name="price"
-              id=""
-              value={rideDetails.price}
-              readOnly
-              className="h-12 rounded-lg text-left px-4"
-            /> */}
                     </div>
                 </p>
                 <div className="flex flex-col gap-4 m-4 justify-items-center">

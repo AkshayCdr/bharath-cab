@@ -69,7 +69,7 @@ export default function LocationInput({
 
     const navigation = useNavigation();
 
-    const isSubmitting = navigation.state !== "idle";
+    const isSubmitting = navigation.state === "submitting";
 
     return (
         <Form method="POST" id="location-form">
