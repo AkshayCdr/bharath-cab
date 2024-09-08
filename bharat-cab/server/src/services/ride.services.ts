@@ -94,19 +94,6 @@ interface Route {
     };
 }
 
-interface OSRMResponse {
-    routes: Route[];
-}
-
-function isValidCoordinates(coords: coordinates) {
-    if (typeof coords.x !== "number" || typeof coords.y !== "number") {
-        console.log("invalid coordinates : type is not number");
-        return false;
-    }
-
-    return coords.x >= -90 && coords.y >= -180 && coords.y <= 180;
-}
-
 function getDistanceFromLatLonInKm(source, destination) {
     const radiusOfEarthKm = 6371;
     const dLat = deg2rad(destination.x - source.x); // deg2rad below
