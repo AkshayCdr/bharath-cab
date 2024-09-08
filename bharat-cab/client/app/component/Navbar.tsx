@@ -5,6 +5,10 @@ import { loader } from "~/root";
 export default function Navbar() {
     const { state } = useAuth();
 
+    function handleSubmit() {
+        localStorage.removeItem("auth");
+    }
+
     return (
         <nav className="nav h-16 bg-gray-950 text-white p-10 items-center justify-center">
             <ul className="flex flex-row items-center text-lg justify-between ">
@@ -14,7 +18,11 @@ export default function Navbar() {
 
                 {state.isAuthenticated ? (
                     <div className="flex flex-row gap-5">
-                        <form action="/logout" method="post">
+                        <form
+                            action="/logout"
+                            method="post"
+                            onSubmit={handleSubmit}
+                        >
                             <button>Logout</button>
                         </form>
                         {state?.accountName && <p>{state.accountName}</p>}

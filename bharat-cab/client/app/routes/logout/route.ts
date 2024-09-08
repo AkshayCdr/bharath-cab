@@ -19,11 +19,7 @@ export async function action({ request }: ActionFunctionArgs) {
 
     return redirect("/", {
         headers: {
-            "Set-Cookie": [
-                clearSessionCookie("accountId"),
-                clearSessionCookie("accountType"),
-                clearSessionCookie("sessionId"),
-            ].join(", "),
+            "Set-Cookie": clearSessionCookie("sessionId"),
         },
     });
 }
