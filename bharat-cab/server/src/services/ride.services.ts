@@ -53,29 +53,6 @@ async function getStatus(id: string): Promise<{ status: string }> {
     return getStatusFromRide(id);
 }
 
-// type PriceMap = { [key: number]: number };
-
-// const priceMap: PriceMap = {
-//     5: 30,
-//     10: 120,
-//     15: 210,
-//     20: 300,
-//     25: 400,
-//     30: 470,
-//     50: 600,
-//     100: 1000,
-//     250: 3000,
-// };
-
-// function findPrice(distance:number){
-//    if(!distance) return null;
-//    for(let price in priceMap){
-//     if(distance <= price){
-
-//     }
-//    }
-// }
-
 type PriceMap = Map<number, number>;
 
 const priceMap: PriceMap = new Map([
@@ -108,31 +85,6 @@ function renameCoordinates(obj: LocationData): coordinates {
     };
 }
 
-// async function getRoute(source: coordinates, destination: coordinates) {
-//     console.log(source);
-//     console.log(destination);
-//     const response = await fetch(
-//         `https://router.project-osrm.org/route/v1/driving/${source.y},${source.x};${destination.y},${destination.x}?overview=full&geometries=geojson`
-//     );
-
-//     if (!response.ok) return null;
-
-//     const data = await response.json();
-
-//     return data.routes.length > 0 ? data.routes[0] : null;
-// }
-
-// d
-
-const fetchWithTimeout = (url, timeout = 5000): Promise<Response> => {
-    return Promise.race([
-        fetch(url),
-        new Promise<Response>((_, reject) =>
-            setTimeout(() => reject(new Error("Request timeout")), timeout)
-        ),
-    ]);
-};
-
 interface Route {
     duration: number;
     distance: number;
@@ -155,93 +107,28 @@ function isValidCoordinates(coords: coordinates) {
     return coords.x >= -90 && coords.y >= -180 && coords.y <= 180;
 }
 
-// async function getRoute(source, destination) {
-//     console.log(source);
-//     console.log(destination);
+function getDistanceFromLatLonInKm(source, destination) {
+    const radiusOfEarthKm = 6371;
+    const dLat = deg2rad(destination.x - source.x); // deg2rad below
+    const dLon = deg2rad(destination.y - source.y);
+    const a =
+        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(deg2rad(source.x)) *
+            Math.cos(deg2rad(destination.x)) *
+            Math.sin(dLon / 2) *
+            Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    const d = radiusOfEarthKm * c;
+    return d;
+}
 
-//     if (!isValidCoordinates(source) || !isValidCoordinates(destination)) {
-//         console.log("coordinates are not valid");
-//     }
-
-//     try {
-//         const response = await fetchWithTimeout(
-//             `https://router.project-osrm.org/route/v1/driving/${source.y},${source.x};${destination.y},${destination.x}?overview=full&geometries=geojson`
-//         );
-
-//         if (!response.ok) return null;
-
-//         const data = await response.json();
-
-//         const routes = (data as OSRMResponse)?.routes ?? [];
-//         return routes.length > 0 ? routes[0] : null;
-//     } catch (error) {
-//         console.error("Fetch error: eroor fetching route due to __", error);
-//         return null;
-//     }
-// }
-
-// const distanceCache = {};
-
-const precesion = (input) => parseFloat(input.toFixed(5));
-
-const toSixFloat = (obj) => {
-    return {
-        x: precesion(obj.x),
-        y: precesion(obj.y),
-    };
-};
+function deg2rad(deg) {
+    return deg * (Math.PI / 180);
+}
 
 async function getDistance(source, destination) {
-    const distance = await calculateDistance(source, destination);
-    console.log("distance is : ");
-    console.log(distance);
-    if (distance === null) return null;
-    if (distance === 0) return 0;
-    return distance / 1000;
-}
-
-async function calculateDistance(source, destination) {
-    // const source = toSixFloat(sourceObj);
-
-    // const destination = toSixFloat(destinationObj);
-
-    // const cacheKey = `${source.x},${source.y}-${destination.x},${destination.y}`;
-
-    // if (distanceCache[cacheKey]) {
-    //     return distanceCache[cacheKey];
-    // }
-
-    try {
-        const response = await fetch(
-            `https://api.geoapify.com/v1/routing?waypoints=${source.x},${source.y}|${destination.x},${destination.y}&mode=drive&apiKey=55b3a098f2a1408d8d10675b02843f50`
-        );
-
-        const data = await response.json();
-        return data.features[0].properties.distance;
-    } catch (err) {
-        console.log(err);
-        return null;
-    }
-
-    // return distanceCache[cacheKey];
-}
-
-//@return distance in kms
-// async function getDistance(source: coordinates, destination: coordinates) {
-//     if (!source || !destination) return null;
-
-//     const route = await getRoute(source, destination);
-
-//     if (!route) return null;
-
-//     return route && route.distance / 1000;
-// }
-
-async function findDistance(
-    source: number,
-    destination: number
-): Promise<number> {
-    return 0;
+    const distance = getDistanceFromLatLonInKm(source, destination);
+    return distance;
 }
 
 function generatePin(): number {

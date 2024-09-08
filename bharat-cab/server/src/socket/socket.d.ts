@@ -2,6 +2,6 @@ import { Socket } from "socket.io";
 
 declare module "socket.io" {
     interface Socket {
-        sessionId?: string; // Add your custom property here
+        sessionId?: string;
     }
 }

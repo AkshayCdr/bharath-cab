@@ -17,7 +17,7 @@ export default function Review({ rideId }) {
             <textarea
                 name="review"
                 placeholder="write a review"
-                className="text-black rounded-lg p-2 "
+                className="text-black rounded-lg p-2"
             ></textarea>
             <button
                 type="submit"
