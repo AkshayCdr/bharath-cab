@@ -14,7 +14,7 @@ import Details from "~/component/Details";
 import Review from "~/component/Review";
 
 import Mapcontainer from "~/component/Mapcontainer";
-import { useLoaderData } from "@remix-run/react";
+import { Link, useLoaderData } from "@remix-run/react";
 import style from "~/styles/finalPageUser.css?url";
 
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
@@ -137,6 +137,14 @@ export default function FinalPageUser() {
 
             {isRideEnded && <Review rideId={rideDetails.id} />}
             {/* <Review rideId={rideDetails.id} /> */}
+            {isRideEnded && (
+                <Link
+                    to={"/login"}
+                    className="bg-red-700 w-32 h-9 m-auto rounded-m"
+                >
+                    Book again
+                </Link>
+            )}
         </div>
     );
 }

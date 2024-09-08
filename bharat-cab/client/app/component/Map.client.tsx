@@ -91,7 +91,7 @@ export default function Map({
     );
 
     return (
-        <div className="">
+        <div className="relative">
             <MapContainer
                 center={center}
                 zoom={13}

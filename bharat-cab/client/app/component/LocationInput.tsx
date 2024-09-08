@@ -2,6 +2,9 @@ import { Form, useActionData, useNavigation } from "@remix-run/react";
 import { useEffect, useState } from "react";
 import { getAutoCompleteData } from "~/utils/autoComplete";
 import Dropdown from "./Dropdown";
+import { FaLocationCrosshairs } from "react-icons/fa6";
+import useCurrLoc from "~/hooks/useGetCurrLocation";
+import { getLocationName } from "~/utils/getLocationName";
 
 export default function LocationInput({
     userId,
@@ -16,6 +19,8 @@ export default function LocationInput({
 }) {
     const [autoCompleteSourceData, setAutoComSource] = useState([]);
     const [isAutoCompleteSource, setIsAutoCompleteSource] = useState(false);
+
+    const { currentLocation } = useCurrLoc();
 
     useEffect(() => {
         if (!sourceName) return;
@@ -71,9 +76,17 @@ export default function LocationInput({
 
     const isSubmitting = navigation.state === "submitting";
 
+    async function handleSetSourceName() {
+        const [lat, long] = currentLocation;
+
+        const name = await getLocationName(lat, long);
+
+        setSourceName(name);
+    }
+
     return (
         <Form method="POST" id="location-form">
-            <div className="text-black m-10">
+            <div className="text-black m-10 flex flex-col items-center">
                 <input type="hidden" name="userId" value={userId} />
                 <input type="text" name="source" id="" value={source} hidden />
                 <input
@@ -83,19 +96,30 @@ export default function LocationInput({
                     value={destination}
                     hidden
                 />
-                <div className="flex flex-col gap-3 p-5 ">
-                    <input
-                        type="text"
-                        name="sourceName"
-                        value={sourceName}
-                        onChange={(e) => {
-                            setSourceName(e.target.value);
-                            setIsAutoCompleteSource(true);
-                        }}
-                        className="h-12 rounded-lg text-left px-4"
-                        placeholder="Enter pickup location"
-                        required
-                    />
+                <div className="flex flex-col gap-3 p-5">
+                    <div className="flex flex-row ">
+                        <input
+                            type="text"
+                            name="sourceName"
+                            value={sourceName}
+                            onChange={(e) => {
+                                setSourceName(e.target.value);
+                                setIsAutoCompleteSource(true);
+                            }}
+                            className="h-12 rounded-l-lg text-left px-4 w-56 focus:outline-none"
+                            placeholder="Enter pickup location"
+                            required
+                        />
+                        <button
+                            className=" bg-white text-black p-2 rounded-r-lg "
+                            onClick={() => {
+                                setSource(currentLocation);
+                                handleSetSourceName();
+                            }}
+                        >
+                            <FaLocationCrosshairs />
+                        </button>
+                    </div>
                     <Dropdown
                         autoCompleteData={autoCompleteSourceData}
                         isAutoComplete={isAutoCompleteSource}
@@ -110,7 +134,7 @@ export default function LocationInput({
                             setDestinationName(e.target.value);
                             setIsAutoCompleteDestination(true);
                         }}
-                        className="h-12 rounded-lg text-left px-4"
+                        className="h-12 rounded-lg text-left px-4 w-64 focus:outline-none"
                         placeholder="Where to?"
                         required
                     />
