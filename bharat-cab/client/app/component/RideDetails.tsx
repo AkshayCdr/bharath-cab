@@ -1,8 +1,10 @@
 import { Form, useNavigation } from "@remix-run/react";
 import { useEffect, useState } from "react";
-import { FaSpinner } from "react-icons/fa6";
+import { FaLocationCrosshairs, FaSpinner } from "react-icons/fa6";
 import Dropdown from "./Dropdown";
 import { getAutoCompleteData } from "~/utils/autoComplete";
+import useCurrLoc from "~/hooks/useGetCurrLocation";
+import { getLocationName } from "~/utils/getLocationName";
 
 export default function RideDetails({
     rideDetails,
@@ -83,6 +85,16 @@ export default function RideDetails({
         }
     }, [rideDetails]);
 
+    const { currentLocation } = useCurrLoc();
+
+    async function handleSetSourceName() {
+        const [lat, long] = currentLocation;
+
+        const name = await getLocationName(lat, long);
+
+        setSourceName(name);
+    }
+
     return (
         <div>
             <Form method="POST" id="ride-request-form" className="m-10 ">
@@ -117,16 +129,27 @@ export default function RideDetails({
                         <label htmlFor="source" className="text-2xl">
                             Source
                         </label>
-                        <input
-                            type="text"
-                            name="sourceName"
-                            value={sourceName}
-                            className="h-12 rounded-lg text-left px-4 text-black max-w-96"
-                            onChange={(e) => {
-                                setSourceName(e.target.value);
-                                setIsAutoCompleteSource(true);
-                            }}
-                        />
+                        <div className="flex flex-row">
+                            <input
+                                type="text"
+                                name="sourceName"
+                                value={sourceName}
+                                className="h-12 rounded-l-lg text-left px-4 text-black w-56"
+                                onChange={(e) => {
+                                    setSourceName(e.target.value);
+                                    setIsAutoCompleteSource(true);
+                                }}
+                            />
+                            <button
+                                className=" bg-white text-black p-2 rounded-r-lg "
+                                onClick={() => {
+                                    setSource(currentLocation);
+                                    handleSetSourceName();
+                                }}
+                            >
+                                <FaLocationCrosshairs />
+                            </button>
+                        </div>
 
                         <Dropdown
                             autoCompleteData={autoCompleteSourceData}
@@ -143,7 +166,7 @@ export default function RideDetails({
                             name="destinationName"
                             id=""
                             value={destinationName}
-                            className="h-12 rounded-lg text-left px-4 text-black max-w-96"
+                            className="h-12 rounded-lg text-left px-4 text-black w-64"
                             onChange={(e) => {
                                 setDestinationName(e.target.value);
                                 setIsAutoCompleteDestination(true);
