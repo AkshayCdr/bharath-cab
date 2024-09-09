@@ -128,7 +128,7 @@ export default function Ride() {
         }
         const timeoutId = setTimeout(() => {
             setIsLoading(false);
-        }, 10000);
+        }, 1000 * 60);
 
         return () => clearTimeout(timeoutId);
     }, [isRequestingForRide, data]);
@@ -147,6 +147,7 @@ export default function Ride() {
 
     useRideSocket({
         rideDetails,
+        setIsLoading,
     });
 
     useEffect(() => {
@@ -159,7 +160,7 @@ export default function Ride() {
 
     return (
         <div className="flex flex-col lg:flex-row bg-gray-950 text-white min-h-screen justify-center">
-            <div className="flex flex-col lg:w-1/4 w-full ">
+            <div className="flex flex-col lg:w-1/4 w-full items-center">
                 <RideDetails
                     rideDetails={rideDetails}
                     sourceName={sourceName}
@@ -173,7 +174,7 @@ export default function Ride() {
                     setDestination={setDestination}
                 />
 
-                <div className="w-32 mx-auto font-extrabold text-2xl">
+                <div className="w-32 font-extrabold text-2xl">
                     <div className="flex flex-col">
                         {data && (isUpdated || isError) && (
                             <h1>{data.message}</h1>

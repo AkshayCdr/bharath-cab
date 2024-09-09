@@ -106,8 +106,12 @@ export default function RideDetails({
     }
 
     return (
-        <div>
-            <Form method="POST" id="ride-request-form" className="m-10 ">
+        <div className="">
+            <Form
+                method="POST"
+                id="ride-request-form"
+                className="m-10 flex flex-col items-center"
+            >
                 <p className="flex flex-col gap-6">
                     <input
                         type="text"
@@ -144,7 +148,7 @@ export default function RideDetails({
                                 type="text"
                                 name="sourceName"
                                 value={sourceName}
-                                className="h-12 rounded-l-lg text-left px-4 text-black w-56 focus:outline-none"
+                                className="h-12 rounded-l-lg text-left px-4 text-black md:w-[350px] lg:w-56 focus:outline-none"
                                 onChange={(e) => {
                                     setSourceName(e.target.value);
                                     setIsAutoCompleteSource(true);
@@ -173,7 +177,7 @@ export default function RideDetails({
                             name="destinationName"
                             id=""
                             value={destinationName}
-                            className="h-12 rounded-lg text-left px-4 text-black w-64 focus:outline-none"
+                            className="h-12 rounded-lg text-left px-4 text-black md:w-96 lg:w-64 focus:outline-none"
                             onChange={(e) => {
                                 setDestinationName(e.target.value);
                                 setIsAutoCompleteDestination(true);
@@ -218,13 +222,13 @@ export default function RideDetails({
                             "Request for ride"
                         )}
                     </button>
-                    <div>
+                    <div className="flex flex-row gap-1">
                         <button
                             type="submit"
                             name="intent"
                             value="update"
                             disabled={isSubmitting}
-                            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-28 "
+                            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-[110px] "
                         >
                             Update
                         </button>
@@ -233,7 +237,7 @@ export default function RideDetails({
                             name="intent"
                             value="cancel"
                             disabled={isSubmitting}
-                            className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded w-28 "
+                            className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded w-[110px] "
                         >
                             Cancel
                         </button>

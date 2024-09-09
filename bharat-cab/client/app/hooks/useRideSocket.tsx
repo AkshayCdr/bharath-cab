@@ -10,7 +10,7 @@ function registerClient(rideDetails) {
     socket.emit("registerClient", rideDetails.user_id);
 }
 
-export default function useRideSocket({ rideDetails }) {
+export default function useRideSocket({ rideDetails, setIsLoading }) {
     const navigate = useNavigate();
 
     console.log(rideDetails);
@@ -27,6 +27,7 @@ export default function useRideSocket({ rideDetails }) {
         const socket = socketIntance.getInstance();
         const handleRideAccepted = (driverDetails) => {
             console.log("ride accepted by driver ", driverDetails);
+            setIsLoading(false);
             navigate(`/finalPageUser/${rideDetails.id}`);
         };
 
@@ -35,5 +36,5 @@ export default function useRideSocket({ rideDetails }) {
         return () => {
             socket.off("rideAccepted", handleRideAccepted);
         };
-    }, [navigate, rideDetails.id]);
+    }, [navigate, rideDetails.id, setIsLoading]);
 }

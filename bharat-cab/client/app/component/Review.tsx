@@ -3,7 +3,10 @@ import Rating from "./Rating";
 
 export default function Review({ rideId }) {
     return (
-        <Form method="POST" className="flex flex-col w-72 gap-3 m-3 p-3">
+        <Form
+            method="POST"
+            className="flex flex-col w-72 gap-3 m-3 p-3 mx-auto items-center"
+        >
             <Rating />
             <input
                 type="text"
@@ -13,7 +16,7 @@ export default function Review({ rideId }) {
                 defaultValue={rideId}
                 readOnly
             />
-            <label htmlFor="review">Review</label>
+
             <textarea
                 name="review"
                 placeholder="write a review"

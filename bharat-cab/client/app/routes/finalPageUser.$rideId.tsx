@@ -136,11 +136,10 @@ export default function FinalPageUser() {
             </div>
 
             {isRideEnded && <Review rideId={rideDetails.id} />}
-            {/* <Review rideId={rideDetails.id} /> */}
             {isRideEnded && (
                 <Link
                     to={"/login"}
-                    className="bg-red-700 w-32 h-9 m-auto rounded-m"
+                    className="flex bg-blue-600 w-56 h-10 items-center justify-center rounded-lg font-bold mx-auto"
                 >
                     Book again
                 </Link>
