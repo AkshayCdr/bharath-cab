@@ -3,19 +3,24 @@ import { useEffect } from "react";
 
 import socketIntance from "~/socket/socketInstance.client";
 
+export function registerClient(userId) {
+    const socket = socketIntance.getInstance();
+    socket.emit("registerClient", userId);
+}
+
 export default function useRideSocket({ rideDetails, setIsLoading }) {
     const navigate = useNavigate();
 
     console.log(rideDetails);
 
-    useEffect(() => {
-        const socket = socketIntance.getInstance();
-        socket.emit("registerClient", rideDetails.user_id);
+    // useEffect(() => {
+    //     const socket = socketIntance.getInstance();
+    //     socket.emit("registerClient", rideDetails.user_id);
 
-        return () => {
-            socket.off("registerClient");
-        };
-    }, [rideDetails]);
+    //     return () => {
+    //         socket.off("registerClient");
+    //     };
+    // }, [rideDetails]);
 
     useEffect(() => {
         const socket = socketIntance.getInstance();

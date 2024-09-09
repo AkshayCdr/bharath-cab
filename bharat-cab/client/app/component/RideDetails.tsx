@@ -5,6 +5,7 @@ import Dropdown from "./Dropdown";
 import { getAutoCompleteData } from "~/utils/autoComplete";
 import useCurrLoc from "~/hooks/useGetCurrLocation";
 import { getLocationName } from "~/utils/getLocationName";
+import { registerClient } from "~/hooks/useRideSocket";
 
 export default function RideDetails({
     rideDetails,
@@ -111,6 +112,7 @@ export default function RideDetails({
                 method="POST"
                 id="ride-request-form"
                 className="m-10 flex flex-col items-center"
+                onSubmit={() => registerClient(rideDetails.user_id)}
             >
                 <p className="flex flex-col gap-6">
                     <input

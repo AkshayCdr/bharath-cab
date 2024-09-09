@@ -83,7 +83,7 @@ export default function useRideLocation() {
 
         const handleRideCancel = () => {
             console.log("ride cancelled");
-            alert("ride cancelled by driver");
+            alert("ride cancelled");
             navigate("/login");
         };
 
