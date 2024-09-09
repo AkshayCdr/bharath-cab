@@ -111,6 +111,12 @@ export default function LocationInput({
                             type="text"
                             name="sourceName"
                             value={sourceName}
+                            onBlur={() =>
+                                setTimeout(
+                                    () => setIsAutoCompleteSource(false),
+                                    1000
+                                )
+                            }
                             onChange={(e) => {
                                 setSourceName(e.target.value);
                                 setIsAutoCompleteSource(true);
@@ -136,6 +142,12 @@ export default function LocationInput({
                         name="destinationName"
                         id=""
                         value={destinationName}
+                        onBlur={() =>
+                            setTimeout(
+                                () => setIsAutoCompleteDestination(false),
+                                1000
+                            )
+                        }
                         onChange={(e) => {
                             setDestinationName(e.target.value);
                             setIsAutoCompleteDestination(true);
