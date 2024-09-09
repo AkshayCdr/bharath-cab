@@ -88,11 +88,21 @@ export default function RideDetails({
     const { currentLocation } = useCurrLoc();
 
     async function handleSetSourceName() {
-        const [lat, long] = currentLocation;
-
-        const name = await getLocationName(lat, long);
-
-        setSourceName(name);
+        navigator.geolocation.getCurrentPosition(
+            async (pos) => {
+                const { latitude, longitude } = pos.coords;
+                setSource([latitude, longitude]);
+                const name = await getLocationName(latitude, longitude);
+                setSourceName(name);
+            },
+            (err) => {
+                console.log(err);
+                console.log("error getting data");
+            },
+            {
+                enableHighAccuracy: true,
+            }
+        );
     }
 
     return (
@@ -134,7 +144,7 @@ export default function RideDetails({
                                 type="text"
                                 name="sourceName"
                                 value={sourceName}
-                                className="h-12 rounded-l-lg text-left px-4 text-black w-56"
+                                className="h-12 rounded-l-lg text-left px-4 text-black w-56 focus:outline-none"
                                 onChange={(e) => {
                                     setSourceName(e.target.value);
                                     setIsAutoCompleteSource(true);
@@ -142,10 +152,7 @@ export default function RideDetails({
                             />
                             <button
                                 className=" bg-white text-black p-2 rounded-r-lg "
-                                onClick={async () => {
-                                    setSource(currentLocation);
-                                    await handleSetSourceName();
-                                }}
+                                onClick={handleSetSourceName}
                             >
                                 <FaLocationCrosshairs />
                             </button>
@@ -166,7 +173,7 @@ export default function RideDetails({
                             name="destinationName"
                             id=""
                             value={destinationName}
-                            className="h-12 rounded-lg text-left px-4 text-black w-64"
+                            className="h-12 rounded-lg text-left px-4 text-black w-64 focus:outline-none"
                             onChange={(e) => {
                                 setDestinationName(e.target.value);
                                 setIsAutoCompleteDestination(true);
