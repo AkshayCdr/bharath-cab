@@ -42,6 +42,9 @@ export async function action({ request }: ActionFunctionArgs) {
     const isReview = intent === "review";
     const isCancel = intent === "cancel";
 
+    console.log(intent);
+    console.log(isCancel);
+
     if (isReview) {
         const rideDetails = Object.fromEntries(formData);
 

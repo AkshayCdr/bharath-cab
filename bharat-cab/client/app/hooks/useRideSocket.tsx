@@ -1,14 +1,7 @@
 import { useNavigate } from "@remix-run/react";
 import { useEffect } from "react";
-// import { socket } from "~/socket/websocket.client";
-// import socket from "~/socket/socket.client";
 
 import socketIntance from "~/socket/socketInstance.client";
-
-function registerClient(rideDetails) {
-    const socket = socketIntance.getInstance();
-    socket.emit("registerClient", rideDetails.user_id);
-}
 
 export default function useRideSocket({ rideDetails, setIsLoading }) {
     const navigate = useNavigate();
@@ -17,7 +10,8 @@ export default function useRideSocket({ rideDetails, setIsLoading }) {
 
     useEffect(() => {
         const socket = socketIntance.getInstance();
-        registerClient(rideDetails);
+        socket.emit("registerClient", rideDetails.user_id);
+
         return () => {
             socket.off("registerClient");
         };

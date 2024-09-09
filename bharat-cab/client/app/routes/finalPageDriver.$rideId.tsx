@@ -38,6 +38,21 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
     return json({ rideDetails });
 };
 
+export async function action({ request }: ActionFunctionArgs) {
+    const formData = await request.formData();
+
+    const { intent } = Object.fromEntries(formData);
+
+    const isCancel = intent === "cancel";
+    if (!isCancel) return null;
+    const rideId = String(formData.get("rideId"));
+    const cookie = request.headers.get("cookie");
+
+    await ride.cancelRide(rideId, cookie);
+
+    return redirect("/");
+}
+
 export default function FinalPageDriver() {
     const role = "driver";
 

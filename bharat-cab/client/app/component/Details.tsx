@@ -282,9 +282,9 @@ export default function RideDetails({
                         value="cancel"
                         className="bg-red-700 w-32 h-9 m-auto rounded-md"
                         disabled={isSubmitting}
-                        onClick={(e) =>
-                            handleCancelRide(e, rideDetails.id, navigate)
-                        }
+                        // onClick={(e) =>
+                        //     handleCancelRide(e, rideDetails.id, navigate)
+                        // }
                     >
                         {isSubmitting ? "cancelling... " : "cancel"}
                     </button>

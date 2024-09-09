@@ -80,6 +80,7 @@ export async function updateRide(req: Request<Id, {}, Ride>, res: Response) {
 
 export async function cancelRide(req: Request<Id>, res: Response) {
     try {
+        console.log("inside cancell ride ");
         const { id } = req.params;
 
         await rideServices.updateStatus(id, "cancelled");
