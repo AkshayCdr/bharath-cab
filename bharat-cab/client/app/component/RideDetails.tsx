@@ -153,6 +153,13 @@ export default function RideDetails({
                                     setSourceName(e.target.value);
                                     setIsAutoCompleteSource(true);
                                 }}
+                                onBlur={() =>
+                                    setTimeout(
+                                        () => setIsAutoCompleteSource(false),
+                                        1000
+                                    )
+                                }
+                                autoComplete="false"
                             />
                             <button
                                 className=" bg-white text-black p-2 rounded-r-lg "
@@ -178,6 +185,13 @@ export default function RideDetails({
                             id=""
                             value={destinationName}
                             className="h-12 rounded-lg text-left px-4 text-black md:w-96 lg:w-64 focus:outline-none"
+                            onBlur={() =>
+                                setTimeout(
+                                    () => setIsAutoCompleteDestination(false),
+                                    1000
+                                )
+                            }
+                            autoComplete="off"
                             onChange={(e) => {
                                 setDestinationName(e.target.value);
                                 setIsAutoCompleteDestination(true);
