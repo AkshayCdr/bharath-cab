@@ -56,7 +56,9 @@ export default function Map({
         const map = useMap();
 
         useEffect(() => {
-            if (center) {
+            if (rideLocation) {
+                map.setView(rideLocation, 16);
+            } else if (center) {
                 map.setView(center);
             }
         }, [map]);
@@ -86,8 +88,8 @@ export default function Map({
     }, [destination, source, rideLocation, userLocation]);
 
     const bounds = L.latLngBounds(
-        [12.7343, 77.3662], // Southwest coordinates (lat, lng)
-        [13.1737, 77.853] // Northeast coordinates (lat, lng))
+        [12.7343, 77.3662], //SW
+        [13.1737, 77.853] // NE
     );
 
     return (

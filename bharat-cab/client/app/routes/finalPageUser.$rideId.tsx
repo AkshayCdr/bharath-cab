@@ -115,7 +115,7 @@ export default function FinalPageUser() {
 
     return (
         <div className="flex flex-col lg:flex-row p-3 bg-gray-950 text-white min-h-screen justify-center">
-            <div className="flex flex-col m-4 p-2 lg:w-1/4 w-full">
+            <div className="flex flex-col m-4 p-2 lg:w-1/4 w-full gap-2">
                 <Details
                     rideDetails={rideDetails}
                     sourceName={sourceName}
@@ -123,6 +123,16 @@ export default function FinalPageUser() {
                     role={role}
                     rideState={rideStatus}
                 />
+                {isRideEnded && <Review rideId={rideDetails.id} />}
+
+                {isRideEnded && (
+                    <Link
+                        to={"/login"}
+                        className="flex bg-blue-600 w-56 h-10 items-center justify-center rounded-lg font-bold mx-auto"
+                    >
+                        Book again
+                    </Link>
+                )}
             </div>
 
             <div className="mt-10 flex-grow lg:w-3/4 w-full p-5">
@@ -134,16 +144,6 @@ export default function FinalPageUser() {
                     isRideStarted={isRideStarted}
                 ></Mapcontainer>
             </div>
-
-            {isRideEnded && <Review rideId={rideDetails.id} />}
-            {isRideEnded && (
-                <Link
-                    to={"/login"}
-                    className="flex bg-blue-600 w-56 h-10 items-center justify-center rounded-lg font-bold mx-auto"
-                >
-                    Book again
-                </Link>
-            )}
         </div>
     );
 }
