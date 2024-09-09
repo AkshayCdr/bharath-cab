@@ -142,9 +142,9 @@ export default function RideDetails({
                             />
                             <button
                                 className=" bg-white text-black p-2 rounded-r-lg "
-                                onClick={() => {
+                                onClick={async () => {
                                     setSource(currentLocation);
-                                    handleSetSourceName();
+                                    await handleSetSourceName();
                                 }}
                             >
                                 <FaLocationCrosshairs />

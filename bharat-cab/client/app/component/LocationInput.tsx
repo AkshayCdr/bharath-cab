@@ -20,8 +20,6 @@ export default function LocationInput({
     const [autoCompleteSourceData, setAutoComSource] = useState([]);
     const [isAutoCompleteSource, setIsAutoCompleteSource] = useState(false);
 
-    const { currentLocation } = useCurrLoc();
-
     useEffect(() => {
         if (!sourceName) return;
         getAutoCompleteData(sourceName)
@@ -76,12 +74,23 @@ export default function LocationInput({
 
     const isSubmitting = navigation.state === "submitting";
 
-    async function handleSetSourceName() {
-        const [lat, long] = currentLocation;
-
-        const name = await getLocationName(lat, long);
-
-        setSourceName(name);
+    async function handleLocationClick() {
+        navigator.geolocation.getCurrentPosition(
+            async (pos) => {
+                const { latitude, longitude } = pos.coords;
+                setSource([latitude, longitude]);
+                const name = await getLocationName(latitude, longitude);
+                console.log(name);
+                setSourceName(name);
+            },
+            (err) => {
+                console.log(err);
+                console.log("eroor getting data");
+            },
+            {
+                enableHighAccuracy: true,
+            }
+        );
     }
 
     return (
@@ -112,10 +121,7 @@ export default function LocationInput({
                         />
                         <button
                             className=" bg-white text-black p-2 rounded-r-lg "
-                            onClick={() => {
-                                setSource(currentLocation);
-                                handleSetSourceName();
-                            }}
+                            onClick={handleLocationClick}
                         >
                             <FaLocationCrosshairs />
                         </button>
