@@ -121,6 +121,7 @@ export default function LocationInput({
                                 setSourceName(e.target.value);
                                 setIsAutoCompleteSource(true);
                             }}
+                            autoComplete="off"
                             className="h-12 rounded-l-lg text-left px-4 md:w-[350px]  lg:w-56 focus:outline-none"
                             placeholder="Enter pickup location"
                             required
@@ -137,6 +138,7 @@ export default function LocationInput({
                         isAutoComplete={isAutoCompleteSource}
                         handleClick={handleClickSource}
                     />
+
                     <input
                         type="text"
                         name="destinationName"
@@ -152,6 +154,7 @@ export default function LocationInput({
                             setDestinationName(e.target.value);
                             setIsAutoCompleteDestination(true);
                         }}
+                        autoComplete="off"
                         className="h-12 rounded-lg text-left px-4 md:w-96 lg:w-64 focus:outline-none"
                         placeholder="Where to?"
                         required

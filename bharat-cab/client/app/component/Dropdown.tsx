@@ -4,7 +4,7 @@ export default function Dropdown({
     handleClick,
 }) {
     return (
-        <div>
+        <div className="">
             {isAutoComplete && autoCompleteData.length > 0 && (
                 <div className="dropdown rounded-lg border-2 w-80 p-2">
                     <ul>
