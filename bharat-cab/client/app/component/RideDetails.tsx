@@ -109,6 +109,7 @@ export default function RideDetails({
                 const { latitude, longitude } = pos.coords;
                 setSource([latitude, longitude]);
                 const name = await getLocationName(latitude, longitude);
+                console.log(name);
                 setSourceName(name);
                 setIsSourceSet(false);
             },

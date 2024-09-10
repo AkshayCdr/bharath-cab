@@ -23,6 +23,7 @@ export default function Mapcontainer({
     isRideStarted,
     isSourceSet,
     setIsSourceSet,
+    rideStatus,
 }) {
     return (
         <ClientOnly
@@ -46,6 +47,7 @@ export default function Mapcontainer({
                     isRideStarted={isRideStarted}
                     isSourceSet={isSourceSet}
                     setIsSourceSet={setIsSourceSet}
+                    rideStatus={rideStatus}
                 />
             )}
         </ClientOnly>

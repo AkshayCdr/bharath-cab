@@ -121,6 +121,7 @@ export default function FinalPageDriver() {
                     isEditable={isEditable}
                     rideLocation={currentLocation}
                     isRideStarted={isRideStarted}
+                    rideStatus={rideState}
                 />
             </div>
         </div>
