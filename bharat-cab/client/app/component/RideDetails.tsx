@@ -178,7 +178,7 @@ export default function RideDetails({
                                         1000
                                     )
                                 }
-                                autoComplete="false"
+                                autoComplete="off"
                             />
                             <button
                                 className=" bg-white text-black p-2 rounded-r-lg "
