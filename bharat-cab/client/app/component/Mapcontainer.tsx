@@ -21,6 +21,8 @@ export default function Mapcontainer({
     isEditable,
     rideLocation,
     isRideStarted,
+    isSourceSet,
+    setIsSourceSet,
 }) {
     return (
         <ClientOnly
@@ -42,6 +44,8 @@ export default function Mapcontainer({
                     isEditable={isEditable}
                     rideLocation={rideLocation}
                     isRideStarted={isRideStarted}
+                    isSourceSet={isSourceSet}
+                    setIsSourceSet={setIsSourceSet}
                 />
             )}
         </ClientOnly>

@@ -136,6 +136,8 @@ export default function User() {
         setDestinationName,
         isEditable,
         isMounted,
+        isSourceSet,
+        setIsSourceSet,
     } = useMapDetails();
 
     if (!isMounted) {
@@ -155,6 +157,7 @@ export default function User() {
                     setDestinationName={setDestinationName}
                     setSource={setSource}
                     setDestination={setDestination}
+                    setIsSourceSet={isSourceSet}
                 />
             </div>
             <div className="mt-10 lg:w-3/4 w-full p-5">
@@ -166,6 +169,8 @@ export default function User() {
                     setSourceName={setSourceName}
                     setDestinationName={setDestinationName}
                     isEditable={isEditable}
+                    isSourceSet={isSourceSet}
+                    setIsSourceSet={setIsSourceSet}
                 ></Mapcontainer>
             </div>
         </div>

@@ -26,9 +26,9 @@ export default function Map({
     isEditable,
     rideLocation,
     isRideStarted,
+    isSourceSet,
+    setIsSourceSet,
 }) {
-    const [isSourceSet, setIsSourceSet] = useState(false);
-
     const { route, distance, midpoint } = useRoute(source, destination);
 
     const { route: rideRoute } = useRoute(rideLocation, destination);
