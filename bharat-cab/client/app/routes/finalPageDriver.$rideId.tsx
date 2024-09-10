@@ -75,7 +75,7 @@ export default function FinalPageDriver() {
     useEffect(() => {
         const socket = socketIntance.getInstance();
         function handleCancelRide() {
-            alert("ride cancelled by user...");
+            alert("ride cancelled ...");
             navigate("/login");
         }
 
@@ -121,6 +121,7 @@ export default function FinalPageDriver() {
                     isEditable={isEditable}
                     rideLocation={currentLocation}
                     isRideStarted={isRideStarted}
+                    rideStatus={rideState}
                 />
             </div>
         </div>

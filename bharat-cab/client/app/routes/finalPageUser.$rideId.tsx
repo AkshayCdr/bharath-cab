@@ -145,6 +145,7 @@ export default function FinalPageUser() {
                     isEditable={isEditable}
                     rideLocation={rideLocation}
                     isRideStarted={isRideStarted}
+                    rideStatus={rideStatus}
                 ></Mapcontainer>
             </div>
         </div>

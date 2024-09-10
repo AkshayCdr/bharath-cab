@@ -21,6 +21,7 @@ export default function useRideDetails(rideDetails) {
     const [destination, setDestination] = useState(null);
     const [sourceName, setSourceName] = useState(null);
     const [destinationName, setDestinationName] = useState(null);
+    const [isSourceSet, setIsSourceSet] = useState(false);
 
     useEffect(() => {
         (async () => {
@@ -53,5 +54,7 @@ export default function useRideDetails(rideDetails) {
         destinationName,
         setSourceName,
         setDestinationName,
+        isSourceSet,
+        setIsSourceSet,
     };
 }

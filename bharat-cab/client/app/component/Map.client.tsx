@@ -1,6 +1,8 @@
 import {
+    Circle,
     MapContainer,
     Marker,
+    Pane,
     Polyline,
     Popup,
     TileLayer,
@@ -26,9 +28,10 @@ export default function Map({
     isEditable,
     rideLocation,
     isRideStarted,
+    isSourceSet,
+    setIsSourceSet,
+    rideStatus,
 }) {
-    const [isSourceSet, setIsSourceSet] = useState(false);
-
     const { route, distance, midpoint } = useRoute(source, destination);
 
     const { route: rideRoute } = useRoute(rideLocation, destination);
@@ -38,6 +41,10 @@ export default function Map({
     const { currentLocation } = useCurrLoc();
 
     const [center, setCenter] = useState([12.971, 77.594]);
+
+    const isNearby = rideStatus === "nearby";
+    console.log(rideStatus);
+    console.log(isNearby);
 
     function ClickHandler() {
         useMapClickHandler({
@@ -134,6 +141,16 @@ export default function Map({
                 )}
                 {!isRideStarted && route.length > 0 && (
                     <Polyline positions={route} color="blue" weight={5} />
+                )}
+
+                {isNearby && (
+                    <Pane name="blue-circle">
+                        <Circle
+                            center={rideLocation}
+                            radius={400}
+                            pathOptions={{ color: "blue" }}
+                        />
+                    </Pane>
                 )}
 
                 {isRideStarted && rideRoute.length > 0 && (

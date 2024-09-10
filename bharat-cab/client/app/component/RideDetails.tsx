@@ -18,12 +18,15 @@ export default function RideDetails({
     setDestinationName,
     setSource,
     setDestination,
+    isSourceSet,
+    setIsSourceSet,
 }) {
     const [autoCompleteSourceData, setAutoComSource] = useState([]);
     const [isAutoCompleteSource, setIsAutoCompleteSource] = useState(false);
 
     useEffect(() => {
         if (!sourceName) return;
+        let ignore = false;
         getAutoCompleteData(sourceName)
             .then(
                 (result) =>
@@ -33,8 +36,13 @@ export default function RideDetails({
                         lat: properties.lat,
                     })) || []
             )
-            .then(setAutoComSource)
+            .then((result) => {
+                if (!ignore) setAutoComSource(result);
+            })
             .catch(console.error);
+        return () => {
+            ignore = true;
+        };
     }, [sourceName]);
 
     const handleClickSource = (locData) => {
@@ -42,6 +50,7 @@ export default function RideDetails({
         setSource([locData.lat, locData.lon]);
         setAutoComSource([]);
         setIsAutoCompleteSource(false);
+        setSource(true);
     };
 
     const [autoCompleteDestData, setAutoCompleteDestData] = useState([]);
@@ -50,6 +59,7 @@ export default function RideDetails({
 
     useEffect(() => {
         if (!destinationName) return;
+        let ignore = false;
         getAutoCompleteData(destinationName)
             .then(
                 (result) =>
@@ -59,8 +69,13 @@ export default function RideDetails({
                         lat: properties.lat,
                     })) || []
             )
-            .then(setAutoCompleteDestData)
+            .then((result) => {
+                if (!ignore) setAutoCompleteDestData(result);
+            })
             .catch(console.error);
+        return () => {
+            ignore = true;
+        };
     }, [destinationName]);
 
     const handleClickDestination = (locData) => {
@@ -68,6 +83,7 @@ export default function RideDetails({
         setDestination([locData.lat, locData.lon]);
         setAutoCompleteDestData([]);
         setIsAutoCompleteDestination(false);
+        setIsSourceSet(false);
     };
 
     const [defaultSource, setDefaultSource] = useState("");
@@ -86,15 +102,16 @@ export default function RideDetails({
         }
     }, [rideDetails]);
 
-    const { currentLocation } = useCurrLoc();
-
-    async function handleSetSourceName() {
+    async function handleSetSourceName(e) {
+        e.preventDefault();
         navigator.geolocation.getCurrentPosition(
             async (pos) => {
                 const { latitude, longitude } = pos.coords;
                 setSource([latitude, longitude]);
                 const name = await getLocationName(latitude, longitude);
+                console.log(name);
                 setSourceName(name);
+                setIsSourceSet(false);
             },
             (err) => {
                 console.log(err);
@@ -161,7 +178,7 @@ export default function RideDetails({
                                         1000
                                     )
                                 }
-                                autoComplete="false"
+                                autoComplete="off"
                             />
                             <button
                                 className=" bg-white text-black p-2 rounded-r-lg "

@@ -143,6 +143,8 @@ export default function Ride() {
         destinationName,
         setSourceName,
         setDestinationName,
+        isSourceSet,
+        setIsSourceSet,
     } = useRideDetails(rideDetails);
 
     useRideSocket({
@@ -172,6 +174,8 @@ export default function Ride() {
                     setDestinationName={setDestinationName}
                     setSource={setSource}
                     setDestination={setDestination}
+                    isSourceSet={isSourceSet}
+                    setIsSourceSet={setIsSourceSet}
                 />
 
                 <div className="w-32 font-extrabold text-2xl">
@@ -198,6 +202,8 @@ export default function Ride() {
                     setSourceName={setSourceName}
                     setDestinationName={setDestinationName}
                     isEditable={isEditable}
+                    isSourceSet={isSourceSet}
+                    setIsSourceSet={setIsSourceSet}
                 />
             </div>
         </div>

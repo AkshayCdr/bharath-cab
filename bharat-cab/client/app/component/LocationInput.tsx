@@ -16,12 +16,14 @@ export default function LocationInput({
     setDestinationName,
     setSource,
     setDestination,
+    setIsSourceSet,
 }) {
     const [autoCompleteSourceData, setAutoComSource] = useState([]);
     const [isAutoCompleteSource, setIsAutoCompleteSource] = useState(false);
 
     useEffect(() => {
         if (!sourceName) return;
+        let ignore = false;
         getAutoCompleteData(sourceName)
             .then(
                 (result) =>
@@ -31,8 +33,13 @@ export default function LocationInput({
                         lat: properties.lat,
                     })) || []
             )
-            .then(setAutoComSource)
+            .then((result) => {
+                if (!ignore) setAutoComSource(result);
+            })
             .catch(console.error);
+        return () => {
+            ignore = true;
+        };
     }, [sourceName]);
 
     const handleClickSource = (locData) => {
@@ -40,6 +47,7 @@ export default function LocationInput({
         setSource([locData.lat, locData.lon]);
         setAutoComSource([]);
         setIsAutoCompleteSource(false);
+        setIsSourceSet(true);
     };
 
     const [autoCompleteDestData, setAutoCompleteDestData] = useState([]);
@@ -48,6 +56,7 @@ export default function LocationInput({
 
     useEffect(() => {
         if (!destinationName) return;
+        let ignore = false;
         getAutoCompleteData(destinationName)
             .then(
                 (result) =>
@@ -57,8 +66,14 @@ export default function LocationInput({
                         lat: properties.lat,
                     })) || []
             )
-            .then(setAutoCompleteDestData)
+            .then((result) => {
+                if (!ignore) setAutoCompleteDestData(result);
+            })
             .catch(console.error);
+
+        return () => {
+            ignore = false;
+        };
     }, [destinationName]);
 
     const handleClickDestination = (locData) => {
@@ -66,6 +81,7 @@ export default function LocationInput({
         setDestination([locData.lat, locData.lon]);
         setAutoCompleteDestData([]);
         setIsAutoCompleteDestination(false);
+        setIsSourceSet(false);
     };
 
     const data = useActionData();
@@ -74,7 +90,8 @@ export default function LocationInput({
 
     const isSubmitting = navigation.state === "submitting";
 
-    async function handleLocationClick() {
+    async function handleLocationClick(e) {
+        e.preventDefault();
         navigator.geolocation.getCurrentPosition(
             async (pos) => {
                 const { latitude, longitude } = pos.coords;
@@ -82,6 +99,7 @@ export default function LocationInput({
                 const name = await getLocationName(latitude, longitude);
                 console.log(name);
                 setSourceName(name);
+                setIsSourceSet(true);
             },
             (err) => {
                 console.log(err);
