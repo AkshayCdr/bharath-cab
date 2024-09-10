@@ -100,7 +100,7 @@ export default function InputPrice() {
                         setSource(e.target.value);
                         setIsAutoCompleteSource(true);
                     }}
-                    className="h-12 rounded-lg text-left px-4 w-80 text-black"
+                    className="h-12 rounded-lg text-left px-4 w-80 text-black focus:outline-none"
                     placeholder="Enter location"
                     autoComplete="off"
                     value={source}
@@ -128,7 +128,7 @@ export default function InputPrice() {
                         setDestination(e.target.value);
                         setIsAutoCompleteDestination(true);
                     }}
-                    className="h-12 rounded-lg text-left px-4 w-80"
+                    className="h-12 rounded-lg text-left px-4 w-80 focus:outline-none"
                     placeholder="Enter destination"
                     autoComplete="off"
                     value={destination}
