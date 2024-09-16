@@ -50,7 +50,7 @@ export default function RideDetails({
         setSource([locData.lat, locData.lon]);
         setAutoComSource([]);
         setIsAutoCompleteSource(false);
-        setSource(true);
+        setIsSourceSet(true);
     };
 
     const [autoCompleteDestData, setAutoCompleteDestData] = useState([]);
