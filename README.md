@@ -26,6 +26,15 @@ https://bharat-cab-client.onrender.com/
 ## ride ended rating page
 ![Imgur](https://i.imgur.com/nVWD1Gb.png)
 
+
+## Built by
+
+- [Remix JS](https://remix.run/)
+- [Express JS](https://expressjs.com/)
+- [PostgreSQL](https://www.postgresql.org/)
+- [React leaflet](https://react-leaflet.js.org/)
+- [Socket IO](https://socket.io/)
+
 ---
 
 # Bharat-cab
