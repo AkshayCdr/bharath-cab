@@ -2,6 +2,32 @@
 
 https://bharat-cab-client.onrender.com/
 
+## main page
+![Imgur](https://i.imgur.com/vUEFgNS.png)
+
+## sign-up
+![Imgur](https://i.imgur.com/wpp27Zi.png)
+
+## user dashboard
+![Imgur](https://i.imgur.com/loDGPjD.png)
+
+## driver dashboard
+![Imgur](https://i.imgur.com/4oSEdAJ.png)
+
+## request from user
+![Imgur](https://i.imgur.com/jljji2W.png)
+
+## ride page
+![Imgur](https://i.imgur.com/N8e2vYU.png)
+
+## pin code to  start ride
+![Imgur](https://i.imgur.com/rydz6CD.png)
+
+## ride ended rating page
+![Imgur](https://i.imgur.com/nVWD1Gb.png)
+
+---
+
 # Bharat-cab
 
 Blazing fast ride app. Movement is what we power. So when you think travel, think bharat-cab.
